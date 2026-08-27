@@ -90,12 +90,15 @@ Teams may use any legally accessible LLM API or local model. Teams manage their 
 ```text
 data/public_set.jsonl             200 labeled development sessions
 data/category_index.sqlite3       generated product/category lookup database
+data/attribute_index.sqlite3      generated ask_attribute lookup database
+data/attribute_index.sqlite3.gz   compressed, GitHub-safe attribute database
 docs/competition_specification.md participant rules and evaluation protocol
 docs/agent_api_contract.json      machine-readable Agent contract
 docs/evaluation_config.json       scoring configuration
 docs/baseline_results.json        reproducible weak-starter reference score
 starter/agent.py                  editable weak starter
 starter/category_index.py         category-index builder and query helpers
+starter/attribute_index.py        ask_attribute-index builder and query helpers
 evaluator/local_evaluator.py      public-set simulator and scorer
 ```
 
@@ -108,6 +111,40 @@ python -m starter.category_index
 The database preserves the full category tree (so identical category names under
 different branches do not collide) and supports both category-to-product and
 product-to-category lookups through `starter.category_index.CategoryIndex`.
+
+Build the lookup index for every valid `ask_attribute` value:
+
+```bash
+python -m starter.attribute_index
+```
+
+Alternatively, restore the committed prebuilt database:
+
+```bash
+gzip -dk data/attribute_index.sqlite3.gz
+```
+
+`starter.attribute_index.AttributeIndex` provides indexed SQLite lookups for
+category, material, color, size, style, brand, budget, feature, use case, and
+other constraints. Its `load_hashmap()` method loads any one attribute into
+memory when average O(1) exact-key lookup is required.
+
+Every value maps to the catalog's scored product identifier, `parent_asin`.
+Filters can be intersected so only product IDs satisfying every selected
+constraint remain:
+
+```python
+from starter.attribute_index import AttributeIndex
+
+with AttributeIndex() as index:
+    candidate_ids = index.filter_products(
+        {"material": "cotton", "color": ["black", "blue"]},
+        maximum_price=100,
+    )
+```
+
+Different attributes use AND semantics; multiple values within one attribute
+use OR semantics. `maximum_price=100` means strictly below $100.
 
 ## Judging and Submission Policy
 

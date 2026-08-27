@@ -189,7 +189,125 @@ The competition catalog and evaluation sessions are already prepared and frozen 
 
 ---
 
-## 5. Deliverables
+## 5. Generated Retrieval Indexes
+
+Two derived SQLite databases have been created from the immutable
+`data/catalog.jsonl` product catalog. They do not modify the competition data or
+introduce new products. They reorganize existing catalog fields into indexed
+lookup structures for faster candidate selection.
+
+### Category Index
+
+- **File:** `data/category_index.sqlite3`
+- **Builder and query API:** `starter/category_index.py`
+- **Approximate size:** 24 MB
+
+The category index contains:
+
+| Data | Count |
+| --- | ---: |
+| Products | 50,000 |
+| Category hierarchy nodes | 1,832 |
+| Product-to-category mappings | 238,403 |
+
+It preserves the complete Amazon category hierarchy rather than using only the
+final category name. This prevents collisions where the same name, such as
+`T-Shirts`, appears under several departments or branches.
+
+The database supports:
+
+- Exact normalized category-name lookup.
+- Full category-path lookup.
+- Category-to-product lookup.
+- Product-ASIN-to-category-path lookup.
+- Parent/child category traversal.
+- Leaf-category filtering.
+
+### `ask_attribute` Index
+
+- **File:** `data/attribute_index.sqlite3`
+- **Committed archive:** `data/attribute_index.sqlite3.gz`
+- **Builder and query API:** `starter/attribute_index.py`
+- **Approximate size:** 149 MB
+
+This index contains a product posting list for every non-null value accepted by
+`ask_attribute`. The stored values follow the local evaluator's constraint
+classification policy where applicable.
+
+| `ask_attribute` | Product/value mappings | Distinct normalized values |
+| --- | ---: | ---: |
+| `category` | 426,680 | 2,693 |
+| `material` | 72,898 | 8,927 |
+| `color` | 53,107 | 4,984 |
+| `size` | 3,989 | 3,703 |
+| `style` | 8,684 | 3,894 |
+| `brand` | 69,776 | 23,225 |
+| `budget` | 10,675 | 2,662 |
+| `feature` | 103,688 | 37,326 |
+| `use_case` | 866 | 804 |
+| `other` | 196,201 | 59,763 |
+
+There is one SQLite view per attribute, including `category_values`,
+`material_values`, `color_values`, and `size_values`. The value `null` has no
+view because it means that the agent is not asking for an attribute.
+
+The query API supports:
+
+- Attribute value to matching product ASINs.
+- Product ASIN and attribute to known values.
+- Numeric minimum/maximum budget filtering.
+- Intersecting multiple filters into one remaining product-ID candidate set.
+- Loading one selected attribute into an in-memory hash map.
+
+The catalog does not contain transaction order IDs. The stable identifier used
+for these mappings is `parent_asin`, which is also the product ID scored by the
+evaluator. Each indexed attribute value therefore corresponds to one or more
+`parent_asin` values.
+
+For example, `maximum_price=100` removes every product priced at $100 or above.
+Adding `material=cotton` then intersects that result with the cotton posting
+list. Only product IDs satisfying both constraints remain eligible for ranking.
+Across attributes the filter operation uses AND; multiple accepted values for a
+single attribute use OR.
+
+### Why the Derived Databases Are Larger
+
+The original JSONL catalog is approximately 58 MB. The generated SQLite files
+use approximately 173 MB in total because they deliberately duplicate compact
+keys across posting lists and maintain additional B-tree indexes. This is a
+space-for-speed tradeoff: the source catalog is optimized for storage and
+sequential reading, while the derived databases are optimized for repeated
+retrieval during conversations.
+
+The intended retrieval pipeline is:
+
+1. Parse the current customer constraint and select its `ask_attribute`.
+2. Perform an indexed category or attribute lookup.
+3. Reduce the original 50,000 products to a small candidate set.
+4. Run BM25, semantic retrieval, or LLM reranking only on those candidates.
+
+SQLite index access is technically **O(log n)** because it uses B-trees. When
+strict average **O(1)** exact-key access is useful, `AttributeIndex.load_hashmap()`
+loads only the required attribute into memory. Loading one targeted map avoids
+placing the entire 149 MB database in memory and keeps startup cost proportional
+to the current retrieval route.
+
+Both databases are deterministic build artifacts and can be regenerated after
+the catalog is downloaded:
+
+```bash
+python -m starter.category_index --force
+python -m starter.attribute_index --force
+```
+
+The expanded attribute database exceeds GitHub's normal per-file limit, so the
+repository stores a compressed 34 MB archive. It can be restored with
+`gzip -dk data/attribute_index.sqlite3.gz`; the expanded local copy is ignored
+by Git.
+
+---
+
+## 6. Deliverables
 
 ### 1. Written Project Description — Devpost
 
@@ -238,7 +356,7 @@ For backend or NLP tracks where a front-end interface is not applicable, a walkt
 
 ---
 
-## 6. Judging Criteria
+## 7. Judging Criteria
 
 | Judging Criteria | Definition | Weight |
 | --- | --- | ---: |
