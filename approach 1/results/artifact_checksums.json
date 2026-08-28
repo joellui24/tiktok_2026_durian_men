@@ -1,0 +1,44 @@
+{
+  "all_frozen_inputs_unchanged": true,
+  "frozen_inputs": {
+    "techjam-conversational-search/data/public_set.jsonl": {
+      "expected_sha256": "857259f7a438e6188ac63e18995b6ff4489bfcfc4a716a798b9a2aa0ee8f7579",
+      "actual_sha256": "857259f7a438e6188ac63e18995b6ff4489bfcfc4a716a798b9a2aa0ee8f7579",
+      "unchanged": true
+    },
+    "techjam-conversational-search/evaluator/local_evaluator.py": {
+      "expected_sha256": "79a5ea06f9a1b8c5036f30efa85dc1f36b8f6b06eb8feb8f545dfa767bc45564",
+      "actual_sha256": "79a5ea06f9a1b8c5036f30efa85dc1f36b8f6b06eb8feb8f545dfa767bc45564",
+      "unchanged": true
+    }
+  },
+  "models": {
+    "linear": {
+      "sha256": "71b92d8710cb7a52f7ba34fde8047fbdd6338d5d31047d1dca01a6290ffae189",
+      "bytes": 22085632,
+      "model_type": "linear_pairwise_ranker",
+      "product_count": 50000,
+      "context_feature_count": 2255,
+      "item_feature_count": 3855,
+      "cross_count": 0
+    },
+    "fm": {
+      "sha256": "e7e0861ed6be771e40e1aee3e111e87e3bfd2f9b0193725d58f3c4b471b6443d",
+      "bytes": 22085632,
+      "model_type": "second_order_factorization_machine",
+      "product_count": 50000,
+      "context_feature_count": 2255,
+      "item_feature_count": 3855,
+      "cross_count": 0
+    },
+    "hybrid": {
+      "sha256": "d3ddc90c9c9e7c838522960f3559c08764ed7b1c612bd4e77190b26312281297",
+      "bytes": 22736896,
+      "model_type": "second_order_fm_plus_explicit_crosses",
+      "product_count": 50000,
+      "context_feature_count": 2255,
+      "item_feature_count": 3855,
+      "cross_count": 24900
+    }
+  }
+}

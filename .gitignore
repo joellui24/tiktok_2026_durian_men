@@ -1,2 +1,7 @@
 .DS_Store
-.DS_Store
+__pycache__/
+*.pyc
+.Rhistory
+approach 1/results/cross_seed_20??.csv
+approach 1/linear_cross_weights.csv
+approach 1/fm_only_cross_weights.csv
