@@ -1,78 +1,377 @@
 from __future__ import annotations
 
-import json
 import re
-import sqlite3
+from dataclasses import dataclass, field
 from pathlib import Path
 
+from starter.attribute_index import AttributeIndex, normalize_value
+from starter.category_index import CategoryIndex
 
-TOKEN_RE = re.compile(r"[a-z0-9]+", re.IGNORECASE)
-STOPWORDS = {
-    "a", "an", "and", "are", "as", "at", "be", "but", "by", "for", "from",
-    "i", "in", "is", "it", "me", "my", "of", "on", "or", "please", "some",
-    "that", "the", "this", "to", "want", "with", "would", "you", "looking",
+
+# ``category`` is supported by the evaluator, but the exact coarse category in
+# the initial message is handled by CategoryIndex rather than asked again.
+EVALUATOR_ATTRIBUTES = (
+    "category",
+    "material",
+    "color",
+    "size",
+    "style",
+    "brand",
+    "budget",
+    "feature",
+    "use_case",
+    "other",
+)
+ROADMAP_STAGES = (
+    ("use_case",),
+    ("feature", "style", "material"),
+    ("size", "budget", "brand"),
+    ("color",),
+    ("other",),
+)
+ROADMAP_ATTRIBUTES = tuple(
+    attribute for stage in ROADMAP_STAGES for attribute in stage
+)
+MATERIALS = (
+    "cotton",
+    "polyester",
+    "nylon",
+    "leather",
+    "wool",
+    "spandex",
+    "silk",
+    "rayon",
+    "fabric",
+)
+BUYING_MARKER = ". A key requirement is:"
+EXPLORING_MARKER = ", but I'm still exploring."
+BOUNDARY_MARKER = "please use your judgment"
+ANSWER_PREFIX = "For that, what matters is:"
+INITIAL_PREFIX_RE = re.compile(r"^\s*I(?:'m| am) looking for\s+", re.IGNORECASE)
+
+QUESTION_TEXT = {
+    "use_case": "What use case or occasion should this work best for?",
+    "feature": "Which product feature matters most to you?",
+    "style": "Do you have a preferred style or fit?",
+    "material": "Do you have a material preference?",
+    "size": "Are there any size, width, or fit constraints?",
+    "budget": "What budget should I stay within?",
+    "brand": "Do you have a preferred brand?",
+    "color": "Do you have a color preference?",
+    "other": "Is there another requirement I should prioritize?",
 }
 
 
-def _text(value: object) -> str:
-    if value is None:
-        return ""
-    if isinstance(value, dict):
-        return " ".join(f"{key} {item}" for key, item in value.items())
-    if isinstance(value, list):
-        return " ".join(str(item) for item in value)
-    return str(value)
+def classify_constraint(value: str) -> str:
+    """Mirror evaluator.local_evaluator.classify_constraint exactly.
+
+    Classification cannot be inferred from index membership because every
+    simulator constraint is also stored under ``other``.
+    """
+
+    lowered = value.lower()
+    if "budget" in lowered or re.search(r"(?:\$|<=|under)\s*\d", lowered):
+        return "budget"
+    if any(material in lowered for material in MATERIALS):
+        return "material"
+    if any(
+        word in lowered
+        for word in ("color", "black", "white", "blue", "red", "pink", "green")
+    ):
+        return "color"
+    if any(word in lowered for word in ("size", "sizing", "width", "wide", "narrow")):
+        return "size"
+    if any(word in lowered for word in ("department", "style", "fit", "sleeve", "neck")):
+        return "style"
+    if any(word in lowered for word in ("hiking", "running", "gym", "winter", "outdoor", "work")):
+        return "use_case"
+    return "feature"
 
 
-def _terms(text: str) -> list[str]:
-    return [
-        token.lower()
-        for token in TOKEN_RE.findall(text)
-        if len(token) > 1 and token.lower() not in STOPWORDS
-    ]
+def _clean_disclosed_value(value: str) -> str:
+    return re.sub(r"\s+", " ", value).strip(" -;,.\t\n")
+
+
+@dataclass
+class SessionState:
+    scenario_state: str = "unknown"
+    coarse_category: str = "clothing item"
+    surviving_candidates: set[str] = field(default_factory=set)
+    known_constraints: dict[str, list[str]] = field(default_factory=dict)
+    unindexed_values: set[tuple[str, str]] = field(default_factory=set)
+    remaining_attributes: set[str] = field(
+        default_factory=lambda: set(ROADMAP_ATTRIBUTES)
+    )
+    exhausted_attributes: set[str] = field(default_factory=set)
+    roadmap_stage: int = 0
+    last_asked_attribute: str | None = None
+    initialized: bool = False
 
 
 class Agent:
-    """Editable weak baseline: stateless BM25 retrieval with no LLM dependency."""
+    """Session-aware progressive attribute-filtering shopping agent."""
 
-    def __init__(self, catalog_path: str | Path = "data/catalog.jsonl") -> None:
-        self.catalog_path = Path(catalog_path)
-        self.connection = sqlite3.connect(":memory:")
-        self._sessions: set[str] = set()
-        self._build_index()
-
-    def _build_index(self) -> None:
-        cursor = self.connection.cursor()
-        cursor.execute(
-            "CREATE VIRTUAL TABLE products USING fts5("
-            "parent_asin UNINDEXED, title, categories, features, details, store, description, "
-            "tokenize='unicode61 remove_diacritics 2')"
+    def __init__(
+        self,
+        catalog_path: str | Path = "data/catalog.jsonl",
+        *,
+        category_index_path: str | Path | None = None,
+        attribute_index_path: str | Path | None = None,
+    ) -> None:
+        catalog_path = Path(catalog_path)
+        data_directory = catalog_path.parent
+        self.catalog_path = catalog_path
+        self.category_index = CategoryIndex(
+            category_index_path or data_directory / "category_index.sqlite3"
         )
-        batch: list[tuple[str, str, str, str, str, str, str]] = []
-        with self.catalog_path.open(encoding="utf-8") as handle:
-            for line in handle:
-                product = json.loads(line)
-                batch.append(
-                    (
-                        str(product["parent_asin"]),
-                        _text(product.get("title")),
-                        _text(product.get("categories")),
-                        _text(product.get("features")),
-                        _text(product.get("details")),
-                        _text(product.get("store")),
-                        _text(product.get("description")),
-                    )
-                )
-                if len(batch) >= 1000:
-                    cursor.executemany("INSERT INTO products VALUES (?, ?, ?, ?, ?, ?, ?)", batch)
-                    batch.clear()
-        if batch:
-            cursor.executemany("INSERT INTO products VALUES (?, ?, ?, ?, ?, ?, ?)", batch)
-        self.connection.commit()
+        self.attribute_index = AttributeIndex(
+            attribute_index_path or data_directory / "attribute_index.sqlite3"
+        )
+        self._sessions: dict[str, SessionState] = {}
+        self._attribute_hashmaps: dict[str, dict[str, tuple[str, ...]]] = {}
+        self._indexed_products: dict[str, frozenset[str]] = {}
+        self._all_catalog_ids: set[str] | None = None
+
+    def close(self) -> None:
+        self.category_index.close()
+        self.attribute_index.close()
+
+    def __enter__(self) -> "Agent":
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        self.close()
 
     def reset(self, session_id: str, user_profile: dict) -> None:
-        # The profile is anonymized and may be used for personalization.
-        self._sessions.add(session_id)
+        # The current deterministic filtering policy does not personalize yet.
+        del user_profile
+        self._sessions[session_id] = SessionState()
+
+    def _hashmap(self, attribute: str) -> dict[str, tuple[str, ...]]:
+        mapping = self._attribute_hashmaps.get(attribute)
+        if mapping is None:
+            mapping = self.attribute_index.load_hashmap(attribute)
+            self._attribute_hashmaps[attribute] = mapping
+            self._indexed_products[attribute] = frozenset(
+                parent_asin
+                for postings in mapping.values()
+                for parent_asin in postings
+            )
+        return mapping
+
+    def _catalog_ids(self) -> set[str]:
+        if self._all_catalog_ids is None:
+            self._all_catalog_ids = {
+                str(row[0])
+                for row in self.category_index.connection.execute(
+                    "SELECT parent_asin FROM products"
+                )
+            }
+        return set(self._all_catalog_ids)
+
+    @staticmethod
+    def _parse_initial_message(user_message: str) -> tuple[str, str, str | None]:
+        """Return scenario state, exact coarse category, and Buying constraint."""
+
+        message = user_message.strip()
+        without_prefix = INITIAL_PREFIX_RE.sub("", message, count=1)
+        if BUYING_MARKER in without_prefix:
+            category, constraint = without_prefix.split(BUYING_MARKER, 1)
+            return "buying", category.strip(), _clean_disclosed_value(constraint)
+        if without_prefix.endswith(EXPLORING_MARKER):
+            category = without_prefix[: -len(EXPLORING_MARKER)].strip()
+            return "exploring_unknown", category, None
+
+        # Intent Override and any unrecognized future template arrive here. We
+        # can still use a plausible exact category without interpreting intent.
+        category = without_prefix.split(".", 1)[0].strip(" ,.")
+        return "unknown", category or "clothing item", None
+
+    def _initial_candidates(self, coarse_category: str) -> tuple[str, set[str]]:
+        candidates = set(
+            self.category_index.products_for_coarse_category(coarse_category)
+        )
+        if candidates:
+            return coarse_category, candidates
+
+        fallback = "clothing item"
+        fallback_candidates = set(
+            self.category_index.products_for_coarse_category(fallback)
+        )
+        return (
+            (fallback, fallback_candidates)
+            if fallback_candidates
+            else (fallback, self._catalog_ids())
+        )
+
+    @staticmethod
+    def _record_constraint(
+        state: SessionState, attribute: str, value: str
+    ) -> None:
+        values = state.known_constraints.setdefault(attribute, [])
+        if value not in values:
+            values.append(value)
+
+    def _apply_values(
+        self, state: SessionState, attribute: str, values: list[str]
+    ) -> bool:
+        """Atomically AND exact postings, rolling back an empty result."""
+
+        cleaned_values = list(
+            dict.fromkeys(
+                cleaned
+                for value in values
+                if (cleaned := _clean_disclosed_value(value))
+            )
+        )
+        if not cleaned_values:
+            return False
+
+        mapping = self._hashmap(attribute)
+        filtered = set(state.surviving_candidates)
+        missing: list[str] = []
+        for value in cleaned_values:
+            self._record_constraint(state, attribute, value)
+            postings = mapping.get(normalize_value(value))
+            if not postings:
+                missing.append(value)
+                filtered.clear()
+                continue
+            filtered.intersection_update(postings)
+
+        if filtered:
+            state.surviving_candidates = filtered
+            return True
+
+        # A value may exist globally but still be incompatible with the current
+        # category/filters. In either case it was not safely indexable in this
+        # session, so preserve the previous survivor set.
+        rejected = missing or cleaned_values
+        state.unindexed_values.update(
+            (attribute, normalize_value(value)) for value in rejected
+        )
+        return False
+
+    @staticmethod
+    def _exhaust_attribute(state: SessionState, attribute: str) -> None:
+        state.remaining_attributes.discard(attribute)
+        state.exhausted_attributes.add(attribute)
+
+    @staticmethod
+    def _advance_past_stage(state: SessionState, attribute: str) -> None:
+        for stage_index, stage in enumerate(ROADMAP_STAGES):
+            if attribute not in stage:
+                continue
+            for completed_stage in ROADMAP_STAGES[: stage_index + 1]:
+                for completed_attribute in completed_stage:
+                    state.remaining_attributes.discard(completed_attribute)
+                    state.exhausted_attributes.add(completed_attribute)
+            state.roadmap_stage = stage_index + 1
+            return
+
+    def _initialize(self, state: SessionState, user_message: str) -> None:
+        scenario, parsed_category, buying_constraint = self._parse_initial_message(
+            user_message
+        )
+        coarse_category, candidates = self._initial_candidates(parsed_category)
+        state.scenario_state = scenario
+        state.coarse_category = coarse_category
+        state.surviving_candidates = candidates
+        state.initialized = True
+
+        if scenario == "buying" and buying_constraint:
+            attribute = classify_constraint(buying_constraint)
+            self._apply_values(state, attribute, [buying_constraint])
+            self._advance_past_stage(state, attribute)
+
+    def _split_answer_values(self, attribute: str, payload: str) -> list[str]:
+        payload = _clean_disclosed_value(payload)
+        if not payload:
+            return []
+        mapping = self._hashmap(attribute)
+        if normalize_value(payload) in mapping:
+            return [payload]
+
+        # The simulator joins at most two constraints with "; ". A catalog
+        # constraint may itself contain semicolons, so prefer a split whose two
+        # complete values both exist in the relevant attribute index.
+        split_points = [match.start() for match in re.finditer(r";\s+", payload)]
+        for split_point in split_points:
+            left = _clean_disclosed_value(payload[:split_point])
+            right = _clean_disclosed_value(payload[split_point + 1 :])
+            if normalize_value(left) in mapping and normalize_value(right) in mapping:
+                return [left, right]
+        return [
+            value
+            for part in re.split(r";\s+", payload)
+            if (value := _clean_disclosed_value(part))
+        ]
+
+    def _process_reply(self, state: SessionState, user_message: str) -> None:
+        asked = state.last_asked_attribute
+        if state.scenario_state == "exploring_unknown":
+            state.scenario_state = (
+                "boundary"
+                if BOUNDARY_MARKER in user_message.casefold()
+                else "browsing"
+            )
+        if asked is None:
+            return
+
+        if user_message.lstrip().startswith(ANSWER_PREFIX):
+            payload = user_message.lstrip()[len(ANSWER_PREFIX) :]
+            values = self._split_answer_values(asked, payload)
+            self._apply_values(state, asked, values)
+
+        # Answers, no-preference replies, and unrecognized simulator replies all
+        # consume the question. This prevents a session getting stuck.
+        self._exhaust_attribute(state, asked)
+        state.last_asked_attribute = None
+
+    def _largest_bucket(self, attribute: str, candidates: set[str]) -> int:
+        mapping = self._hashmap(attribute)
+        indexed = self._indexed_products[attribute]
+        largest = sum(parent_asin not in indexed for parent_asin in candidates)
+        for postings in mapping.values():
+            if len(postings) <= largest:
+                continue
+            bucket_size = sum(parent_asin in candidates for parent_asin in postings)
+            if bucket_size > largest:
+                largest = bucket_size
+        return largest
+
+    def _choose_next_attribute(self, state: SessionState) -> str | None:
+        while state.roadmap_stage < len(ROADMAP_STAGES):
+            stage = ROADMAP_STAGES[state.roadmap_stage]
+            available = [
+                attribute
+                for attribute in stage
+                if attribute in state.remaining_attributes
+            ]
+            if available:
+                order = {attribute: position for position, attribute in enumerate(stage)}
+                return min(
+                    available,
+                    key=lambda attribute: (
+                        self._largest_bucket(
+                            attribute, state.surviving_candidates
+                        ),
+                        order[attribute],
+                    ),
+                )
+            state.roadmap_stage += 1
+        return None
+
+    @staticmethod
+    def _recommendations(
+        state: SessionState, top_k: int
+    ) -> list[dict[str, str]]:
+        limit = max(0, min(10, int(top_k)))
+        candidates = state.surviving_candidates
+        if len(candidates) > 10:
+            return []
+        ranked = sorted(candidates)[:limit]
+        return [{"parent_asin": parent_asin} for parent_asin in ranked]
 
     def respond(
         self,
@@ -81,22 +380,30 @@ class Agent:
         turn: int,
         top_k: int,
     ) -> dict:
-        if session_id not in self._sessions:
+        state = self._sessions.get(session_id)
+        if state is None:
             raise RuntimeError("reset must be called before respond")
-        unique_terms = list(dict.fromkeys(_terms(user_message)))[:40]
-        expression = " OR ".join(f'"{term}"' for term in unique_terms)
-        if not expression:
-            recommendations: list[dict] = []
+
+        if not state.initialized:
+            self._initialize(state, user_message)
         else:
-            rows = self.connection.execute(
-                "SELECT parent_asin FROM products WHERE products MATCH ? "
-                "ORDER BY bm25(products, 0.0, 6.0, 4.0, 2.5, 2.5, 1.5, 1.0) LIMIT ?",
-                (expression, top_k),
-            ).fetchall()
-            recommendations = [{"parent_asin": str(row[0])} for row in rows]
+            self._process_reply(state, user_message)
+
+        ask_attribute: str | None = None
+        if turn < 10 and len(state.surviving_candidates) > 10:
+            ask_attribute = self._choose_next_attribute(state)
+        state.last_asked_attribute = ask_attribute
+
+        recommendations = self._recommendations(state, top_k)
+        if ask_attribute is None:
+            message = "Here are the best matching products from the remaining options."
+        else:
+            message = (
+                "Here are some current matches. " + QUESTION_TEXT[ask_attribute]
+            )
         return {
-            "message": "Here are the closest matches I found.",
-            "ask_attribute": None,
+            "message": message,
+            "ask_attribute": ask_attribute,
             "recommendations": recommendations,
             "usage": {"prompt_tokens": 0, "completion_tokens": 0},
         }
