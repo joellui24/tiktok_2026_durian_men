@@ -17,6 +17,22 @@ def normalize_category(value: str) -> str:
     return " ".join(value.split())
 
 
+def coarse_category(values: list[str]) -> str:
+    """Mirror evaluator.local_evaluator.coarse_category exactly."""
+    excluded = {
+        "clothing",
+        "clothing shoes & jewelry",
+        "clothing, shoes & jewelry",
+    }
+    cleaned: list[str] = []
+    for value in values:
+        for part in value.split(","):
+            part = part.strip()
+            if part and part.lower() not in excluded:
+                cleaned.append(part)
+    return " ".join(cleaned[-2:]) if cleaned else "clothing item"
+
+
 def _category_names(product: dict) -> list[str]:
     values = product.get("categories") or []
     if not isinstance(values, list):
@@ -35,8 +51,12 @@ def _create_schema(connection: sqlite3.Connection) -> None:
         );
 
         CREATE TABLE products (
-            parent_asin TEXT PRIMARY KEY
+            parent_asin TEXT PRIMARY KEY,
+            coarse_category TEXT NOT NULL
         );
+
+        CREATE INDEX products_by_coarse_category
+            ON products(coarse_category, parent_asin);
 
         CREATE TABLE categories (
             category_id INTEGER PRIMARY KEY,
@@ -105,11 +125,15 @@ def build_category_database(
                 if not parent_asin:
                     raise ValueError(f"missing parent_asin on catalog line {line_number}")
 
+                names = _category_names(product)
                 cursor.execute(
-                    "INSERT INTO products(parent_asin) VALUES (?)", (parent_asin,)
+                    """
+                    INSERT INTO products(parent_asin, coarse_category)
+                    VALUES (?, ?)
+                    """,
+                    (parent_asin, coarse_category(names)),
                 )
                 product_count += 1
-                names = _category_names(product)
                 if not names:
                     uncategorized_count += 1
                     continue
@@ -158,13 +182,19 @@ def build_category_database(
             )
             """
         )
+        coarse_category_count = int(
+            cursor.execute(
+                "SELECT COUNT(DISTINCT coarse_category) FROM products"
+            ).fetchone()[0]
+        )
         cursor.executemany(
             "INSERT INTO metadata(key, value) VALUES (?, ?)",
             (
-                ("schema_version", "1"),
+                ("schema_version", "2"),
                 ("catalog_path", str(catalog_path)),
                 ("product_count", str(product_count)),
                 ("category_count", str(len(category_ids))),
+                ("coarse_category_count", str(coarse_category_count)),
                 ("uncategorized_product_count", str(uncategorized_count)),
             ),
         )
@@ -181,6 +211,7 @@ def build_category_database(
     return {
         "products": product_count,
         "categories": len(category_ids),
+        "coarse_categories": coarse_category_count,
         "uncategorized_products": uncategorized_count,
     }
 
@@ -244,6 +275,38 @@ class CategoryIndex:
             for row in self.connection.execute(sql, parameters).fetchall()
         ]
 
+    def products_for_coarse_category(
+        self,
+        coarse_category: str,
+        *,
+        limit: int | None = None,
+    ) -> list[str]:
+        """Return ASINs for one exact evaluator initial-message category."""
+        sql = """
+            SELECT parent_asin
+            FROM products
+            WHERE coarse_category = ?
+            ORDER BY parent_asin
+        """
+        parameters: list[object] = [coarse_category]
+        if limit is not None:
+            if limit < 0:
+                raise ValueError("limit must be non-negative")
+            sql += " LIMIT ?"
+            parameters.append(limit)
+        return [
+            str(row[0])
+            for row in self.connection.execute(sql, parameters).fetchall()
+        ]
+
+    def coarse_category_for_product(self, parent_asin: str) -> str | None:
+        """Return the evaluator category string for one product ID."""
+        row = self.connection.execute(
+            "SELECT coarse_category FROM products WHERE parent_asin = ?",
+            (parent_asin,),
+        ).fetchone()
+        return None if row is None else str(row[0])
+
     def categories_for_product(self, parent_asin: str) -> list[dict]:
         """Return the ordered category path for one product."""
         rows = self.connection.execute(
@@ -273,6 +336,7 @@ def main(argv: Iterable[str] | None = None) -> None:
     print(
         f"Built {args.output}: {counts['products']} products, "
         f"{counts['categories']} category nodes, "
+        f"{counts['coarse_categories']} coarse categories, "
         f"{counts['uncategorized_products']} uncategorized products"
     )
 
