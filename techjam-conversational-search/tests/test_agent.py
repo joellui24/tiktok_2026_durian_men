@@ -233,7 +233,7 @@ class ProgressiveAgentTest(unittest.TestCase):
             "a-completely-different-id", initial_message, 1, 10
         )
         self.assertEqual(first["ask_attribute"], "use_case")
-        self.assertEqual(first["recommendations"], [])
+        self.assertEqual(len(first["recommendations"]), 10)
         self.assertEqual(first, second)
 
         reply = "I don't have an additional preference for use_case."
@@ -242,14 +242,19 @@ class ProgressiveAgentTest(unittest.TestCase):
         # All three stage-two attributes have a largest bucket of 15 in this
         # fixture, so the roadmap-order tie break chooses feature.
         self.assertEqual(first["ask_attribute"], "feature")
-        self.assertEqual(first["recommendations"], [])
+        self.assertEqual(len(first["recommendations"]), 10)
         self.assertEqual(first, second)
 
-    def test_recommendations_wait_until_ten_or_fewer_valid_survivors(self) -> None:
+    def test_recommendations_return_ranked_top_ten_on_every_turn(self) -> None:
         response = self._start_browsing()
         state = self.agent._sessions["session"]
         self.assertGreater(len(state.surviving_candidates), 10)
-        self.assertEqual(response["recommendations"], [])
+        recommendations = [
+            item["parent_asin"] for item in response["recommendations"]
+        ]
+        self.assertEqual(recommendations, [f"A{index:02d}" for index in range(10)])
+        self.assertEqual(len(recommendations), len(set(recommendations)))
+        self.assertTrue(set(recommendations).issubset(state.surviving_candidates))
 
         self.assertTrue(self.agent._apply_values(state, "feature", ["feature-0"]))
         recommendations = [
@@ -277,7 +282,7 @@ class ProgressiveAgentTest(unittest.TestCase):
 
         response = self._start_browsing("last-turn", turn=10)
         self.assertIsNone(response["ask_attribute"])
-        self.assertEqual(response["recommendations"], [])
+        self.assertEqual(len(response["recommendations"]), 10)
 
     def test_unknown_initial_template_uses_nonempty_safe_fallback(self) -> None:
         self._reset()
@@ -286,7 +291,53 @@ class ProgressiveAgentTest(unittest.TestCase):
         self.assertEqual(state.scenario_state, "unknown")
         self.assertEqual(state.coarse_category, "clothing item")
         self.assertEqual(len(state.surviving_candidates), 18)
-        self.assertEqual(response["recommendations"], [])
+        self.assertEqual(len(response["recommendations"]), 10)
+
+    def test_intent_override_replaces_obsolete_filters_atomically(self) -> None:
+        self._reset()
+        first = self.agent.respond(
+            "session",
+            f"I'm looking for {LARGE_CATEGORY}. feature-0.",
+            1,
+            10,
+        )
+        state = self.agent._sessions["session"]
+        self.assertEqual(state.scenario_state, "provisional_override")
+        self.assertEqual(state.surviving_candidates, {"A00"})
+        self.assertIsNone(first["ask_attribute"])
+
+        response = self.agent.respond(
+            "session",
+            "Actually, ignore my earlier preference. What I need is: common option.",
+            3,
+            10,
+        )
+        self.assertEqual(state.scenario_state, "intent_override")
+        self.assertEqual(state.intent_epoch, 1)
+        self.assertEqual(state.override_count, 1)
+        self.assertEqual(state.known_constraints, {"feature": ["common option"]})
+        self.assertEqual(len(state.surviving_candidates), 15)
+        self.assertNotIn("feature-0", state.known_constraints["feature"])
+        self.assertEqual(len(response["recommendations"]), 10)
+
+    def test_incomplete_override_preserves_existing_state(self) -> None:
+        self._reset()
+        self.agent.respond(
+            "session",
+            f"I'm looking for {LARGE_CATEGORY}. feature-0.",
+            1,
+            10,
+        )
+        state = self.agent._sessions["session"]
+        before = set(state.surviving_candidates)
+        self.agent.respond(
+            "session",
+            "Actually, I changed my mind.",
+            2,
+            10,
+        )
+        self.assertEqual(state.surviving_candidates, before)
+        self.assertEqual(state.intent_epoch, 0)
 
 
 if __name__ == "__main__":

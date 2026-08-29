@@ -1,0 +1,246 @@
+{
+  "model": "second_order_fm_plus_explicit_crosses",
+  "seed": 2026,
+  "catalog_sha256": "da979b05a68af864cb0dcf9ee6a81c010c7e66a57978ad286c7a2e005fc69a67",
+  "product_count": 50000,
+  "state_count": 400000,
+  "train_state_count": 319008,
+  "validation_state_count": 40912,
+  "test_state_count": 40080,
+  "context_feature_count": 2255,
+  "item_feature_count": 3855,
+  "explicit_cross_count": 24900,
+  "selected_epoch": 30,
+  "temperature": 1.0,
+  "temperature_nll": {
+    "0.25": 2.642656501428784,
+    "0.5": 1.748450752086792,
+    "1.0": 1.5552094839803348,
+    "2.0": 1.6534691454545696,
+    "4.0": 1.7912695114996204
+  },
+  "internal_validation": {
+    "mrr": 0.6014933730158729,
+    "hit_rate_at_10": 1.0,
+    "pairwise_accuracy": 0.7545376190476191
+  },
+  "internal_test": {
+    "mrr": 0.5915093253968253,
+    "hit_rate_at_10": 1.0,
+    "pairwise_accuracy": 0.7470669047619047
+  },
+  "training_history": [
+    {
+      "epoch": 1.0,
+      "loss": 0.6929712295532227,
+      "mrr": 0.4576256349206349,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.6212540476190476
+    },
+    {
+      "epoch": 2.0,
+      "loss": 0.6777810454368591,
+      "mrr": 0.46240253968253975,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.6255078571428572
+    },
+    {
+      "epoch": 3.0,
+      "loss": 0.6616616249084473,
+      "mrr": 0.4632747619047619,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.6259966666666666
+    },
+    {
+      "epoch": 4.0,
+      "loss": 0.6453405022621155,
+      "mrr": 0.4624335714285715,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.6259385714285715
+    },
+    {
+      "epoch": 5.0,
+      "loss": 0.6314608454704285,
+      "mrr": 0.4619930158730158,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.6255621428571428
+    },
+    {
+      "epoch": 6.0,
+      "loss": 0.6201739311218262,
+      "mrr": 0.46377928571428567,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.6286047619047619
+    },
+    {
+      "epoch": 7.0,
+      "loss": 0.6123024821281433,
+      "mrr": 0.46448571428571434,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.6311888095238095
+    },
+    {
+      "epoch": 8.0,
+      "loss": 0.6093243360519409,
+      "mrr": 0.47157444444444446,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.637135
+    },
+    {
+      "epoch": 9.0,
+      "loss": 0.5663393139839172,
+      "mrr": 0.4758892063492064,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.6426764285714286
+    },
+    {
+      "epoch": 10.0,
+      "loss": 0.5567556023597717,
+      "mrr": 0.4780440476190476,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.6461119047619047
+    },
+    {
+      "epoch": 11.0,
+      "loss": 0.5561575889587402,
+      "mrr": 0.481280873015873,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.6497328571428572
+    },
+    {
+      "epoch": 12.0,
+      "loss": 0.5531788468360901,
+      "mrr": 0.4871692063492064,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.655080238095238
+    },
+    {
+      "epoch": 13.0,
+      "loss": 0.5525581240653992,
+      "mrr": 0.49624198412698417,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.6644700000000001
+    },
+    {
+      "epoch": 14.0,
+      "loss": 0.5491509437561035,
+      "mrr": 0.5069327777777778,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.6739371428571429
+    },
+    {
+      "epoch": 15.0,
+      "loss": 0.5447140336036682,
+      "mrr": 0.5193201587301587,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.6851007142857143
+    },
+    {
+      "epoch": 16.0,
+      "loss": 0.5398120284080505,
+      "mrr": 0.5332174603174603,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.6976859523809524
+    },
+    {
+      "epoch": 17.0,
+      "loss": 0.508537769317627,
+      "mrr": 0.5445478571428571,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.7077690476190477
+    },
+    {
+      "epoch": 18.0,
+      "loss": 0.4978920519351959,
+      "mrr": 0.5519257142857142,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.7142580952380952
+    },
+    {
+      "epoch": 19.0,
+      "loss": 0.49428820610046387,
+      "mrr": 0.5579657142857143,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.7192516666666666
+    },
+    {
+      "epoch": 20.0,
+      "loss": 0.48716652393341064,
+      "mrr": 0.5634431746031746,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.724327142857143
+    },
+    {
+      "epoch": 21.0,
+      "loss": 0.48288610577583313,
+      "mrr": 0.5682403968253967,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.7282845238095238
+    },
+    {
+      "epoch": 22.0,
+      "loss": 0.47709906101226807,
+      "mrr": 0.5743089682539683,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.7327909523809524
+    },
+    {
+      "epoch": 23.0,
+      "loss": 0.4740000069141388,
+      "mrr": 0.5789399206349206,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.7367735714285715
+    },
+    {
+      "epoch": 24.0,
+      "loss": 0.469494104385376,
+      "mrr": 0.5832378571428571,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.7404764285714286
+    },
+    {
+      "epoch": 25.0,
+      "loss": 0.4721815288066864,
+      "mrr": 0.5866218253968254,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.7423752380952381
+    },
+    {
+      "epoch": 26.0,
+      "loss": 0.45348936319351196,
+      "mrr": 0.590023253968254,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.7448764285714286
+    },
+    {
+      "epoch": 27.0,
+      "loss": 0.4462762773036957,
+      "mrr": 0.5918412698412698,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.745725
+    },
+    {
+      "epoch": 28.0,
+      "loss": 0.4369896352291107,
+      "mrr": 0.5925240476190476,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.7469783333333333
+    },
+    {
+      "epoch": 29.0,
+      "loss": 0.4334743916988373,
+      "mrr": 0.5945983333333333,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.7488704761904763
+    },
+    {
+      "epoch": 30.0,
+      "loss": 0.4296603202819824,
+      "mrr": 0.5973359523809524,
+      "hit_rate_at_10": 1.0,
+      "pairwise_accuracy": 0.7500938095238096
+    }
+  ],
+  "elapsed_seconds": 144.263,
+  "artifact": "/Users/joellui/Documents/tiktok_hackathon26/techjam-conversational-search/../approach 1/fm_model.sqlite3"
+}

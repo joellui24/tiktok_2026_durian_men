@@ -146,6 +146,27 @@ with AttributeIndex() as index:
 Different attributes use AND semantics; multiple values within one attribute
 use OR semantics. `maximum_price=100` means strictly below $100.
 
+## Approach 1: Hybrid Factorization Machine
+
+The `fm` branch replaces lexical candidate ordering with a catalog-trained
+second-order Factorization Machine plus regularized explicit context–item
+crosses. Exact filters remain authoritative, while the model ranks survivors
+and supplies the probability distribution for information-gain questions.
+Intent Override is handled by atomically replacing obsolete active state.
+
+The evaluator-facing `Agent` loads the committed standard-library-compatible
+SQLite artifact automatically. Offline training and complete reproduction
+instructions are in [`approach 1/README.md`](<../approach 1/README.md>).
+
+Run the frozen public evaluator wrapper from this directory:
+
+```bash
+/usr/local/bin/python3.12 "../approach 1/evaluate_fm.py"
+```
+
+The reported official hybrid result is 197/200 correct, MRR `0.658440`, MTTC
+`2.200000`, and Technical Score `0.866032`.
+
 ## Judging and Submission Policy
 
 - Participant submission requirements: `docs/submission_rules.md`

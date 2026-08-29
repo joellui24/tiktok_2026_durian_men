@@ -37,7 +37,7 @@ def _report(result: dict, *, cohort: str, intent_override_note: str) -> dict:
     )
     return {
         "cohort": cohort,
-        "intent_override_implemented": False,
+        "intent_override_implemented": True,
         "note": intent_override_note,
         **overall,
         "recommended_technical_score": overall["technical_score"],
@@ -76,15 +76,15 @@ def evaluate_cohorts(
             cohort="buying_browsing_boundary_170",
             intent_override_note=(
                 "Intent Override sessions were filtered in memory; public_set.jsonl "
-                "was not modified."
+                "was not modified. The FM agent also supports override state replacement."
             ),
         ),
         _report(
             official_result,
             cohort="official_public_200",
             intent_override_note=(
-                "This is the unchanged official 200-session evaluation. Intent "
-                "Override behavior is explicitly not implemented."
+                "This is the unchanged official 200-session evaluation, including "
+                "implemented Intent Override state replacement and reranking."
             ),
         ),
     )
