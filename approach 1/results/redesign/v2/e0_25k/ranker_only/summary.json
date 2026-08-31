@@ -1,0 +1,3852 @@
+{
+  "schema_version": "1",
+  "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+  "split": "validation",
+  "models": {
+    "linear": {
+      "schema_version": "1",
+      "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+      "overall": {
+        "schema_version": "1",
+        "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+        "state_count": 9757,
+        "trajectory_count": 2500,
+        "primary": {
+          "aggregation": "trajectory_macro",
+          "mrr": 0.4269771949786356,
+          "hit_rate_at_1": 0.35753650793650793,
+          "hit_rate_at_5": 0.49368285714285715,
+          "mean_rank": 63.81474285714285,
+          "mean_rank_percentile": 0.3412457503725987,
+          "pairwise_accuracy": 0.5135528713206026,
+          "median_rank": 18.0,
+          "hit_rate_at_10": 0.1883413779026487,
+          "hit_rate_at_10_raw": 0.5208568207440811,
+          "hit_rate_at_10_informative": true,
+          "hit_rate_at_10_informative_state_count": 5635,
+          "hit_rate_at_10_informative_trajectory_count": 1983
+        },
+        "state_micro": {
+          "aggregation": "state_micro",
+          "mrr": 0.4082526860777338,
+          "hit_rate_at_1": 0.3469304089371733,
+          "hit_rate_at_5": 0.4613098288408322,
+          "mean_rank": 71.06969355334631,
+          "mean_rank_percentile": 0.34105767858275005,
+          "pairwise_accuracy": 0.5134061843448944,
+          "median_rank": 8.0,
+          "hit_rate_at_10": 0.17036379769299023,
+          "hit_rate_at_10_raw": 0.5208568207440811,
+          "hit_rate_at_10_informative": true,
+          "hit_rate_at_10_informative_state_count": 5635,
+          "hit_rate_at_10_informative_trajectory_count": 1983
+        },
+        "candidate_width": {
+          "minimum": 1,
+          "maximum": 1354,
+          "mean": 144.65686174028903,
+          "median": 25.0
+        }
+      },
+      "breakdowns": [
+        {
+          "dimension": "scenario",
+          "value": "boundary",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 636,
+            "trajectory_count": 137,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.2810578829224448,
+              "hit_rate_at_1": 0.21990789016336462,
+              "hit_rate_at_5": 0.33146506777893636,
+              "mean_rank": 125.10340632603408,
+              "mean_rank_percentile": 0.4458691850049032,
+              "pairwise_accuracy": 0.4570145393511291,
+              "median_rank": 62.0,
+              "hit_rate_at_10": 0.08528464017185822,
+              "hit_rate_at_10_raw": 0.4056603773584906,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 415,
+              "hit_rate_at_10_informative_trajectory_count": 133
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.32152770117391594,
+              "hit_rate_at_1": 0.2641509433962264,
+              "hit_rate_at_5": 0.3710691823899371,
+              "mean_rank": 122.44654088050315,
+              "mean_rank_percentile": 0.41401112133525153,
+              "pairwise_accuracy": 0.4613593656118832,
+              "median_rank": 26.0,
+              "hit_rate_at_10": 0.0891566265060241,
+              "hit_rate_at_10_raw": 0.4056603773584906,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 415,
+              "hit_rate_at_10_informative_trajectory_count": 133
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 230.61477987421384,
+              "median": 54.5
+            }
+          }
+        },
+        {
+          "dimension": "scenario",
+          "value": "browsing",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 4114,
+            "trajectory_count": 991,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.33195163785480325,
+              "hit_rate_at_1": 0.2782350679928884,
+              "hit_rate_at_5": 0.38107010715487,
+              "mean_rank": 97.93517971265197,
+              "mean_rank_percentile": 0.371576691978061,
+              "pairwise_accuracy": 0.5118851945078063,
+              "median_rank": 45.0,
+              "hit_rate_at_10": 0.14416530399881075,
+              "hit_rate_at_10_raw": 0.4394749635391347,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2657,
+              "hit_rate_at_10_informative_trajectory_count": 961
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.351743327315401,
+              "hit_rate_at_1": 0.3033543996110841,
+              "hit_rate_at_5": 0.39158969372873115,
+              "mean_rank": 99.99100631988333,
+              "mean_rank_percentile": 0.3546074583958183,
+              "pairwise_accuracy": 0.513333445597029,
+              "median_rank": 20.0,
+              "hit_rate_at_10": 0.13210387655250283,
+              "hit_rate_at_10_raw": 0.4394749635391347,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2657,
+              "hit_rate_at_10_informative_trajectory_count": 961
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 209.3458920758386,
+              "median": 56.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario",
+          "value": "buying",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2907,
+            "trajectory_count": 990,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.4700220514944472,
+              "hit_rate_at_1": 0.3828451178451178,
+              "hit_rate_at_5": 0.5555555555555556,
+              "mean_rank": 36.65705387205387,
+              "mean_rank_percentile": 0.33320577446943395,
+              "pairwise_accuracy": 0.516937950545249,
+              "median_rank": 9.0,
+              "hit_rate_at_10": 0.23209191759112519,
+              "hit_rate_at_10_raw": 0.5366357069143447,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1708,
+              "hit_rate_at_10_informative_trajectory_count": 631
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.3907502700420486,
+              "hit_rate_at_1": 0.31613347093223254,
+              "hit_rate_at_5": 0.45338837289301687,
+              "mean_rank": 49.07946336429308,
+              "mean_rank_percentile": 0.35880592152895024,
+              "pairwise_accuracy": 0.5131196504304093,
+              "median_rank": 8.0,
+              "hit_rate_at_10": 0.21135831381733022,
+              "hit_rate_at_10_raw": 0.5366357069143447,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1708,
+              "hit_rate_at_10_informative_trajectory_count": 631
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1069,
+              "mean": 95.77433780529756,
+              "median": 22.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario",
+          "value": "intent_override",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2100,
+            "trajectory_count": 382,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.6142726528602132,
+              "hit_rate_at_1": 0.5470321200033242,
+              "hit_rate_at_5": 0.6836543256045874,
+              "mean_rank": 23.700115307903268,
+              "mean_rank_percentile": 0.24587455264614405,
+              "pairwise_accuracy": 0.5347328441160415,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.29901255075673683,
+              "hit_rate_at_10_raw": 0.6933333333333334,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 855,
+              "hit_rate_at_10_informative_trajectory_count": 258
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.5694508364409728,
+              "hit_rate_at_1": 0.5,
+              "hit_rate_at_5": 0.6361904761904762,
+              "mean_rank": 29.292380952380952,
+              "mean_rank_percentile": 0.2678499043036275,
+              "pairwise_accuracy": 0.5352179915699933,
+              "median_rank": 1.5,
+              "hit_rate_at_10": 0.24678362573099416,
+              "hit_rate_at_10_raw": 0.6933333333333334,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 855,
+              "hit_rate_at_10_informative_trajectory_count": 258
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1136,
+              "mean": 59.562380952380956,
+              "median": 3.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "boundary",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 499,
+            "trajectory_count": 133,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.35423558431681595,
+              "hit_rate_at_1": 0.2937224012411982,
+              "hit_rate_at_5": 0.4126447070056093,
+              "mean_rank": 102.66046067549827,
+              "mean_rank_percentile": 0.4107710992624522,
+              "pairwise_accuracy": 0.4564266118969328,
+              "median_rank": 40.0,
+              "hit_rate_at_10": 0.09661654135338346,
+              "hit_rate_at_10_raw": 0.49498997995991983,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 282,
+              "hit_rate_at_10_informative_trajectory_count": 133
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.3979429074485847,
+              "hit_rate_at_1": 0.3346693386773547,
+              "hit_rate_at_5": 0.46092184368737477,
+              "mean_rank": 97.07214428857715,
+              "mean_rank_percentile": 0.37677553834618466,
+              "pairwise_accuracy": 0.4657229630031754,
+              "median_rank": 12.0,
+              "hit_rate_at_10": 0.10638297872340426,
+              "hit_rate_at_10_raw": 0.49498997995991983,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 282,
+              "hit_rate_at_10_informative_trajectory_count": 133
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 185.31462925851704,
+              "median": 26.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "browsing",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 3123,
+            "trajectory_count": 963,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.45590831449187114,
+              "hit_rate_at_1": 0.4013029718637195,
+              "hit_rate_at_5": 0.5096614415929058,
+              "mean_rank": 75.08524040284165,
+              "mean_rank_percentile": 0.3107144490305235,
+              "pairwise_accuracy": 0.5157744195388484,
+              "median_rank": 24.0,
+              "hit_rate_at_10": 0.14345166293296568,
+              "hit_rate_at_10_raw": 0.5360230547550432,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1696,
+              "hit_rate_at_10_informative_trajectory_count": 829
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.4453829576141435,
+              "hit_rate_at_1": 0.3941722702529619,
+              "hit_rate_at_5": 0.4924751841178354,
+              "mean_rank": 78.14089016970861,
+              "mean_rank_percentile": 0.309326743275193,
+              "pairwise_accuracy": 0.5185904342496589,
+              "median_rank": 6.0,
+              "hit_rate_at_10": 0.14563679245283018,
+              "hit_rate_at_10_raw": 0.5360230547550432,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1696,
+              "hit_rate_at_10_informative_trajectory_count": 829
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 165.99007364713415,
+              "median": 22.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "buying",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2907,
+            "trajectory_count": 990,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.4700220514944472,
+              "hit_rate_at_1": 0.3828451178451178,
+              "hit_rate_at_5": 0.5555555555555556,
+              "mean_rank": 36.65705387205387,
+              "mean_rank_percentile": 0.33320577446943395,
+              "pairwise_accuracy": 0.516937950545249,
+              "median_rank": 9.0,
+              "hit_rate_at_10": 0.23209191759112519,
+              "hit_rate_at_10_raw": 0.5366357069143447,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1708,
+              "hit_rate_at_10_informative_trajectory_count": 631
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.3907502700420486,
+              "hit_rate_at_1": 0.31613347093223254,
+              "hit_rate_at_5": 0.45338837289301687,
+              "mean_rank": 49.07946336429308,
+              "mean_rank_percentile": 0.35880592152895024,
+              "pairwise_accuracy": 0.5131196504304093,
+              "median_rank": 8.0,
+              "hit_rate_at_10": 0.21135831381733022,
+              "hit_rate_at_10_raw": 0.5366357069143447,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1708,
+              "hit_rate_at_10_informative_trajectory_count": 631
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1069,
+              "mean": 95.77433780529756,
+              "median": 22.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "exploring_unknown",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1128,
+            "trajectory_count": 1128,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.05501700272726625,
+              "hit_rate_at_1": 0.015957446808510637,
+              "hit_rate_at_5": 0.0700354609929078,
+              "mean_rank": 174.43794326241135,
+              "mean_rank_percentile": 0.503659347629825,
+              "pairwise_accuracy": 0.49631579714323737,
+              "median_rank": 90.0,
+              "hit_rate_at_10": 0.10146252285191956,
+              "hit_rate_at_10_raw": 0.12854609929078015,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1094,
+              "hit_rate_at_10_informative_trajectory_count": 1094
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.05501700272726625,
+              "hit_rate_at_1": 0.015957446808510637,
+              "hit_rate_at_5": 0.0700354609929078,
+              "mean_rank": 174.43794326241135,
+              "mean_rank_percentile": 0.503659347629825,
+              "pairwise_accuracy": 0.49631579714323737,
+              "median_rank": 90.0,
+              "hit_rate_at_10": 0.10146252285191956,
+              "hit_rate_at_10_raw": 0.12854609929078015,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1094,
+              "hit_rate_at_10_informative_trajectory_count": 1094
+            },
+            "candidate_width": {
+              "minimum": 3,
+              "maximum": 1354,
+              "mean": 352.00443262411346,
+              "median": 249.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "intent_override",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1141,
+            "trajectory_count": 382,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.514594677040236,
+              "hit_rate_at_1": 0.4282816005983545,
+              "hit_rate_at_5": 0.6048117676389927,
+              "mean_rank": 28.411053976564446,
+              "mean_rank_percentile": 0.3112628463815598,
+              "pairwise_accuracy": 0.5354124850812778,
+              "median_rank": 5.5,
+              "hit_rate_at_10": 0.28221060782036395,
+              "hit_rate_at_10_raw": 0.5828220858895705,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 623,
+              "hit_rate_at_10_informative_trajectory_count": 246
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.4407935116236411,
+              "hit_rate_at_1": 0.3593339176161262,
+              "hit_rate_at_5": 0.5118317265556529,
+              "mean_rank": 38.38212094653812,
+              "mean_rank_percentile": 0.3323514225885166,
+              "pairwise_accuracy": 0.5337038823556995,
+              "median_rank": 4.0,
+              "hit_rate_at_10": 0.23595505617977527,
+              "hit_rate_at_10_raw": 0.5828220858895705,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 623,
+              "hit_rate_at_10_informative_trajectory_count": 246
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1069,
+              "mean": 80.84312007011394,
+              "median": 15.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "provisional_override",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 959,
+            "trajectory_count": 382,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.715345066841198,
+              "hit_rate_at_1": 0.6609947643979057,
+              "hit_rate_at_5": 0.7766143106457243,
+              "mean_rank": 18.56282722513089,
+              "mean_rank_percentile": 0.19388261660655845,
+              "pairwise_accuracy": 0.5366741795260207,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.32,
+              "hit_rate_at_10_raw": 0.8248175182481752,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 232,
+              "hit_rate_at_10_informative_trajectory_count": 125
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.7225248798367763,
+              "hit_rate_at_1": 0.6673618352450469,
+              "hit_rate_at_5": 0.7841501564129302,
+              "mean_rank": 18.477580813347238,
+              "mean_rank_percentile": 0.19110722196467186,
+              "pairwise_accuracy": 0.5383834996941774,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.27586206896551724,
+              "hit_rate_at_10_raw": 0.8248175182481752,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 232,
+              "hit_rate_at_10_informative_trajectory_count": 125
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1136,
+              "mean": 34.2429614181439,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "turn_bucket",
+          "value": "early",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 6624,
+            "trajectory_count": 2500,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.3526250780558936,
+              "hit_rate_at_1": 0.2888,
+              "hit_rate_at_5": 0.40773333333333334,
+              "mean_rank": 83.28673333333333,
+              "mean_rank_percentile": 0.37380582353551983,
+              "pairwise_accuracy": 0.5109444871470463,
+              "median_rank": 22.5,
+              "hit_rate_at_10": 0.1719077568134172,
+              "hit_rate_at_10_raw": 0.4156099033816425,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 4561,
+              "hit_rate_at_10_informative_trajectory_count": 1908
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.3080229335568374,
+              "hit_rate_at_1": 0.25075483091787437,
+              "hit_rate_at_5": 0.3506944444444444,
+              "mean_rank": 93.09224033816425,
+              "mean_rank_percentile": 0.38845356308288065,
+              "pairwise_accuracy": 0.5086988814301026,
+              "median_rank": 21.0,
+              "hit_rate_at_10": 0.1512826134619601,
+              "hit_rate_at_10_raw": 0.4156099033816425,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 4561,
+              "hit_rate_at_10_informative_trajectory_count": 1908
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 187.5638586956522,
+              "median": 58.0
+            }
+          }
+        },
+        {
+          "dimension": "turn_bucket",
+          "value": "late",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 678,
+            "trajectory_count": 224,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.756191496463437,
+              "hit_rate_at_1": 0.693452380952381,
+              "hit_rate_at_5": 0.8266369047619048,
+              "mean_rank": 12.545014880952381,
+              "mean_rank_percentile": 0.16415628168081337,
+              "pairwise_accuracy": 0.568351947784749,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.2358490566037736,
+              "hit_rate_at_10_raw": 0.8761061946902655,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 108,
+              "hit_rate_at_10_informative_trajectory_count": 53
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.797733914727253,
+              "hit_rate_at_1": 0.7418879056047197,
+              "hit_rate_at_5": 0.8613569321533924,
+              "mean_rank": 10.337758112094395,
+              "mean_rank_percentile": 0.14801300977964876,
+              "pairwise_accuracy": 0.5316939644761118,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.2222222222222222,
+              "hit_rate_at_10_raw": 0.8761061946902655,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 108,
+              "hit_rate_at_10_informative_trajectory_count": 53
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1069,
+              "mean": 24.1858407079646,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "turn_bucket",
+          "value": "middle",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2455,
+            "trajectory_count": 1355,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.6265673233066424,
+              "hit_rate_at_1": 0.5489544895448955,
+              "hit_rate_at_5": 0.7162361623616236,
+              "mean_rank": 22.060270602706026,
+              "mean_rank_percentile": 0.2534525081644979,
+              "pairwise_accuracy": 0.5211534637347569,
+              "median_rank": 2.0,
+              "hit_rate_at_10": 0.27548209366391185,
+              "hit_rate_at_10_raw": 0.7067209775967414,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 966,
+              "hit_rate_at_10_informative_trajectory_count": 605
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.5711258460264276,
+              "hit_rate_at_1": 0.4973523421588595,
+              "hit_rate_at_5": 0.6492871690427698,
+              "mean_rank": 28.421588594704684,
+              "mean_rank_percentile": 0.26648902136060654,
+              "pairwise_accuracy": 0.5284485534124997,
+              "median_rank": 2.0,
+              "hit_rate_at_10": 0.2546583850931677,
+              "hit_rate_at_10_raw": 0.7067209775967414,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 966,
+              "hit_rate_at_10_informative_trajectory_count": 605
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1136,
+              "mean": 62.15723014256619,
+              "median": 3.0
+            }
+          }
+        },
+        {
+          "dimension": "survivor_width",
+          "value": "11-50",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1570,
+            "trajectory_count": 842,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.17071981659326627,
+              "hit_rate_at_1": 0.04931380311427818,
+              "hit_rate_at_5": 0.24840327263130116,
+              "mean_rank": 13.471458733929044,
+              "mean_rank_percentile": 0.4839878584546111,
+              "pairwise_accuracy": 0.5162655112581621,
+              "median_rank": 11.0,
+              "hit_rate_at_10": 0.4800936922670889,
+              "hit_rate_at_10_raw": 0.4662420382165605,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1570,
+              "hit_rate_at_10_informative_trajectory_count": 842
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.16505746117959433,
+              "hit_rate_at_1": 0.044585987261146494,
+              "hit_rate_at_5": 0.24140127388535032,
+              "mean_rank": 13.875796178343949,
+              "mean_rank_percentile": 0.48369076159702046,
+              "pairwise_accuracy": 0.516600549485541,
+              "median_rank": 12.0,
+              "hit_rate_at_10": 0.4662420382165605,
+              "hit_rate_at_10_raw": 0.4662420382165605,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1570,
+              "hit_rate_at_10_informative_trajectory_count": 842
+            },
+            "candidate_width": {
+              "minimum": 11,
+              "maximum": 50,
+              "mean": 27.618471337579617,
+              "median": 26.0
+            }
+          }
+        },
+        {
+          "dimension": "survivor_width",
+          "value": "51-200",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1817,
+            "trajectory_count": 820,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.0516164847899446,
+              "hit_rate_at_1": 0.007317073170731708,
+              "hit_rate_at_5": 0.04846689895470383,
+              "mean_rank": 52.6630168408827,
+              "mean_rank_percentile": 0.49094534716583343,
+              "pairwise_accuracy": 0.5091172110198267,
+              "median_rank": 43.0,
+              "hit_rate_at_10": 0.10168989547038328,
+              "hit_rate_at_10_raw": 0.09466152999449642,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1817,
+              "hit_rate_at_10_informative_trajectory_count": 820
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.050730880396302205,
+              "hit_rate_at_1": 0.007154650522839846,
+              "hit_rate_at_5": 0.04623004953219593,
+              "mean_rank": 53.61805173362686,
+              "mean_rank_percentile": 0.48726402187224477,
+              "pairwise_accuracy": 0.5127987548670284,
+              "median_rank": 44.0,
+              "hit_rate_at_10": 0.09466152999449642,
+              "hit_rate_at_10_raw": 0.09466152999449642,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1817,
+              "hit_rate_at_10_informative_trajectory_count": 820
+            },
+            "candidate_width": {
+              "minimum": 51,
+              "maximum": 200,
+              "mean": 108.80957622454595,
+              "median": 104.0
+            }
+          }
+        },
+        {
+          "dimension": "survivor_width",
+          "value": "<=10",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 4122,
+            "trajectory_count": 2346,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.8399400843268064,
+              "hit_rate_at_1": 0.7534836398327447,
+              "hit_rate_at_5": 0.961134284631727,
+              "mean_rank": 1.6260221721538857,
+              "mean_rank_percentile": 0.17061709748311563,
+              "pairwise_accuracy": 0.5107770650188797,
+              "median_rank": 1.0,
+              "hit_rate_at_10": null,
+              "hit_rate_at_10_raw": 1.0,
+              "hit_rate_at_10_informative": false,
+              "hit_rate_at_10_informative_state_count": 0,
+              "hit_rate_at_10_informative_trajectory_count": 0
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.8717160339794984,
+              "hit_rate_at_1": 0.7998544395924309,
+              "hit_rate_at_5": 0.9711305191654537,
+              "mean_rank": 1.4915089762251335,
+              "mean_rank_percentile": 0.14180057839082583,
+              "pairwise_accuracy": 0.5155372276029055,
+              "median_rank": 1.0,
+              "hit_rate_at_10": null,
+              "hit_rate_at_10_raw": 1.0,
+              "hit_rate_at_10_informative": false,
+              "hit_rate_at_10_informative_state_count": 0,
+              "hit_rate_at_10_informative_trajectory_count": 0
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 10,
+              "mean": 2.022076661814653,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "survivor_width",
+          "value": ">200",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2248,
+            "trajectory_count": 856,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.017459767510929546,
+              "hit_rate_at_1": 0.002628504672897196,
+              "hit_rate_at_5": 0.015478971962616822,
+              "mean_rank": 254.75661437472186,
+              "mean_rank_percentile": 0.49346153025250955,
+              "pairwise_accuracy": 0.5062549621519764,
+              "median_rank": 194.0,
+              "hit_rate_at_10": 0.02638239875389408,
+              "hit_rate_at_10_raw": 0.02491103202846975,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2248,
+              "hit_rate_at_10_informative_trajectory_count": 856
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.017255223427452015,
+              "hit_rate_at_1": 0.002224199288256228,
+              "hit_rate_at_5": 0.015569395017793594,
+              "mean_rank": 252.70017793594306,
+              "mean_rank_percentile": 0.488631922756102,
+              "pairwise_accuracy": 0.5105476056287085,
+              "median_rank": 189.0,
+              "hit_rate_at_10": 0.02491103202846975,
+              "hit_rate_at_10_raw": 0.02491103202846975,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2248,
+              "hit_rate_at_10_informative_trajectory_count": 856
+            },
+            "candidate_width": {
+              "minimum": 201,
+              "maximum": 1354,
+              "mean": 516.9101423487544,
+              "median": 388.5
+            }
+          }
+        },
+        {
+          "dimension": "other_answer",
+          "value": "with_other",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 759,
+            "trajectory_count": 568,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.7619267402469695,
+              "hit_rate_at_1": 0.6848591549295775,
+              "hit_rate_at_5": 0.846830985915493,
+              "mean_rank": 8.21830985915493,
+              "mean_rank_percentile": 0.1917536098959601,
+              "pairwise_accuracy": 0.5259674774761105,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.4411764705882353,
+              "hit_rate_at_10_raw": 0.9117259552042161,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 134,
+              "hit_rate_at_10_informative_trajectory_count": 102
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.7629662478202418,
+              "hit_rate_at_1": 0.6837944664031621,
+              "hit_rate_at_5": 0.852437417654809,
+              "mean_rank": 8.119894598155467,
+              "mean_rank_percentile": 0.19491651673269955,
+              "pairwise_accuracy": 0.5312399205098971,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.5,
+              "hit_rate_at_10_raw": 0.9117259552042161,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 134,
+              "hit_rate_at_10_informative_trajectory_count": 102
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 394,
+              "mean": 13.542819499341238,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "other_answer",
+          "value": "without_other",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 8998,
+            "trajectory_count": 2500,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.3895536733729309,
+              "hit_rate_at_1": 0.3210565079365079,
+              "hit_rate_at_5": 0.452705873015873,
+              "mean_rank": 68.17203428571429,
+              "mean_rank_percentile": 0.3569965376625981,
+              "pairwise_accuracy": 0.512927300552456,
+              "median_rank": 18.5,
+              "hit_rate_at_10": 0.1816527787783461,
+              "hit_rate_at_10_raw": 0.48788619693265173,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5501,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.3783318599649794,
+              "hit_rate_at_1": 0.3185152256056902,
+              "hit_rate_at_5": 0.4283174038675261,
+              "mean_rank": 76.37963991998222,
+              "mean_rank_percentile": 0.35338498930115286,
+              "pairwise_accuracy": 0.5125763898028189,
+              "median_rank": 12.0,
+              "hit_rate_at_10": 0.16233412106889655,
+              "hit_rate_at_10_raw": 0.48788619693265173,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5501,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 155.71660368970882,
+              "median": 35.0
+            }
+          }
+        },
+        {
+          "dimension": "supervision_weight",
+          "value": "high",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1882,
+            "trajectory_count": 1072,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.7592301356478318,
+              "hit_rate_at_1": 0.6797574626865672,
+              "hit_rate_at_5": 0.855907960199005,
+              "mean_rank": 7.762966417910447,
+              "mean_rank_percentile": 0.19797694048009062,
+              "pairwise_accuracy": 0.5078777842838519,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.39982269503546103,
+              "hit_rate_at_10_raw": 0.9017003188097769,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 294,
+              "hit_rate_at_10_informative_trajectory_count": 188
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.769572758441507,
+              "hit_rate_at_1": 0.6950053134962806,
+              "hit_rate_at_5": 0.859192348565356,
+              "mean_rank": 8.075982996811902,
+              "mean_rank_percentile": 0.18791940053389838,
+              "pairwise_accuracy": 0.4970014827877483,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.3707482993197279,
+              "hit_rate_at_10_raw": 0.9017003188097769,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 294,
+              "hit_rate_at_10_informative_trajectory_count": 188
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 394,
+              "mean": 14.782146652497342,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "supervision_weight",
+          "value": "low",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2507,
+            "trajectory_count": 1128,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.05501700272726625,
+              "hit_rate_at_1": 0.015957446808510637,
+              "hit_rate_at_5": 0.0700354609929078,
+              "mean_rank": 174.43794326241135,
+              "mean_rank_percentile": 0.503659347629825,
+              "pairwise_accuracy": 0.49631579714323737,
+              "median_rank": 90.0,
+              "hit_rate_at_10": 0.10146252285191956,
+              "hit_rate_at_10_raw": 0.10131631431990427,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2471,
+              "hit_rate_at_10_informative_trajectory_count": 1094
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.04523532571179057,
+              "hit_rate_at_1": 0.011567610690067811,
+              "hit_rate_at_5": 0.05305145592341444,
+              "mean_rank": 184.13282808137217,
+              "mean_rank_percentile": 0.4987988039040433,
+              "pairwise_accuracy": 0.5011793155460776,
+              "median_rank": 105.0,
+              "hit_rate_at_10": 0.08822339133953865,
+              "hit_rate_at_10_raw": 0.10131631431990427,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2471,
+              "hit_rate_at_10_informative_trajectory_count": 1094
+            },
+            "candidate_width": {
+              "minimum": 3,
+              "maximum": 1354,
+              "mean": 378.07738332668526,
+              "median": 283.0
+            }
+          }
+        },
+        {
+          "dimension": "supervision_weight",
+          "value": "medium",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 5368,
+            "trajectory_count": 2468,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.5253760617683726,
+              "hit_rate_at_1": 0.44882158292814694,
+              "hit_rate_at_5": 0.6007674423091764,
+              "mean_rank": 29.966706381364,
+              "mean_rank_percentile": 0.297731907096628,
+              "pairwise_accuracy": 0.5184441282767724,
+              "median_rank": 2.5,
+              "hit_rate_at_10": 0.2522711511789182,
+              "hit_rate_at_10_raw": 0.5832712369597616,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2870,
+              "hit_rate_at_10_informative_trajectory_count": 1236
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.45111411421648157,
+              "hit_rate_at_1": 0.38152011922503726,
+              "hit_rate_at_5": 0.5124813710879285,
+              "mean_rank": 40.35152757078986,
+              "mean_rank_percentile": 0.3210780284537368,
+              "pairwise_accuracy": 0.525014812726045,
+              "median_rank": 5.0,
+              "hit_rate_at_10": 0.2205574912891986,
+              "hit_rate_at_10_raw": 0.5832712369597616,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2870,
+              "hit_rate_at_10_informative_trajectory_count": 1236
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1136,
+              "mean": 81.17678837555887,
+              "median": 15.0
+            }
+          }
+        },
+        {
+          "dimension": "seed",
+          "value": "2026",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 9757,
+            "trajectory_count": 2500,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.4269771949786356,
+              "hit_rate_at_1": 0.35753650793650793,
+              "hit_rate_at_5": 0.49368285714285715,
+              "mean_rank": 63.81474285714285,
+              "mean_rank_percentile": 0.3412457503725987,
+              "pairwise_accuracy": 0.5135528713206026,
+              "median_rank": 18.0,
+              "hit_rate_at_10": 0.1883413779026487,
+              "hit_rate_at_10_raw": 0.5208568207440811,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5635,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.4082526860777338,
+              "hit_rate_at_1": 0.3469304089371733,
+              "hit_rate_at_5": 0.4613098288408322,
+              "mean_rank": 71.06969355334631,
+              "mean_rank_percentile": 0.34105767858275005,
+              "pairwise_accuracy": 0.5134061843448944,
+              "median_rank": 8.0,
+              "hit_rate_at_10": 0.17036379769299023,
+              "hit_rate_at_10_raw": 0.5208568207440811,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5635,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 144.65686174028903,
+              "median": 25.0
+            }
+          }
+        },
+        {
+          "dimension": "generation_seed",
+          "value": "2026",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 9757,
+            "trajectory_count": 2500,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.4269771949786356,
+              "hit_rate_at_1": 0.35753650793650793,
+              "hit_rate_at_5": 0.49368285714285715,
+              "mean_rank": 63.81474285714285,
+              "mean_rank_percentile": 0.3412457503725987,
+              "pairwise_accuracy": 0.5135528713206026,
+              "median_rank": 18.0,
+              "hit_rate_at_10": 0.1883413779026487,
+              "hit_rate_at_10_raw": 0.5208568207440811,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5635,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.4082526860777338,
+              "hit_rate_at_1": 0.3469304089371733,
+              "hit_rate_at_5": 0.4613098288408322,
+              "mean_rank": 71.06969355334631,
+              "mean_rank_percentile": 0.34105767858275005,
+              "pairwise_accuracy": 0.5134061843448944,
+              "median_rank": 8.0,
+              "hit_rate_at_10": 0.17036379769299023,
+              "hit_rate_at_10_raw": 0.5208568207440811,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5635,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 144.65686174028903,
+              "median": 25.0
+            }
+          }
+        }
+      ],
+      "artifact": "/Users/joellui/Documents/tiktok_hackathon26/approach 1/linear_model.sqlite3",
+      "training_scope": "legacy_all_products",
+      "feature_schema_version": "legacy"
+    },
+    "fm": {
+      "schema_version": "1",
+      "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+      "overall": {
+        "schema_version": "1",
+        "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+        "state_count": 9757,
+        "trajectory_count": 2500,
+        "primary": {
+          "aggregation": "trajectory_macro",
+          "mrr": 0.4350615914011279,
+          "hit_rate_at_1": 0.3638531746031746,
+          "hit_rate_at_5": 0.5022626984126984,
+          "mean_rank": 61.69058142857143,
+          "mean_rank_percentile": 0.321899114293457,
+          "pairwise_accuracy": 0.5426704985709572,
+          "median_rank": 15.0,
+          "hit_rate_at_10": 0.21030865531621962,
+          "hit_rate_at_10_raw": 0.5312083632264015,
+          "hit_rate_at_10_informative": true,
+          "hit_rate_at_10_informative_state_count": 5635,
+          "hit_rate_at_10_informative_trajectory_count": 1983
+        },
+        "state_micro": {
+          "aggregation": "state_micro",
+          "mrr": 0.4138235198931317,
+          "hit_rate_at_1": 0.35103002972225067,
+          "hit_rate_at_5": 0.4671517884595675,
+          "mean_rank": 69.1624474736087,
+          "mean_rank_percentile": 0.32545725442282225,
+          "pairwise_accuracy": 0.5357412303505313,
+          "median_rank": 8.0,
+          "hit_rate_at_10": 0.18828748890860691,
+          "hit_rate_at_10_raw": 0.5312083632264015,
+          "hit_rate_at_10_informative": true,
+          "hit_rate_at_10_informative_state_count": 5635,
+          "hit_rate_at_10_informative_trajectory_count": 1983
+        },
+        "candidate_width": {
+          "minimum": 1,
+          "maximum": 1354,
+          "mean": 144.65686174028903,
+          "median": 25.0
+        }
+      },
+      "breakdowns": [
+        {
+          "dimension": "scenario",
+          "value": "boundary",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 636,
+            "trajectory_count": 137,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.282973248127621,
+              "hit_rate_at_1": 0.22161105318039623,
+              "hit_rate_at_5": 0.3423792144595064,
+              "mean_rank": 119.64642857142857,
+              "mean_rank_percentile": 0.4421387363799465,
+              "pairwise_accuracy": 0.45876950735098326,
+              "median_rank": 56.0,
+              "hit_rate_at_10": 0.08077336197636949,
+              "hit_rate_at_10_raw": 0.40408805031446543,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 415,
+              "hit_rate_at_10_informative_trajectory_count": 133
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.32599339578973685,
+              "hit_rate_at_1": 0.2672955974842767,
+              "hit_rate_at_5": 0.3757861635220126,
+              "mean_rank": 117.85691823899371,
+              "mean_rank_percentile": 0.4026512039614237,
+              "pairwise_accuracy": 0.476286860342781,
+              "median_rank": 25.0,
+              "hit_rate_at_10": 0.08674698795180723,
+              "hit_rate_at_10_raw": 0.40408805031446543,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 415,
+              "hit_rate_at_10_informative_trajectory_count": 133
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 230.61477987421384,
+              "median": 54.5
+            }
+          }
+        },
+        {
+          "dimension": "scenario",
+          "value": "browsing",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 4114,
+            "trajectory_count": 991,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.3349900380795423,
+              "hit_rate_at_1": 0.27759117774254,
+              "hit_rate_at_5": 0.3813343904665802,
+              "mean_rank": 97.75976887223104,
+              "mean_rank_percentile": 0.364213292072508,
+              "pairwise_accuracy": 0.5224665752092003,
+              "median_rank": 43.0,
+              "hit_rate_at_10": 0.15200188295921907,
+              "hit_rate_at_10_raw": 0.4470102090422946,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2657,
+              "hit_rate_at_10_informative_trajectory_count": 961
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.3583868881900469,
+              "hit_rate_at_1": 0.3087019931939718,
+              "hit_rate_at_5": 0.3952357802625182,
+              "mean_rank": 99.99003403014098,
+              "mean_rank_percentile": 0.34716133828960444,
+              "pairwise_accuracy": 0.5235445583026836,
+              "median_rank": 18.0,
+              "hit_rate_at_10": 0.14377117049303725,
+              "hit_rate_at_10_raw": 0.4470102090422946,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2657,
+              "hit_rate_at_10_informative_trajectory_count": 961
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 209.3458920758386,
+              "median": 56.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario",
+          "value": "buying",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2907,
+            "trajectory_count": 990,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.4905357342597268,
+              "hit_rate_at_1": 0.4047306397306397,
+              "hit_rate_at_5": 0.5773569023569024,
+              "mean_rank": 32.75952861952862,
+              "mean_rank_percentile": 0.29140763913948137,
+              "pairwise_accuracy": 0.5794789070934753,
+              "median_rank": 7.0,
+              "hit_rate_at_10": 0.2734812466983624,
+              "hit_rate_at_10_raw": 0.5538355693154455,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1708,
+              "hit_rate_at_10_informative_trajectory_count": 631
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.40459862893118126,
+              "hit_rate_at_1": 0.3285173718610251,
+              "hit_rate_at_5": 0.4712762297901617,
+              "mean_rank": 44.48950808393533,
+              "mean_rank_percentile": 0.3193207499463883,
+              "pairwise_accuracy": 0.5668069253558103,
+              "median_rank": 7.0,
+              "hit_rate_at_10": 0.24063231850117095,
+              "hit_rate_at_10_raw": 0.5538355693154455,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1708,
+              "hit_rate_at_10_informative_trajectory_count": 631
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1069,
+              "mean": 95.77433780529756,
+              "median": 22.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario",
+          "value": "intent_override",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2100,
+            "trajectory_count": 382,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.6054480074748158,
+              "hit_rate_at_1": 0.532712124989612,
+              "hit_rate_at_5": 0.6787043962436633,
+              "mean_rank": 22.31159311892296,
+              "mean_rank_percentile": 0.24802576873729812,
+              "pairwise_accuracy": 0.550012630716953,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.3397625199950781,
+              "hit_rate_at_10_raw": 0.7033333333333334,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 855,
+              "hit_rate_at_10_informative_trajectory_count": 258
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.5617963864562936,
+              "hit_rate_at_1": 0.49047619047619045,
+              "hit_rate_at_5": 0.63,
+              "mean_rank": 28.176666666666666,
+              "mean_rank_percentile": 0.2680538570792514,
+              "pairwise_accuracy": 0.534858979978367,
+              "median_rank": 2.0,
+              "hit_rate_at_10": 0.27134502923976606,
+              "hit_rate_at_10_raw": 0.7033333333333334,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 855,
+              "hit_rate_at_10_informative_trajectory_count": 258
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1136,
+              "mean": 59.562380952380956,
+              "median": 3.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "boundary",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 499,
+            "trajectory_count": 133,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.35840279542728254,
+              "hit_rate_at_1": 0.29226041293710464,
+              "hit_rate_at_5": 0.4207900704141305,
+              "mean_rank": 97.87266380236305,
+              "mean_rank_percentile": 0.4008949633657885,
+              "pairwise_accuracy": 0.4645576887561302,
+              "median_rank": 39.0,
+              "hit_rate_at_10": 0.08834586466165413,
+              "hit_rate_at_10_raw": 0.4909819639278557,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 282,
+              "hit_rate_at_10_informative_trajectory_count": 133
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.4030642251315979,
+              "hit_rate_at_1": 0.3366733466933868,
+              "hit_rate_at_5": 0.46292585170340683,
+              "mean_rank": 92.9879759519038,
+              "mean_rank_percentile": 0.36236531324622423,
+              "pairwise_accuracy": 0.48644544808928564,
+              "median_rank": 11.0,
+              "hit_rate_at_10": 0.09929078014184398,
+              "hit_rate_at_10_raw": 0.4909819639278557,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 282,
+              "hit_rate_at_10_informative_trajectory_count": 133
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 185.31462925851704,
+              "median": 26.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "browsing",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 3123,
+            "trajectory_count": 963,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.4615249430138386,
+              "hit_rate_at_1": 0.4077065717252633,
+              "hit_rate_at_5": 0.5096894624932008,
+              "mean_rank": 74.62070991775042,
+              "mean_rank_percentile": 0.3030926691397891,
+              "pairwise_accuracy": 0.5290893107214544,
+              "median_rank": 22.5,
+              "hit_rate_at_10": 0.157022229881096,
+              "hit_rate_at_10_raw": 0.5465898174831892,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1696,
+              "hit_rate_at_10_informative_trajectory_count": 829
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.45412227263251725,
+              "hit_rate_at_1": 0.4031380083253282,
+              "hit_rate_at_5": 0.4966378482228626,
+              "mean_rank": 77.94364393211656,
+              "mean_rank_percentile": 0.30064260377588653,
+              "pairwise_accuracy": 0.5320899701662015,
+              "median_rank": 6.0,
+              "hit_rate_at_10": 0.1650943396226415,
+              "hit_rate_at_10_raw": 0.5465898174831892,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1696,
+              "hit_rate_at_10_informative_trajectory_count": 829
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 165.99007364713415,
+              "median": 22.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "buying",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2907,
+            "trajectory_count": 990,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.4905357342597268,
+              "hit_rate_at_1": 0.4047306397306397,
+              "hit_rate_at_5": 0.5773569023569024,
+              "mean_rank": 32.75952861952862,
+              "mean_rank_percentile": 0.29140763913948137,
+              "pairwise_accuracy": 0.5794789070934753,
+              "median_rank": 7.0,
+              "hit_rate_at_10": 0.2734812466983624,
+              "hit_rate_at_10_raw": 0.5538355693154455,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1708,
+              "hit_rate_at_10_informative_trajectory_count": 631
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.40459862893118126,
+              "hit_rate_at_1": 0.3285173718610251,
+              "hit_rate_at_5": 0.4712762297901617,
+              "mean_rank": 44.48950808393533,
+              "mean_rank_percentile": 0.3193207499463883,
+              "pairwise_accuracy": 0.5668069253558103,
+              "median_rank": 7.0,
+              "hit_rate_at_10": 0.24063231850117095,
+              "hit_rate_at_10_raw": 0.5538355693154455,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1708,
+              "hit_rate_at_10_informative_trajectory_count": 631
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1069,
+              "mean": 95.77433780529756,
+              "median": 22.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "exploring_unknown",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1128,
+            "trajectory_count": 1128,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.055303680819243584,
+              "hit_rate_at_1": 0.01152482269503546,
+              "hit_rate_at_5": 0.07358156028368794,
+              "mean_rank": 174.1994680851064,
+              "mean_rank_percentile": 0.5005148657277824,
+              "pairwise_accuracy": 0.49946027904528,
+              "median_rank": 87.0,
+              "hit_rate_at_10": 0.10054844606946983,
+              "hit_rate_at_10_raw": 0.1276595744680851,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1094,
+              "hit_rate_at_10_informative_trajectory_count": 1094
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.055303680819243584,
+              "hit_rate_at_1": 0.01152482269503546,
+              "hit_rate_at_5": 0.07358156028368794,
+              "mean_rank": 174.1994680851064,
+              "mean_rank_percentile": 0.5005148657277824,
+              "pairwise_accuracy": 0.49946027904528,
+              "median_rank": 87.0,
+              "hit_rate_at_10": 0.10054844606946983,
+              "hit_rate_at_10_raw": 0.1276595744680851,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1094,
+              "hit_rate_at_10_informative_trajectory_count": 1094
+            },
+            "candidate_width": {
+              "minimum": 3,
+              "maximum": 1354,
+              "mean": 352.00443262411346,
+              "median": 249.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "intent_override",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1141,
+            "trajectory_count": 382,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.5174928011410855,
+              "hit_rate_at_1": 0.4254736973323361,
+              "hit_rate_at_5": 0.6114372974320618,
+              "mean_rank": 25.555721765145847,
+              "mean_rank_percentile": 0.2857212516280902,
+              "pairwise_accuracy": 0.5746554907264146,
+              "median_rank": 5.0,
+              "hit_rate_at_10": 0.32048974061169183,
+              "hit_rate_at_10_raw": 0.6003505696757231,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 623,
+              "hit_rate_at_10_informative_trajectory_count": 246
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.44223017068896453,
+              "hit_rate_at_1": 0.3619631901840491,
+              "hit_rate_at_5": 0.5109553023663453,
+              "mean_rank": 35.994741454864155,
+              "mean_rank_percentile": 0.3106931816752713,
+              "pairwise_accuracy": 0.5643260048860748,
+              "median_rank": 5.0,
+              "hit_rate_at_10": 0.2680577849117175,
+              "hit_rate_at_10_raw": 0.6003505696757231,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 623,
+              "hit_rate_at_10_informative_trajectory_count": 246
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1069,
+              "mean": 80.84312007011394,
+              "median": 15.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "provisional_override",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 959,
+            "trajectory_count": 382,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.6980346220498466,
+              "hit_rate_at_1": 0.6383071553228622,
+              "hit_rate_at_5": 0.762652705061082,
+              "mean_rank": 18.845986038394415,
+              "mean_rank_percentile": 0.2178453998385663,
+              "pairwise_accuracy": 0.48737032771221994,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.32,
+              "hit_rate_at_10_raw": 0.8258602711157456,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 232,
+              "hit_rate_at_10_informative_trajectory_count": 125
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.7040540008364006,
+              "hit_rate_at_1": 0.643378519290928,
+              "hit_rate_at_5": 0.7716371220020855,
+              "mean_rank": 18.874869655891555,
+              "mean_rank_percentile": 0.21732239788836644,
+              "pairwise_accuracy": 0.47325304966613835,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.2801724137931034,
+              "hit_rate_at_10_raw": 0.8258602711157456,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 232,
+              "hit_rate_at_10_informative_trajectory_count": 125
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1136,
+              "mean": 34.2429614181439,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "turn_bucket",
+          "value": "early",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 6624,
+            "trajectory_count": 2500,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.35894571762856803,
+              "hit_rate_at_1": 0.2926,
+              "hit_rate_at_5": 0.4166,
+              "mean_rank": 81.06946666666666,
+              "mean_rank_percentile": 0.35649278269415524,
+              "pairwise_accuracy": 0.534382645384502,
+              "median_rank": 20.0,
+              "hit_rate_at_10": 0.1914744933612858,
+              "hit_rate_at_10_raw": 0.42542270531400966,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 4561,
+              "hit_rate_at_10_informative_trajectory_count": 1908
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.31202579902768623,
+              "hit_rate_at_1": 0.25181159420289856,
+              "hit_rate_at_5": 0.35839371980676327,
+              "mean_rank": 90.66681763285024,
+              "mean_rank_percentile": 0.373921144098044,
+              "pairwise_accuracy": 0.5271223729814054,
+              "median_rank": 18.0,
+              "hit_rate_at_10": 0.1655338741504056,
+              "hit_rate_at_10_raw": 0.42542270531400966,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 4561,
+              "hit_rate_at_10_informative_trajectory_count": 1908
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 187.5638586956522,
+              "median": 58.0
+            }
+          }
+        },
+        {
+          "dimension": "turn_bucket",
+          "value": "late",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 678,
+            "trajectory_count": 224,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.7639516535805798,
+              "hit_rate_at_1": 0.7034970238095238,
+              "hit_rate_at_5": 0.834077380952381,
+              "mean_rank": 14.065104166666668,
+              "mean_rank_percentile": 0.15691415014433813,
+              "pairwise_accuracy": 0.5847663828084687,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.29245283018867924,
+              "hit_rate_at_10_raw": 0.883480825958702,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 108,
+              "hit_rate_at_10_informative_trajectory_count": 53
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.8101458348664196,
+              "hit_rate_at_1": 0.7595870206489675,
+              "hit_rate_at_5": 0.8657817109144543,
+              "mean_rank": 11.734513274336283,
+              "mean_rank_percentile": 0.12940123752014326,
+              "pairwise_accuracy": 0.5920709098921153,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.26851851851851855,
+              "hit_rate_at_10_raw": 0.883480825958702,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 108,
+              "hit_rate_at_10_informative_trajectory_count": 53
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1069,
+              "mean": 24.1858407079646,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "turn_bucket",
+          "value": "middle",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2455,
+            "trajectory_count": 1355,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.6337246140803735,
+              "hit_rate_at_1": 0.5558425584255843,
+              "hit_rate_at_5": 0.7182041820418203,
+              "mean_rank": 20.992373923739237,
+              "mean_rank_percentile": 0.23590809932823356,
+              "pairwise_accuracy": 0.5534083938833857,
+              "median_rank": 2.0,
+              "hit_rate_at_10": 0.29531680440771346,
+              "hit_rate_at_10_raw": 0.7193482688391039,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 966,
+              "hit_rate_at_10_informative_trajectory_count": 605
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.5790380101012056,
+              "hit_rate_at_1": 0.5059063136456212,
+              "hit_rate_at_5": 0.6505091649694501,
+              "mean_rank": 27.0,
+              "mean_rank_percentile": 0.2488385881300921,
+              "pairwise_accuracy": 0.5598256812770277,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.2867494824016563,
+              "hit_rate_at_10_raw": 0.7193482688391039,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 966,
+              "hit_rate_at_10_informative_trajectory_count": 605
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1136,
+              "mean": 62.15723014256619,
+              "median": 3.0
+            }
+          }
+        },
+        {
+          "dimension": "survivor_width",
+          "value": "11-50",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1570,
+            "trajectory_count": 842,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.18299328906290852,
+              "hit_rate_at_1": 0.05486276062285563,
+              "hit_rate_at_5": 0.26272103457376617,
+              "mean_rank": 12.661836424989632,
+              "mean_rank_percentile": 0.45542039326488737,
+              "pairwise_accuracy": 0.544832976447886,
+              "median_rank": 10.75,
+              "hit_rate_at_10": 0.5017399992459375,
+              "hit_rate_at_10_raw": 0.4910828025477707,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1570,
+              "hit_rate_at_10_informative_trajectory_count": 842
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.17570804391588177,
+              "hit_rate_at_1": 0.048407643312101914,
+              "hit_rate_at_5": 0.2573248407643312,
+              "mean_rank": 13.073885350318472,
+              "mean_rank_percentile": 0.45548257935004116,
+              "pairwise_accuracy": 0.5448087317325203,
+              "median_rank": 11.0,
+              "hit_rate_at_10": 0.4910828025477707,
+              "hit_rate_at_10_raw": 0.4910828025477707,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1570,
+              "hit_rate_at_10_informative_trajectory_count": 842
+            },
+            "candidate_width": {
+              "minimum": 11,
+              "maximum": 50,
+              "mean": 27.618471337579617,
+              "median": 26.0
+            }
+          }
+        },
+        {
+          "dimension": "survivor_width",
+          "value": "51-200",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1817,
+            "trajectory_count": 820,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.06114807790280018,
+              "hit_rate_at_1": 0.012195121951219513,
+              "hit_rate_at_5": 0.066869918699187,
+              "mean_rank": 50.85147793263647,
+              "mean_rank_percentile": 0.4713992975280658,
+              "pairwise_accuracy": 0.5286632606575943,
+              "median_rank": 42.0,
+              "hit_rate_at_10": 0.12934088269454122,
+              "hit_rate_at_10_raw": 0.11997798569069895,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1817,
+              "hit_rate_at_10_informative_trajectory_count": 820
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.05885803107133456,
+              "hit_rate_at_1": 0.012107870115575124,
+              "hit_rate_at_5": 0.06053935057787562,
+              "mean_rank": 52.28343423225096,
+              "mean_rank_percentile": 0.4709209095935425,
+              "pairwise_accuracy": 0.5291418671457306,
+              "median_rank": 43.0,
+              "hit_rate_at_10": 0.11997798569069895,
+              "hit_rate_at_10_raw": 0.11997798569069895,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1817,
+              "hit_rate_at_10_informative_trajectory_count": 820
+            },
+            "candidate_width": {
+              "minimum": 51,
+              "maximum": 200,
+              "mean": 108.80957622454595,
+              "median": 104.0
+            }
+          }
+        },
+        {
+          "dimension": "survivor_width",
+          "value": "<=10",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 4122,
+            "trajectory_count": 2346,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.8470112733096459,
+              "hit_rate_at_1": 0.762434031583648,
+              "hit_rate_at_5": 0.9661986292101381,
+              "mean_rank": 1.5788288745449872,
+              "mean_rank_percentile": 0.15897423784328546,
+              "pairwise_accuracy": 0.5381926276800028,
+              "median_rank": 1.0,
+              "hit_rate_at_10": null,
+              "hit_rate_at_10_raw": 1.0,
+              "hit_rate_at_10_informative": false,
+              "hit_rate_at_10_informative_state_count": 0,
+              "hit_rate_at_10_informative_trajectory_count": 0
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.8762081898908681,
+              "hit_rate_at_1": 0.8061620572537603,
+              "hit_rate_at_5": 0.972828723920427,
+              "mean_rank": 1.465065502183406,
+              "mean_rank_percentile": 0.13176470814753202,
+              "pairwise_accuracy": 0.5505947336561744,
+              "median_rank": 1.0,
+              "hit_rate_at_10": null,
+              "hit_rate_at_10_raw": 1.0,
+              "hit_rate_at_10_informative": false,
+              "hit_rate_at_10_informative_state_count": 0,
+              "hit_rate_at_10_informative_trajectory_count": 0
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 10,
+              "mean": 2.022076661814653,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "survivor_width",
+          "value": ">200",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2248,
+            "trajectory_count": 856,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.018069716444070502,
+              "hit_rate_at_1": 0.0014602803738317756,
+              "hit_rate_at_5": 0.013225967957276367,
+              "mean_rank": 246.25972685803293,
+              "mean_rank_percentile": 0.47235588121715033,
+              "pairwise_accuracy": 0.5273606111873356,
+              "median_rank": 188.25,
+              "hit_rate_at_10": 0.03218179795282599,
+              "hit_rate_at_10_raw": 0.03202846975088968,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2248,
+              "hit_rate_at_10_informative_trajectory_count": 856
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.019190059369474217,
+              "hit_rate_at_1": 0.0017793594306049821,
+              "hit_rate_at_5": 0.015124555160142349,
+              "mean_rank": 246.1094306049822,
+              "mean_rank_percentile": 0.47223370200547976,
+              "pairwise_accuracy": 0.5269458263793309,
+              "median_rank": 182.0,
+              "hit_rate_at_10": 0.03202846975088968,
+              "hit_rate_at_10_raw": 0.03202846975088968,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2248,
+              "hit_rate_at_10_informative_trajectory_count": 856
+            },
+            "candidate_width": {
+              "minimum": 201,
+              "maximum": 1354,
+              "mean": 516.9101423487544,
+              "median": 388.5
+            }
+          }
+        },
+        {
+          "dimension": "other_answer",
+          "value": "with_other",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 759,
+            "trajectory_count": 568,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.7640331030501817,
+              "hit_rate_at_1": 0.6919014084507042,
+              "hit_rate_at_5": 0.8485915492957746,
+              "mean_rank": 7.866637323943662,
+              "mean_rank_percentile": 0.18377917742454547,
+              "pairwise_accuracy": 0.5460984892261705,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.37254901960784315,
+              "hit_rate_at_10_raw": 0.8945981554677207,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 134,
+              "hit_rate_at_10_informative_trajectory_count": 102
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.7609872888445165,
+              "hit_rate_at_1": 0.6851119894598156,
+              "hit_rate_at_5": 0.8484848484848485,
+              "mean_rank": 8.206851119894598,
+              "mean_rank_percentile": 0.19128527054527023,
+              "pairwise_accuracy": 0.5403360124447448,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.40298507462686567,
+              "hit_rate_at_10_raw": 0.8945981554677207,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 134,
+              "hit_rate_at_10_informative_trajectory_count": 102
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 394,
+              "mean": 13.542819499341238,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "other_answer",
+          "value": "without_other",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 8998,
+            "trajectory_count": 2500,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.3978725094802368,
+              "hit_rate_at_1": 0.32656682539682536,
+              "hit_rate_at_5": 0.4625212698412698,
+              "mean_rank": 65.7784926984127,
+              "mean_rank_percentile": 0.33514429564961074,
+              "pairwise_accuracy": 0.5425039617711015,
+              "median_rank": 16.0,
+              "hit_rate_at_10": 0.20532622529596808,
+              "hit_rate_at_10_raw": 0.5005556790397866,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5501,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.38453953449258704,
+              "hit_rate_at_1": 0.3228495221160258,
+              "hit_rate_at_5": 0.43498555234496555,
+              "mean_rank": 74.30417870637919,
+              "mean_rank_percentile": 0.33677494010442505,
+              "pairwise_accuracy": 0.5355274375104596,
+              "median_rank": 10.0,
+              "hit_rate_at_10": 0.1830576258862025,
+              "hit_rate_at_10_raw": 0.5005556790397866,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5501,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 155.71660368970882,
+              "median": 35.0
+            }
+          }
+        },
+        {
+          "dimension": "supervision_weight",
+          "value": "high",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1882,
+            "trajectory_count": 1072,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.768270165770549,
+              "hit_rate_at_1": 0.6951325959488273,
+              "hit_rate_at_5": 0.8540422885572139,
+              "mean_rank": 8.018959888059703,
+              "mean_rank_percentile": 0.18633417206327393,
+              "pairwise_accuracy": 0.535481019723625,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.3484042553191489,
+              "hit_rate_at_10_raw": 0.8931987247608927,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 294,
+              "hit_rate_at_10_informative_trajectory_count": 188
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.7838385269612644,
+              "hit_rate_at_1": 0.7194473963868225,
+              "hit_rate_at_5": 0.8533475026567482,
+              "mean_rank": 8.718916046758768,
+              "mean_rank_percentile": 0.16780766349418128,
+              "pairwise_accuracy": 0.5517775885891197,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.3163265306122449,
+              "hit_rate_at_10_raw": 0.8931987247608927,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 294,
+              "hit_rate_at_10_informative_trajectory_count": 188
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 394,
+              "mean": 14.782146652497342,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "supervision_weight",
+          "value": "low",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2507,
+            "trajectory_count": 1128,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.05644347630740004,
+              "hit_rate_at_1": 0.013223995271867612,
+              "hit_rate_at_5": 0.07432033096926713,
+              "mean_rank": 174.20644208037825,
+              "mean_rank_percentile": 0.500876773614854,
+              "pairwise_accuracy": 0.4990983711582083,
+              "median_rank": 86.0,
+              "hit_rate_at_10": 0.1004722730042657,
+              "hit_rate_at_10_raw": 0.0997207818109294,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2471,
+              "hit_rate_at_10_informative_trajectory_count": 1094
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.0479977808386198,
+              "hit_rate_at_1": 0.011567610690067811,
+              "hit_rate_at_5": 0.056641404068607897,
+              "mean_rank": 182.99481451934582,
+              "mean_rank_percentile": 0.4956471247668691,
+              "pairwise_accuracy": 0.5043309946832517,
+              "median_rank": 96.0,
+              "hit_rate_at_10": 0.08660461351679483,
+              "hit_rate_at_10_raw": 0.0997207818109294,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2471,
+              "hit_rate_at_10_informative_trajectory_count": 1094
+            },
+            "candidate_width": {
+              "minimum": 3,
+              "maximum": 1354,
+              "mean": 378.07738332668526,
+              "median": 283.0
+            }
+          }
+        },
+        {
+          "dimension": "supervision_weight",
+          "value": "medium",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 5368,
+            "trajectory_count": 2468,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.5322656082518945,
+              "hit_rate_at_1": 0.4528806822566952,
+              "hit_rate_at_5": 0.61128042113658,
+              "mean_rank": 27.514453577216948,
+              "mean_rank_percentile": 0.2768993526446681,
+              "pairwise_accuracy": 0.5538605352308071,
+              "median_rank": 2.0,
+              "hit_rate_at_10": 0.29397570247084814,
+              "hit_rate_at_10_raw": 0.6058122205663189,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2870,
+              "hit_rate_at_10_informative_trajectory_count": 1236
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.454948125799882,
+              "hit_rate_at_1": 0.38040238450074515,
+              "hit_rate_at_5": 0.5234724292101341,
+              "mean_rank": 37.190946348733235,
+              "mean_rank_percentile": 0.3012453552378701,
+              "pairwise_accuracy": 0.5544485395224985,
+              "median_rank": 4.0,
+              "hit_rate_at_10": 0.2627177700348432,
+              "hit_rate_at_10_raw": 0.6058122205663189,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2870,
+              "hit_rate_at_10_informative_trajectory_count": 1236
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1136,
+              "mean": 81.17678837555887,
+              "median": 15.0
+            }
+          }
+        },
+        {
+          "dimension": "seed",
+          "value": "2026",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 9757,
+            "trajectory_count": 2500,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.4350615914011279,
+              "hit_rate_at_1": 0.3638531746031746,
+              "hit_rate_at_5": 0.5022626984126984,
+              "mean_rank": 61.69058142857143,
+              "mean_rank_percentile": 0.321899114293457,
+              "pairwise_accuracy": 0.5426704985709572,
+              "median_rank": 15.0,
+              "hit_rate_at_10": 0.21030865531621962,
+              "hit_rate_at_10_raw": 0.5312083632264015,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5635,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.4138235198931317,
+              "hit_rate_at_1": 0.35103002972225067,
+              "hit_rate_at_5": 0.4671517884595675,
+              "mean_rank": 69.1624474736087,
+              "mean_rank_percentile": 0.32545725442282225,
+              "pairwise_accuracy": 0.5357412303505313,
+              "median_rank": 8.0,
+              "hit_rate_at_10": 0.18828748890860691,
+              "hit_rate_at_10_raw": 0.5312083632264015,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5635,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 144.65686174028903,
+              "median": 25.0
+            }
+          }
+        },
+        {
+          "dimension": "generation_seed",
+          "value": "2026",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 9757,
+            "trajectory_count": 2500,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.4350615914011279,
+              "hit_rate_at_1": 0.3638531746031746,
+              "hit_rate_at_5": 0.5022626984126984,
+              "mean_rank": 61.69058142857143,
+              "mean_rank_percentile": 0.321899114293457,
+              "pairwise_accuracy": 0.5426704985709572,
+              "median_rank": 15.0,
+              "hit_rate_at_10": 0.21030865531621962,
+              "hit_rate_at_10_raw": 0.5312083632264015,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5635,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.4138235198931317,
+              "hit_rate_at_1": 0.35103002972225067,
+              "hit_rate_at_5": 0.4671517884595675,
+              "mean_rank": 69.1624474736087,
+              "mean_rank_percentile": 0.32545725442282225,
+              "pairwise_accuracy": 0.5357412303505313,
+              "median_rank": 8.0,
+              "hit_rate_at_10": 0.18828748890860691,
+              "hit_rate_at_10_raw": 0.5312083632264015,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5635,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 144.65686174028903,
+              "median": 25.0
+            }
+          }
+        }
+      ],
+      "artifact": "/Users/joellui/Documents/tiktok_hackathon26/approach 1/fm_only_model.sqlite3",
+      "training_scope": "legacy_all_products",
+      "feature_schema_version": "legacy"
+    },
+    "hybrid": {
+      "schema_version": "1",
+      "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+      "overall": {
+        "schema_version": "1",
+        "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+        "state_count": 9757,
+        "trajectory_count": 2500,
+        "primary": {
+          "aggregation": "trajectory_macro",
+          "mrr": 0.43722905058980877,
+          "hit_rate_at_1": 0.36559555555555556,
+          "hit_rate_at_5": 0.5025503174603174,
+          "mean_rank": 61.53210238095238,
+          "mean_rank_percentile": 0.31480376383024633,
+          "pairwise_accuracy": 0.5550208978620065,
+          "median_rank": 14.0,
+          "hit_rate_at_10": 0.2188583115209439,
+          "hit_rate_at_10_raw": 0.536845341805883,
+          "hit_rate_at_10_informative": true,
+          "hit_rate_at_10_informative_state_count": 5635,
+          "hit_rate_at_10_informative_trajectory_count": 1983
+        },
+        "state_micro": {
+          "aggregation": "state_micro",
+          "mrr": 0.41699990840786505,
+          "hit_rate_at_1": 0.3537972737521779,
+          "hit_rate_at_5": 0.46827918417546377,
+          "mean_rank": 68.92343958183868,
+          "mean_rank_percentile": 0.3175691276156029,
+          "pairwise_accuracy": 0.5470346204104051,
+          "median_rank": 8.0,
+          "hit_rate_at_10": 0.19804791481810116,
+          "hit_rate_at_10_raw": 0.536845341805883,
+          "hit_rate_at_10_informative": true,
+          "hit_rate_at_10_informative_state_count": 5635,
+          "hit_rate_at_10_informative_trajectory_count": 1983
+        },
+        "candidate_width": {
+          "minimum": 1,
+          "maximum": 1354,
+          "mean": 144.65686174028903,
+          "median": 25.0
+        }
+      },
+      "breakdowns": [
+        {
+          "dimension": "scenario",
+          "value": "boundary",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 636,
+            "trajectory_count": 137,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.2882759261058395,
+              "hit_rate_at_1": 0.23073514077163712,
+              "hit_rate_at_5": 0.3418752172401807,
+              "mean_rank": 120.73235140771638,
+              "mean_rank_percentile": 0.4331425892155627,
+              "pairwise_accuracy": 0.4693982803957577,
+              "median_rank": 56.0,
+              "hit_rate_at_10": 0.08974221267454349,
+              "hit_rate_at_10_raw": 0.4088050314465409,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 415,
+              "hit_rate_at_10_informative_trajectory_count": 133
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.33463884632669944,
+              "hit_rate_at_1": 0.28459119496855345,
+              "hit_rate_at_5": 0.37264150943396224,
+              "mean_rank": 119.32389937106919,
+              "mean_rank_percentile": 0.39491414449862916,
+              "pairwise_accuracy": 0.4864537401327341,
+              "median_rank": 25.0,
+              "hit_rate_at_10": 0.09397590361445783,
+              "hit_rate_at_10_raw": 0.4088050314465409,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 415,
+              "hit_rate_at_10_informative_trajectory_count": 133
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 230.61477987421384,
+              "median": 54.5
+            }
+          }
+        },
+        {
+          "dimension": "scenario",
+          "value": "browsing",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 4114,
+            "trajectory_count": 991,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.33355316946987296,
+              "hit_rate_at_1": 0.2762985920907213,
+              "hit_rate_at_5": 0.38084666762769687,
+              "mean_rank": 98.04774037768489,
+              "mean_rank_percentile": 0.36216673248937903,
+              "pairwise_accuracy": 0.5260914041557659,
+              "median_rank": 44.0,
+              "hit_rate_at_10": 0.1491278925722214,
+              "hit_rate_at_10_raw": 0.4460379192999514,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2657,
+              "hit_rate_at_10_informative_trajectory_count": 961
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.35864212873454565,
+              "hit_rate_at_1": 0.30967428293631505,
+              "hit_rate_at_5": 0.394263490520175,
+              "mean_rank": 100.2603305785124,
+              "mean_rank_percentile": 0.3440859206192074,
+              "pairwise_accuracy": 0.5277619810680214,
+              "median_rank": 17.0,
+              "hit_rate_at_10": 0.14226571321038767,
+              "hit_rate_at_10_raw": 0.4460379192999514,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2657,
+              "hit_rate_at_10_informative_trajectory_count": 961
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 209.3458920758386,
+              "median": 56.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario",
+          "value": "buying",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2907,
+            "trajectory_count": 990,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.4932786962916983,
+              "hit_rate_at_1": 0.40565656565656566,
+              "hit_rate_at_5": 0.5762794612794613,
+              "mean_rank": 32.2226430976431,
+              "mean_rank_percentile": 0.28401365919391564,
+              "pairwise_accuracy": 0.5927391424333975,
+              "median_rank": 7.0,
+              "hit_rate_at_10": 0.29725303750660326,
+              "hit_rate_at_10_raw": 0.56484348125215,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1708,
+              "hit_rate_at_10_informative_trajectory_count": 631
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.407268725247857,
+              "hit_rate_at_1": 0.3278293773649811,
+              "hit_rate_at_5": 0.4733402132782938,
+              "mean_rank": 43.72239422084623,
+              "mean_rank_percentile": 0.3126212185690683,
+              "pairwise_accuracy": 0.5759161572144956,
+              "median_rank": 7.0,
+              "hit_rate_at_10": 0.25936768149882905,
+              "hit_rate_at_10_raw": 0.56484348125215,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1708,
+              "hit_rate_at_10_informative_trajectory_count": 631
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1069,
+              "mean": 95.77433780529756,
+              "median": 22.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario",
+          "value": "intent_override",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2100,
+            "trajectory_count": 382,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.6143500636769543,
+              "hit_rate_at_1": 0.5417965179090833,
+              "hit_rate_at_5": 0.6848250644062162,
+              "mean_rank": 21.529310022438295,
+              "mean_rank_percentile": 0.22928827317835768,
+              "pairwise_accuracy": 0.588108780860894,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.3534176202780854,
+              "hit_rate_at_10_raw": 0.7147619047619047,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 855,
+              "hit_rate_at_10_informative_trajectory_count": 258
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.5697399515058653,
+              "hit_rate_at_1": 0.49714285714285716,
+              "hit_rate_at_5": 0.6352380952380953,
+              "mean_rank": 27.154285714285713,
+              "mean_rank_percentile": 0.249046296398385,
+              "pairwise_accuracy": 0.5683173852003448,
+              "median_rank": 2.0,
+              "hit_rate_at_10": 0.2994152046783626,
+              "hit_rate_at_10_raw": 0.7147619047619047,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 855,
+              "hit_rate_at_10_informative_trajectory_count": 258
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1136,
+              "mean": 59.562380952380956,
+              "median": 3.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "boundary",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 499,
+            "trajectory_count": 133,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.3621535604784466,
+              "hit_rate_at_1": 0.3031208974817997,
+              "hit_rate_at_5": 0.4201635039980905,
+              "mean_rank": 98.68634681942952,
+              "mean_rank_percentile": 0.39392245822540733,
+              "pairwise_accuracy": 0.47365252709632044,
+              "median_rank": 33.0,
+              "hit_rate_at_10": 0.09273182957393485,
+              "hit_rate_at_10_raw": 0.49298597194388777,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 282,
+              "hit_rate_at_10_informative_trajectory_count": 133
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.41314217001023934,
+              "hit_rate_at_1": 0.3587174348697395,
+              "hit_rate_at_5": 0.4589178356713427,
+              "mean_rank": 94.07414829659318,
+              "mean_rank_percentile": 0.354244917609686,
+              "pairwise_accuracy": 0.498122904638659,
+              "median_rank": 11.0,
+              "hit_rate_at_10": 0.10283687943262411,
+              "hit_rate_at_10_raw": 0.49298597194388777,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 282,
+              "hit_rate_at_10_informative_trajectory_count": 133
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 185.31462925851704,
+              "median": 26.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "browsing",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 3123,
+            "trajectory_count": 963,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.46038713705475287,
+              "hit_rate_at_1": 0.40695660057030775,
+              "hit_rate_at_5": 0.5092172279088166,
+              "mean_rank": 74.94555621487085,
+              "mean_rank_percentile": 0.3013661745885506,
+              "pairwise_accuracy": 0.5327102495191837,
+              "median_rank": 22.5,
+              "hit_rate_at_10": 0.15107128496754552,
+              "hit_rate_at_10_raw": 0.5462696125520333,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1696,
+              "hit_rate_at_10_informative_trajectory_count": 829
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.454837070501842,
+              "hit_rate_at_1": 0.4047390329811079,
+              "hit_rate_at_5": 0.4966378482228626,
+              "mean_rank": 78.2724943964137,
+              "mean_rank_percentile": 0.29704124359503553,
+              "pairwise_accuracy": 0.537688301597161,
+              "median_rank": 6.0,
+              "hit_rate_at_10": 0.1645047169811321,
+              "hit_rate_at_10_raw": 0.5462696125520333,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1696,
+              "hit_rate_at_10_informative_trajectory_count": 829
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 165.99007364713415,
+              "median": 22.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "buying",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2907,
+            "trajectory_count": 990,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.4932786962916983,
+              "hit_rate_at_1": 0.40565656565656566,
+              "hit_rate_at_5": 0.5762794612794613,
+              "mean_rank": 32.2226430976431,
+              "mean_rank_percentile": 0.28401365919391564,
+              "pairwise_accuracy": 0.5927391424333975,
+              "median_rank": 7.0,
+              "hit_rate_at_10": 0.29725303750660326,
+              "hit_rate_at_10_raw": 0.56484348125215,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1708,
+              "hit_rate_at_10_informative_trajectory_count": 631
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.407268725247857,
+              "hit_rate_at_1": 0.3278293773649811,
+              "hit_rate_at_5": 0.4733402132782938,
+              "mean_rank": 43.72239422084623,
+              "mean_rank_percentile": 0.3126212185690683,
+              "pairwise_accuracy": 0.5759161572144956,
+              "median_rank": 7.0,
+              "hit_rate_at_10": 0.25936768149882905,
+              "hit_rate_at_10_raw": 0.56484348125215,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1708,
+              "hit_rate_at_10_informative_trajectory_count": 631
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1069,
+              "mean": 95.77433780529756,
+              "median": 22.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "exploring_unknown",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1128,
+            "trajectory_count": 1128,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.054671905908989,
+              "hit_rate_at_1": 0.010638297872340425,
+              "hit_rate_at_5": 0.0700354609929078,
+              "mean_rank": 174.6214539007092,
+              "mean_rank_percentile": 0.49849898554434235,
+              "pairwise_accuracy": 0.50147615922872,
+              "median_rank": 88.0,
+              "hit_rate_at_10": 0.09963436928702012,
+              "hit_rate_at_10_raw": 0.12677304964539007,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1094,
+              "hit_rate_at_10_informative_trajectory_count": 1094
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.054671905908989,
+              "hit_rate_at_1": 0.010638297872340425,
+              "hit_rate_at_5": 0.0700354609929078,
+              "mean_rank": 174.6214539007092,
+              "mean_rank_percentile": 0.49849898554434235,
+              "pairwise_accuracy": 0.50147615922872,
+              "median_rank": 88.0,
+              "hit_rate_at_10": 0.09963436928702012,
+              "hit_rate_at_10_raw": 0.12677304964539007,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1094,
+              "hit_rate_at_10_informative_trajectory_count": 1094
+            },
+            "candidate_width": {
+              "minimum": 3,
+              "maximum": 1354,
+              "mean": 352.00443262411346,
+              "median": 249.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "intent_override",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1141,
+            "trajectory_count": 382,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.5310635043458797,
+              "hit_rate_at_1": 0.44396659187235105,
+              "hit_rate_at_5": 0.6209953876838694,
+              "mean_rank": 24.218692346048364,
+              "mean_rank_percentile": 0.2546435260469178,
+              "pairwise_accuracy": 0.620713682778037,
+              "median_rank": 4.5,
+              "hit_rate_at_10": 0.34921602787456446,
+              "hit_rate_at_10_raw": 0.6196319018404908,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 623,
+              "hit_rate_at_10_informative_trajectory_count": 246
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.4529915017992359,
+              "hit_rate_at_1": 0.3733567046450482,
+              "hit_rate_at_5": 0.5179666958808063,
+              "mean_rank": 34.235758106923754,
+              "mean_rank_percentile": 0.2807719308519963,
+              "pairwise_accuracy": 0.6066310199906061,
+              "median_rank": 4.0,
+              "hit_rate_at_10": 0.30337078651685395,
+              "hit_rate_at_10_raw": 0.6196319018404908,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 623,
+              "hit_rate_at_10_informative_trajectory_count": 246
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1069,
+              "mean": 80.84312007011394,
+              "median": 15.0
+            }
+          }
+        },
+        {
+          "dimension": "scenario_state",
+          "value": "provisional_override",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 959,
+            "trajectory_count": 382,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.7033251872780608,
+              "hit_rate_at_1": 0.6413612565445026,
+              "hit_rate_at_5": 0.7661431064572426,
+              "mean_rank": 18.79973821989529,
+              "mean_rank_percentile": 0.21100967397732676,
+              "pairwise_accuracy": 0.5028403163813525,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.328,
+              "hit_rate_at_10_raw": 0.8279457768508863,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 232,
+              "hit_rate_at_10_informative_trajectory_count": 125
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.708645041302804,
+              "hit_rate_at_1": 0.6444212721584984,
+              "hit_rate_at_5": 0.7747653806047967,
+              "mean_rank": 18.7288842544317,
+              "mean_rank_percentile": 0.21129973861781087,
+              "pairwise_accuracy": 0.4882160813771818,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.28879310344827586,
+              "hit_rate_at_10_raw": 0.8279457768508863,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 232,
+              "hit_rate_at_10_informative_trajectory_count": 125
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1136,
+              "mean": 34.2429614181439,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "turn_bucket",
+          "value": "early",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 6624,
+            "trajectory_count": 2500,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.3608085218413787,
+              "hit_rate_at_1": 0.2929333333333333,
+              "hit_rate_at_5": 0.4172,
+              "mean_rank": 81.048,
+              "mean_rank_percentile": 0.3491952188983707,
+              "pairwise_accuracy": 0.544951720990332,
+              "median_rank": 19.0,
+              "hit_rate_at_10": 0.20020964360587,
+              "hit_rate_at_10_raw": 0.43085748792270534,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 4561,
+              "hit_rate_at_10_informative_trajectory_count": 1908
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.3142565455708968,
+              "hit_rate_at_1": 0.25226449275362317,
+              "hit_rate_at_5": 0.35929951690821255,
+              "mean_rank": 90.6268115942029,
+              "mean_rank_percentile": 0.36629023736853206,
+              "pairwise_accuracy": 0.5367964641156231,
+              "median_rank": 17.0,
+              "hit_rate_at_10": 0.17342688007016005,
+              "hit_rate_at_10_raw": 0.43085748792270534,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 4561,
+              "hit_rate_at_10_informative_trajectory_count": 1908
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 187.5638586956522,
+              "median": 58.0
+            }
+          }
+        },
+        {
+          "dimension": "turn_bucket",
+          "value": "late",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 678,
+            "trajectory_count": 224,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.7719293777807118,
+              "hit_rate_at_1": 0.7191220238095238,
+              "hit_rate_at_5": 0.8296130952380952,
+              "mean_rank": 13.840029761904761,
+              "mean_rank_percentile": 0.1450604811415638,
+              "pairwise_accuracy": 0.6151947857311192,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.3490566037735849,
+              "hit_rate_at_10_raw": 0.8938053097345132,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 108,
+              "hit_rate_at_10_informative_trajectory_count": 53
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.8190794978416935,
+              "hit_rate_at_1": 0.7743362831858407,
+              "hit_rate_at_5": 0.8628318584070797,
+              "mean_rank": 11.5,
+              "mean_rank_percentile": 0.11654266246185302,
+              "pairwise_accuracy": 0.6337843734783392,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.3333333333333333,
+              "hit_rate_at_10_raw": 0.8938053097345132,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 108,
+              "hit_rate_at_10_informative_trajectory_count": 53
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1069,
+              "mean": 24.1858407079646,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "turn_bucket",
+          "value": "middle",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2455,
+            "trajectory_count": 1355,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.6351678862794234,
+              "hit_rate_at_1": 0.558179581795818,
+              "hit_rate_at_5": 0.7199261992619926,
+              "mean_rank": 20.46027060270603,
+              "mean_rank_percentile": 0.23313367285898173,
+              "pairwise_accuracy": 0.5626584442800314,
+              "median_rank": 2.0,
+              "hit_rate_at_10": 0.30192837465564737,
+              "hit_rate_at_10_raw": 0.7242362525458248,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 966,
+              "hit_rate_at_10_informative_trajectory_count": 605
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.583175905880754,
+              "hit_rate_at_1": 0.5116089613034623,
+              "hit_rate_at_5": 0.6533604887983707,
+              "mean_rank": 26.222810590631365,
+              "mean_rank_percentile": 0.24162913265464153,
+              "pairwise_accuracy": 0.5726419109600336,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.2991718426501035,
+              "hit_rate_at_10_raw": 0.7242362525458248,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 966,
+              "hit_rate_at_10_informative_trajectory_count": 605
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1136,
+              "mean": 62.15723014256619,
+              "median": 3.0
+            }
+          }
+        },
+        {
+          "dimension": "survivor_width",
+          "value": "11-50",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1570,
+            "trajectory_count": 842,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.19113773725680147,
+              "hit_rate_at_1": 0.06043811031934547,
+              "hit_rate_at_5": 0.26974795460543677,
+              "mean_rank": 12.397135505033367,
+              "mean_rank_percentile": 0.44352301152736767,
+              "pairwise_accuracy": 0.5567303581854056,
+              "median_rank": 10.0,
+              "hit_rate_at_10": 0.5150746521886664,
+              "hit_rate_at_10_raw": 0.5101910828025478,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1570,
+              "hit_rate_at_10_informative_trajectory_count": 842
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.18864837927182343,
+              "hit_rate_at_1": 0.05732484076433121,
+              "hit_rate_at_5": 0.27070063694267515,
+              "mean_rank": 12.662420382165605,
+              "mean_rank_percentile": 0.4391926718055528,
+              "pairwise_accuracy": 0.5610986392770086,
+              "median_rank": 10.0,
+              "hit_rate_at_10": 0.5101910828025478,
+              "hit_rate_at_10_raw": 0.5101910828025478,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1570,
+              "hit_rate_at_10_informative_trajectory_count": 842
+            },
+            "candidate_width": {
+              "minimum": 11,
+              "maximum": 50,
+              "mean": 27.618471337579617,
+              "median": 26.0
+            }
+          }
+        },
+        {
+          "dimension": "survivor_width",
+          "value": "51-200",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1817,
+            "trajectory_count": 820,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.061832414534562744,
+              "hit_rate_at_1": 0.01097560975609756,
+              "hit_rate_at_5": 0.05955284552845529,
+              "mean_rank": 49.42707897793263,
+              "mean_rank_percentile": 0.4583428948361432,
+              "pairwise_accuracy": 0.5417196633495167,
+              "median_rank": 41.0,
+              "hit_rate_at_10": 0.13960511033681766,
+              "hit_rate_at_10_raw": 0.13263621353880023,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1817,
+              "hit_rate_at_10_informative_trajectory_count": 820
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.059331793683901575,
+              "hit_rate_at_1": 0.010456796917996699,
+              "hit_rate_at_5": 0.05558613098514034,
+              "mean_rank": 50.95652173913044,
+              "mean_rank_percentile": 0.4583903818462825,
+              "pairwise_accuracy": 0.5416723948929907,
+              "median_rank": 42.0,
+              "hit_rate_at_10": 0.13263621353880023,
+              "hit_rate_at_10_raw": 0.13263621353880023,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 1817,
+              "hit_rate_at_10_informative_trajectory_count": 820
+            },
+            "candidate_width": {
+              "minimum": 51,
+              "maximum": 200,
+              "mean": 108.80957622454595,
+              "median": 104.0
+            }
+          }
+        },
+        {
+          "dimension": "survivor_width",
+          "value": "<=10",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 4122,
+            "trajectory_count": 2346,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.8483868205092021,
+              "hit_rate_at_1": 0.7648530426663419,
+              "hit_rate_at_5": 0.9666223494228608,
+              "mean_rank": 1.5747131219637613,
+              "mean_rank_percentile": 0.15600964298762982,
+              "pairwise_accuracy": 0.5545821111463454,
+              "median_rank": 1.0,
+              "hit_rate_at_10": null,
+              "hit_rate_at_10_raw": 1.0,
+              "hit_rate_at_10_informative": false,
+              "hit_rate_at_10_informative_state_count": 0,
+              "hit_rate_at_10_informative_trajectory_count": 0
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.8793063545974754,
+              "hit_rate_at_1": 0.8102862688015526,
+              "hit_rate_at_5": 0.9740417273168365,
+              "mean_rank": 1.4509946627850558,
+              "mean_rank_percentile": 0.1264403933981809,
+              "pairwise_accuracy": 0.5691937382297552,
+              "median_rank": 1.0,
+              "hit_rate_at_10": null,
+              "hit_rate_at_10_raw": 1.0,
+              "hit_rate_at_10_informative": false,
+              "hit_rate_at_10_informative_state_count": 0,
+              "hit_rate_at_10_informative_trajectory_count": 0
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 10,
+              "mean": 2.022076661814653,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "survivor_width",
+          "value": ">200",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2248,
+            "trajectory_count": 856,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.017292417843282795,
+              "hit_rate_at_1": 0.0011682242990654205,
+              "hit_rate_at_5": 0.01255841121495327,
+              "mean_rank": 246.3186415220294,
+              "mean_rank_percentile": 0.46951317272345827,
+              "pairwise_accuracy": 0.5302033196810276,
+              "median_rank": 185.0,
+              "hit_rate_at_10": 0.03177848242100578,
+              "hit_rate_at_10_raw": 0.03291814946619217,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2248,
+              "hit_rate_at_10_informative_trajectory_count": 856
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.017875217128262358,
+              "hit_rate_at_1": 0.0013345195729537367,
+              "hit_rate_at_5": 0.012455516014234875,
+              "mean_rank": 246.45774021352312,
+              "mean_rank_percentile": 0.469264616551923,
+              "pairwise_accuracy": 0.5299149118328877,
+              "median_rank": 179.0,
+              "hit_rate_at_10": 0.03291814946619217,
+              "hit_rate_at_10_raw": 0.03291814946619217,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2248,
+              "hit_rate_at_10_informative_trajectory_count": 856
+            },
+            "candidate_width": {
+              "minimum": 201,
+              "maximum": 1354,
+              "mean": 516.9101423487544,
+              "median": 388.5
+            }
+          }
+        },
+        {
+          "dimension": "other_answer",
+          "value": "with_other",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 759,
+            "trajectory_count": 568,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.759427014549668,
+              "hit_rate_at_1": 0.6813380281690141,
+              "hit_rate_at_5": 0.8450704225352113,
+              "mean_rank": 7.538732394366197,
+              "mean_rank_percentile": 0.19305744091909322,
+              "pairwise_accuracy": 0.5226760284932679,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.35294117647058826,
+              "hit_rate_at_10_raw": 0.8919631093544137,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 134,
+              "hit_rate_at_10_informative_trajectory_count": 102
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.7553283559034486,
+              "hit_rate_at_1": 0.6732542819499341,
+              "hit_rate_at_5": 0.8484848484848485,
+              "mean_rank": 7.822134387351778,
+              "mean_rank_percentile": 0.20364876475288465,
+              "pairwise_accuracy": 0.5093660715088394,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.3880597014925373,
+              "hit_rate_at_10_raw": 0.8919631093544137,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 134,
+              "hit_rate_at_10_informative_trajectory_count": 102
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 394,
+              "mean": 13.542819499341238,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "other_answer",
+          "value": "without_other",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 8998,
+            "trajectory_count": 2500,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.4010400009651747,
+              "hit_rate_at_1": 0.3293215873015873,
+              "hit_rate_at_5": 0.4638425396825397,
+              "mean_rank": 65.59026507936508,
+              "mean_rank_percentile": 0.32617838112151093,
+              "pairwise_accuracy": 0.555737679337447,
+              "median_rank": 15.0,
+              "hit_rate_at_10": 0.2144642156745031,
+              "hit_rate_at_10_raw": 0.506890420093354,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5501,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.38846120073403223,
+              "hit_rate_at_1": 0.3268504112024894,
+              "hit_rate_at_5": 0.4362080462324961,
+              "mean_rank": 74.07746165814625,
+              "mean_rank_percentile": 0.32717854697688353,
+              "pairwise_accuracy": 0.5487873185549342,
+              "median_rank": 10.0,
+              "hit_rate_at_10": 0.19341937829485548,
+              "hit_rate_at_10_raw": 0.506890420093354,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5501,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 155.71660368970882,
+              "median": 35.0
+            }
+          }
+        },
+        {
+          "dimension": "supervision_weight",
+          "value": "high",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 1882,
+            "trajectory_count": 1072,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.7681539342634186,
+              "hit_rate_at_1": 0.695732276119403,
+              "hit_rate_at_5": 0.8529539800995025,
+              "mean_rank": 7.945114827647476,
+              "mean_rank_percentile": 0.1883189444357346,
+              "pairwise_accuracy": 0.5324036040744429,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.3537234042553192,
+              "hit_rate_at_10_raw": 0.8937300743889479,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 294,
+              "hit_rate_at_10_informative_trajectory_count": 188
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.7837806653054431,
+              "hit_rate_at_1": 0.720510095642933,
+              "hit_rate_at_5": 0.8528161530286928,
+              "mean_rank": 8.638150903294367,
+              "mean_rank_percentile": 0.17150300385252554,
+              "pairwise_accuracy": 0.5417130002325293,
+              "median_rank": 1.0,
+              "hit_rate_at_10": 0.3197278911564626,
+              "hit_rate_at_10_raw": 0.8937300743889479,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 294,
+              "hit_rate_at_10_informative_trajectory_count": 188
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 394,
+              "mean": 14.782146652497342,
+              "median": 1.0
+            }
+          }
+        },
+        {
+          "dimension": "supervision_weight",
+          "value": "low",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 2507,
+            "trajectory_count": 1128,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.05439749769851295,
+              "hit_rate_at_1": 0.011081560283687944,
+              "hit_rate_at_5": 0.07106973995271867,
+              "mean_rank": 174.5737293144208,
+              "mean_rank_percentile": 0.498852717434706,
+              "pairwise_accuracy": 0.5011224273383563,
+              "median_rank": 87.5,
+              "hit_rate_at_10": 0.0985679463741621,
+              "hit_rate_at_10_raw": 0.09852413242919825,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2471,
+              "hit_rate_at_10_informative_trajectory_count": 1094
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.04618533835684523,
+              "hit_rate_at_1": 0.00997207818109294,
+              "hit_rate_at_5": 0.053849222177901876,
+              "mean_rank": 184.05225368966893,
+              "mean_rank_percentile": 0.49444348375042224,
+              "pairwise_accuracy": 0.5055346356996986,
+              "median_rank": 96.0,
+              "hit_rate_at_10": 0.08539053014973695,
+              "hit_rate_at_10_raw": 0.09852413242919825,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2471,
+              "hit_rate_at_10_informative_trajectory_count": 1094
+            },
+            "candidate_width": {
+              "minimum": 3,
+              "maximum": 1354,
+              "mean": 378.07738332668526,
+              "median": 283.0
+            }
+          }
+        },
+        {
+          "dimension": "supervision_weight",
+          "value": "medium",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 5368,
+            "trajectory_count": 2468,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.5361939388300292,
+              "hit_rate_at_1": 0.45602200226389855,
+              "hit_rate_at_5": 0.6138528723212677,
+              "mean_rank": 26.913836793496436,
+              "mean_rank_percentile": 0.26633427912173496,
+              "pairwise_accuracy": 0.5723876773147284,
+              "median_rank": 2.0,
+              "hit_rate_at_10": 0.30858632557661686,
+              "hit_rate_at_10_raw": 0.6164307004470939,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2870,
+              "hit_rate_at_10_informative_trajectory_count": 1236
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.46158834779621544,
+              "hit_rate_at_1": 0.3858047690014903,
+              "hit_rate_at_5": 0.5270119225037257,
+              "mean_rank": 36.290983606557376,
+              "mean_rank_percentile": 0.28617427554632563,
+              "pairwise_accuracy": 0.5768155718100879,
+              "median_rank": 4.0,
+              "hit_rate_at_10": 0.2825783972125436,
+              "hit_rate_at_10_raw": 0.6164307004470939,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 2870,
+              "hit_rate_at_10_informative_trajectory_count": 1236
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1136,
+              "mean": 81.17678837555887,
+              "median": 15.0
+            }
+          }
+        },
+        {
+          "dimension": "seed",
+          "value": "2026",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 9757,
+            "trajectory_count": 2500,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.43722905058980877,
+              "hit_rate_at_1": 0.36559555555555556,
+              "hit_rate_at_5": 0.5025503174603174,
+              "mean_rank": 61.53210238095238,
+              "mean_rank_percentile": 0.31480376383024633,
+              "pairwise_accuracy": 0.5550208978620065,
+              "median_rank": 14.0,
+              "hit_rate_at_10": 0.2188583115209439,
+              "hit_rate_at_10_raw": 0.536845341805883,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5635,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.41699990840786505,
+              "hit_rate_at_1": 0.3537972737521779,
+              "hit_rate_at_5": 0.46827918417546377,
+              "mean_rank": 68.92343958183868,
+              "mean_rank_percentile": 0.3175691276156029,
+              "pairwise_accuracy": 0.5470346204104051,
+              "median_rank": 8.0,
+              "hit_rate_at_10": 0.19804791481810116,
+              "hit_rate_at_10_raw": 0.536845341805883,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5635,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 144.65686174028903,
+              "median": 25.0
+            }
+          }
+        },
+        {
+          "dimension": "generation_seed",
+          "value": "2026",
+          "metrics": {
+            "schema_version": "1",
+            "evaluation_protocol": "exact_full_survivor_ranker_only_v1",
+            "state_count": 9757,
+            "trajectory_count": 2500,
+            "primary": {
+              "aggregation": "trajectory_macro",
+              "mrr": 0.43722905058980877,
+              "hit_rate_at_1": 0.36559555555555556,
+              "hit_rate_at_5": 0.5025503174603174,
+              "mean_rank": 61.53210238095238,
+              "mean_rank_percentile": 0.31480376383024633,
+              "pairwise_accuracy": 0.5550208978620065,
+              "median_rank": 14.0,
+              "hit_rate_at_10": 0.2188583115209439,
+              "hit_rate_at_10_raw": 0.536845341805883,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5635,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "state_micro": {
+              "aggregation": "state_micro",
+              "mrr": 0.41699990840786505,
+              "hit_rate_at_1": 0.3537972737521779,
+              "hit_rate_at_5": 0.46827918417546377,
+              "mean_rank": 68.92343958183868,
+              "mean_rank_percentile": 0.3175691276156029,
+              "pairwise_accuracy": 0.5470346204104051,
+              "median_rank": 8.0,
+              "hit_rate_at_10": 0.19804791481810116,
+              "hit_rate_at_10_raw": 0.536845341805883,
+              "hit_rate_at_10_informative": true,
+              "hit_rate_at_10_informative_state_count": 5635,
+              "hit_rate_at_10_informative_trajectory_count": 1983
+            },
+            "candidate_width": {
+              "minimum": 1,
+              "maximum": 1354,
+              "mean": 144.65686174028903,
+              "median": 25.0
+            }
+          }
+        }
+      ],
+      "artifact": "/Users/joellui/Documents/tiktok_hackathon26/approach 1/fm_model.sqlite3",
+      "training_scope": "legacy_all_products",
+      "feature_schema_version": "legacy"
+    }
+  },
+  "paired_comparisons": [
+    {
+      "comparison": "fm_minus_linear",
+      "comparison_unit": "trajectory",
+      "metric": "mrr_delta",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 0.008084396422492222,
+      "observed_delta_raw": 0.008084396422492222,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.0030654609287461337,
+      "ci_95_upper": 0.012969088509716594,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 3186,
+      "ties": 3790,
+      "losses": 2781
+    },
+    {
+      "comparison": "fm_minus_linear",
+      "comparison_unit": "trajectory",
+      "metric": "hit_at_1_delta",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 0.006316666666666667,
+      "observed_delta_raw": 0.006316666666666667,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": -0.0006701309523809522,
+      "ci_95_upper": 0.013627154761904766,
+      "ci_excludes_zero": false,
+      "informative": true,
+      "wins": 217,
+      "ties": 9363,
+      "losses": 177
+    },
+    {
+      "comparison": "fm_minus_linear",
+      "comparison_unit": "trajectory",
+      "metric": "hit_at_5_delta",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 0.008579841269841269,
+      "observed_delta_raw": 0.008579841269841269,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.0012416865079365083,
+      "ci_95_upper": 0.01609147619047619,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 298,
+      "ties": 9218,
+      "losses": 241
+    },
+    {
+      "comparison": "fm_minus_linear",
+      "comparison_unit": "trajectory",
+      "metric": "hit_at_10_delta",
+      "state_count": 5635,
+      "trajectory_count": 1983,
+      "observed_delta": 0.021967277413570907,
+      "observed_delta_raw": 0.008885873015873015,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.008529634832584908,
+      "ci_95_upper": 0.03523529364679138,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 348,
+      "ties": 5040,
+      "losses": 247
+    },
+    {
+      "comparison": "fm_minus_linear",
+      "comparison_unit": "trajectory",
+      "metric": "rank_improvement",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 2.1241614285714285,
+      "observed_delta_raw": 2.1241614285714285,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.3904784801587301,
+      "ci_95_upper": 3.8918024126984125,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 3186,
+      "ties": 3790,
+      "losses": 2781
+    },
+    {
+      "comparison": "fm_minus_linear",
+      "comparison_unit": "trajectory",
+      "metric": "rank_percentile_improvement",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 0.0193466360791417,
+      "observed_delta_raw": 0.0193466360791417,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.011596676716631128,
+      "ci_95_upper": 0.027211033286542206,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 3186,
+      "ties": 3790,
+      "losses": 2781
+    },
+    {
+      "comparison": "fm_minus_linear",
+      "comparison_unit": "trajectory",
+      "metric": "pairwise_accuracy_delta",
+      "state_count": 9757,
+      "trajectory_count": 2238,
+      "observed_delta": 0.029117627250354737,
+      "observed_delta_raw": 0.029117627250354737,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.018627780475012956,
+      "ci_95_upper": 0.03934108540373828,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 3186,
+      "ties": 848,
+      "losses": 2781
+    },
+    {
+      "comparison": "hybrid_minus_linear",
+      "comparison_unit": "trajectory",
+      "metric": "mrr_delta",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 0.010251855611173165,
+      "observed_delta_raw": 0.010251855611173165,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.0054460376960765765,
+      "ci_95_upper": 0.015245034142537245,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 3338,
+      "ties": 3770,
+      "losses": 2649
+    },
+    {
+      "comparison": "hybrid_minus_linear",
+      "comparison_unit": "trajectory",
+      "metric": "hit_at_1_delta",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 0.00805904761904762,
+      "observed_delta_raw": 0.00805904761904762,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.00101752380952381,
+      "ci_95_upper": 0.015208976190476186,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 235,
+      "ties": 9354,
+      "losses": 168
+    },
+    {
+      "comparison": "hybrid_minus_linear",
+      "comparison_unit": "trajectory",
+      "metric": "hit_at_5_delta",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 0.008867460317460317,
+      "observed_delta_raw": 0.008867460317460317,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.001434111111111112,
+      "ci_95_upper": 0.016476325396825392,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 307,
+      "ties": 9211,
+      "losses": 239
+    },
+    {
+      "comparison": "hybrid_minus_linear",
+      "comparison_unit": "trajectory",
+      "metric": "hit_at_10_delta",
+      "state_count": 5635,
+      "trajectory_count": 1983,
+      "observed_delta": 0.030516933618295192,
+      "observed_delta_raw": 0.013376031746031745,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.017015034539618504,
+      "ci_95_upper": 0.04406658982301947,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 381,
+      "ties": 5029,
+      "losses": 225
+    },
+    {
+      "comparison": "hybrid_minus_linear",
+      "comparison_unit": "trajectory",
+      "metric": "rank_improvement",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 2.282640476190476,
+      "observed_delta_raw": 2.282640476190476,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.3481522222222222,
+      "ci_95_upper": 4.199167242063491,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 3338,
+      "ties": 3770,
+      "losses": 2649
+    },
+    {
+      "comparison": "hybrid_minus_linear",
+      "comparison_unit": "trajectory",
+      "metric": "rank_percentile_improvement",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 0.026441986542352386,
+      "observed_delta_raw": 0.026441986542352386,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.018526221009970995,
+      "ci_95_upper": 0.034296627305008855,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 3338,
+      "ties": 3770,
+      "losses": 2649
+    },
+    {
+      "comparison": "hybrid_minus_linear",
+      "comparison_unit": "trajectory",
+      "metric": "pairwise_accuracy_delta",
+      "state_count": 9757,
+      "trajectory_count": 2238,
+      "observed_delta": 0.04146802654140392,
+      "observed_delta_raw": 0.04146802654140392,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.030772698138099887,
+      "ci_95_upper": 0.05227477148438861,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 3338,
+      "ties": 828,
+      "losses": 2649
+    },
+    {
+      "comparison": "hybrid_minus_fm",
+      "comparison_unit": "trajectory",
+      "metric": "mrr_delta",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 0.002167459188680942,
+      "observed_delta_raw": 0.002167459188680942,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": -0.00047395533177420454,
+      "ci_95_upper": 0.004800051922109763,
+      "ci_excludes_zero": false,
+      "informative": true,
+      "wins": 2816,
+      "ties": 4552,
+      "losses": 2389
+    },
+    {
+      "comparison": "hybrid_minus_fm",
+      "comparison_unit": "trajectory",
+      "metric": "hit_at_1_delta",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 0.0017423809523809525,
+      "observed_delta_raw": 0.0017423809523809525,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": -0.002449047619047619,
+      "ci_95_upper": 0.005939333333333329,
+      "ci_excludes_zero": false,
+      "informative": true,
+      "wins": 89,
+      "ties": 9606,
+      "losses": 62
+    },
+    {
+      "comparison": "hybrid_minus_fm",
+      "comparison_unit": "trajectory",
+      "metric": "hit_at_5_delta",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 0.0002876190476190477,
+      "observed_delta_raw": 0.0002876190476190477,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": -0.004158142857142857,
+      "ci_95_upper": 0.004696976190476186,
+      "ci_excludes_zero": false,
+      "informative": true,
+      "wins": 102,
+      "ties": 9564,
+      "losses": 91
+    },
+    {
+      "comparison": "hybrid_minus_fm",
+      "comparison_unit": "trajectory",
+      "metric": "hit_at_10_delta",
+      "state_count": 5635,
+      "trajectory_count": 1983,
+      "observed_delta": 0.008549656204724282,
+      "observed_delta_raw": 0.00449015873015873,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": -0.0005440390141600418,
+      "ci_95_upper": 0.01784262461077892,
+      "ci_excludes_zero": false,
+      "informative": true,
+      "wins": 169,
+      "ties": 5352,
+      "losses": 114
+    },
+    {
+      "comparison": "hybrid_minus_fm",
+      "comparison_unit": "trajectory",
+      "metric": "rank_improvement",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 0.1584790476190476,
+      "observed_delta_raw": 0.1584790476190476,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": -0.446213257936508,
+      "ci_95_upper": 0.7670872499999998,
+      "ci_excludes_zero": false,
+      "informative": true,
+      "wins": 2816,
+      "ties": 4552,
+      "losses": 2389
+    },
+    {
+      "comparison": "hybrid_minus_fm",
+      "comparison_unit": "trajectory",
+      "metric": "rank_percentile_improvement",
+      "state_count": 9757,
+      "trajectory_count": 2500,
+      "observed_delta": 0.007095350463210685,
+      "observed_delta_raw": 0.007095350463210685,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.0035511977603039186,
+      "ci_95_upper": 0.010568527612984902,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 2816,
+      "ties": 4552,
+      "losses": 2389
+    },
+    {
+      "comparison": "hybrid_minus_fm",
+      "comparison_unit": "trajectory",
+      "metric": "pairwise_accuracy_delta",
+      "state_count": 9757,
+      "trajectory_count": 2238,
+      "observed_delta": 0.012350399291049181,
+      "observed_delta_raw": 0.012350399291049181,
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 2026,
+      "ci_95_lower": 0.007789195090452293,
+      "ci_95_upper": 0.016954677001592946,
+      "ci_excludes_zero": true,
+      "informative": true,
+      "wins": 2816,
+      "ties": 1610,
+      "losses": 2389
+    }
+  ]
+}
