@@ -8,8 +8,10 @@
 > candidate retraining were not run. A later user-authorized exploratory
 > official evaluation of the best-validation E7 artifact (100k, model seed
 > 2028) scored 195/200, MRR `0.652365`, and Technical Score `0.855410`; it did
-> not beat the frozen hybrid incumbent and was not promoted. The runtime still
-> loads the frozen incumbent artifact, `fm_model.sqlite3`.
+> not beat the frozen hybrid incumbent and was not promoted. The runtime now
+> routes Buying sessions to the frozen `linear_model.sqlite3` artifact and all
+> other observable scenarios to the frozen `fm_model.sqlite3` artifact; neither
+> artifact was retrained or overwritten.
 
 This directory contains two deliberately separate bodies of work:
 
@@ -29,8 +31,8 @@ Nothing below `results/redesign/` was copied over a frozen root artifact.
 
 | Scope | Artifacts | Status |
 |---|---|---|
-| Runtime incumbent | `fm_model.sqlite3` | Frozen hybrid FM plus explicit crosses; loaded by `starter/agent.py` |
-| Frozen references | `linear_model.sqlite3`, `fm_only_model.sqlite3` | Read-only baselines for every redesign comparison |
+| Routed runtime | `linear_model.sqlite3`, `fm_model.sqlite3` | Frozen Linear for Buying; frozen Hybrid FM plus explicit crosses for every other observable state |
+| Frozen reference | `fm_only_model.sqlite3` | Read-only independent-FM baseline for redesign comparisons |
 | Legacy training reports | Root-level `*_training_metrics.json`, `cross_weights.csv`, and historical result CSVs | Historical evidence; not current redesign results |
 | Historical redesign evidence | `results/redesign/v2/` and `results/redesign/experiments_v2/` | E0, smoke, and superseded set-valued/n16 experiments; not loaded by runtime |
 | Current v3 evidence | `results/redesign/experiments_v3_downweight/` | Versioned, resumable down-weight/n32 research outputs; not loaded by runtime |
@@ -43,6 +45,9 @@ unless a specific versioned run is intentionally being regenerated.
 The frozen hybrid's official result remains 197/200, MRR `0.658440`, and
 Technical Score `0.866032`. The frozen Linear reference remains the strongest
 official result at 199/200, MRR `0.672881`, and Technical Score `0.878564`.
+The intent-routed combination scores 199/200, MRR `0.704468`, and Technical
+Score `0.886440` on the same public sessions; its result and routing audit are
+under `results/routed_linear_buying_hybrid_else/`.
 
 ## What the redesign changes
 

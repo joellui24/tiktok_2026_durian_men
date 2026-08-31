@@ -34,7 +34,15 @@ Verify the downloaded file using the published `SHA256SUMS` file.
 
 ## Run the Starter
 
-Python 3.10 or later is recommended. The starter uses only the Python standard library.
+Python 3.10 or later is recommended. Install the optional fuzzy-intent
+dependency used by the routed agent:
+
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+Model inference remains offline. If RapidFuzz is unavailable, deterministic
+template matching still works and unclassified wording safely uses Hybrid FM.
 
 ```bash
 python3 -m evaluator.local_evaluator
@@ -146,7 +154,7 @@ with AttributeIndex() as index:
 Different attributes use AND semantics; multiple values within one attribute
 use OR semantics. `maximum_price=100` means strictly below $100.
 
-## Approach 1: Hybrid Factorization Machine
+## Approach 1: Intent-routed Linear and Hybrid Factorization Machine
 
 The `fm` branch replaces lexical candidate ordering with a catalog-trained
 second-order Factorization Machine plus regularized explicit context–item
@@ -154,9 +162,14 @@ crosses. Exact filters remain authoritative, while the model ranks survivors
 and supplies the probability distribution for information-gain questions.
 Intent Override is handled by atomically replacing obsolete active state.
 
-The evaluator-facing `Agent` loads the committed standard-library-compatible
-SQLite artifact automatically. Offline training and complete reproduction
-instructions are in [`approach 1/README.md`](<../approach 1/README.md>).
+The evaluator-facing `Agent` deterministically identifies the released Buying
+template, uses RapidFuzz only for wording variations, and routes Buying
+sessions to the frozen Linear artifact. Browsing, Boundary, Intent Override,
+and unknown sessions use the frozen Hybrid artifact. The selected model drives
+both information-gain questions and recommendation ranking. Both SQLite
+artifacts run locally without network access. Offline training and complete
+reproduction instructions are in
+[`approach 1/README.md`](<../approach 1/README.md>).
 
 Run the frozen public evaluator wrapper from this directory:
 
@@ -164,8 +177,9 @@ Run the frozen public evaluator wrapper from this directory:
 /usr/local/bin/python3.12 "../approach 1/evaluate_fm.py"
 ```
 
-The reported official hybrid result is 197/200 correct, MRR `0.658440`, MTTC
-`2.200000`, and Technical Score `0.866032`.
+The routed public result is 199/200 correct, MRR `0.704468`, MTTC `2.120000`,
+and Technical Score `0.886440`. The standalone frozen Hybrid result remains
+197/200, MRR `0.658440`, MTTC `2.200000`, and Technical Score `0.866032`.
 
 ## Judging and Submission Policy
 

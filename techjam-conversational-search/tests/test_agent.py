@@ -5,10 +5,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import starter.agent as agent_module
 from starter.agent import (
     Agent,
     EVALUATOR_ATTRIBUTES,
     ROADMAP_ATTRIBUTES,
+    SessionState,
     classify_constraint,
 )
 from starter.attribute_index import build_attribute_database, normalize_value
@@ -17,6 +19,48 @@ from starter.category_index import build_category_database
 
 LARGE_CATEGORY = "Tops Tunics"
 SMALL_CATEGORY = "Accessories Belts"
+
+
+class RecordingModel:
+    def __init__(self, name: str) -> None:
+        self.name = name
+        self.metadata = {"feature_schema_version": "conversation-features-v2"}
+        self.calls: list[tuple[str, str]] = []
+
+    def posterior(
+        self,
+        parent_asins: set[str],
+        context_names: list[str],
+        *,
+        mode: str,
+        disabled_field_pair: tuple[str, str] | None,
+    ) -> dict[str, float]:
+        del context_names, disabled_field_pair
+        self.calls.append(("posterior", mode))
+        probability = 1.0 / len(parent_asins)
+        return {parent_asin: probability for parent_asin in parent_asins}
+
+    def predicted_reply(
+        self,
+        parent_asin: str,
+        attribute: str,
+        disclosed_values: set[str],
+    ) -> tuple[str, ...]:
+        del disclosed_values
+        return (f"{attribute}:{parent_asin}",)
+
+    def rank(
+        self,
+        parent_asins: set[str],
+        context_names: list[str],
+        limit: int,
+        *,
+        mode: str,
+        disabled_field_pair: tuple[str, str] | None,
+    ) -> list[str]:
+        del context_names, disabled_field_pair
+        self.calls.append(("rank", mode))
+        return sorted(parent_asins)[:limit]
 
 
 def _catalog_products() -> list[dict]:
@@ -85,6 +129,9 @@ class ProgressiveAgentTest(unittest.TestCase):
             self.catalog_path,
             category_index_path=self.category_path,
             attribute_index_path=self.attribute_path,
+            model_path=self.data_directory / "missing-hybrid.sqlite3",
+            linear_model_path=self.data_directory / "missing-linear.sqlite3",
+            ranking_mode="routed",
         )
         self.addCleanup(self.agent.close)
 
@@ -115,6 +162,12 @@ class ProgressiveAgentTest(unittest.TestCase):
             ),
             ("exploring_unknown", LARGE_CATEGORY, None),
         )
+        self.assertEqual(
+            Agent._parse_initial_message(
+                f"I'm looking for {LARGE_CATEGORY}. Actually, ignore my earlier preference."
+            ),
+            ("intent_override", LARGE_CATEGORY, None),
+        )
         self.assertEqual(classify_constraint("gray hat"), "feature")
         self.assertEqual(classify_constraint("color: green"), "color")
         self.assertEqual(classify_constraint("budget around $30"), "budget")
@@ -130,6 +183,100 @@ class ProgressiveAgentTest(unittest.TestCase):
         self.assertEqual(state.coarse_category, LARGE_CATEGORY)
         self.assertEqual(len(state.surviving_candidates), 15)
         self.assertEqual(state.known_constraints["feature"], ["common option"])
+
+    @unittest.skipIf(
+        agent_module.rapidfuzz_fuzz is None, "RapidFuzz is not installed"
+    )
+    def test_fuzzy_intent_fallback_handles_template_wording_variations(self) -> None:
+        self.assertEqual(
+            Agent._parse_initial_message(
+                f"I’m looking for {LARGE_CATEGORY}. A key requirment is: cotton."
+            ),
+            ("buying", LARGE_CATEGORY, "cotton"),
+        )
+        self.assertEqual(
+            Agent._parse_initial_message(
+                f"I'm looking for {LARGE_CATEGORY}, but im still exploreing."
+            ),
+            ("exploring_unknown", LARGE_CATEGORY, None),
+        )
+
+        self._start_browsing("fuzzy-boundary")
+        self.agent.respond(
+            "fuzzy-boundary",
+            "I don't have a preference; please use your judgmet.",
+            2,
+            10,
+        )
+        self.assertEqual(
+            self.agent._sessions["fuzzy-boundary"].scenario_state, "boundary"
+        )
+
+    def test_exact_non_buying_cue_wins_over_buying_words(self) -> None:
+        scenario, _, _ = Agent._parse_initial_message(
+            f"I'm looking for {LARGE_CATEGORY}; requirements matter, "
+            "but I'm still exploring."
+        )
+        self.assertEqual(scenario, "exploring_unknown")
+
+    def test_routed_mode_uses_one_model_for_questions_and_ranking(self) -> None:
+        linear = RecordingModel("linear")
+        hybrid = RecordingModel("hybrid")
+        self.agent.ranking_mode = "routed"
+        self.agent.linear_model = linear  # type: ignore[assignment]
+        self.agent.model = hybrid  # type: ignore[assignment]
+
+        buying = SessionState(
+            scenario_state="buying",
+            coarse_category=LARGE_CATEGORY,
+            surviving_candidates={f"A{index:02d}" for index in range(15)},
+        )
+        self.agent._choose_next_attribute(buying, turn=1)
+        self.agent._recommendations(buying, top_k=10, turn=1)
+        self.assertEqual(linear.calls, [("posterior", "linear"), ("rank", "linear")])
+        self.assertEqual(hybrid.calls, [])
+
+        browsing = SessionState(
+            scenario_state="browsing",
+            coarse_category=LARGE_CATEGORY,
+            surviving_candidates={f"A{index:02d}" for index in range(15)},
+        )
+        self.agent._choose_next_attribute(browsing, turn=2)
+        self.agent._recommendations(browsing, top_k=10, turn=2)
+        self.assertEqual(
+            hybrid.calls, [("posterior", "hybrid"), ("rank", "hybrid")]
+        )
+
+    def test_routed_mode_falls_back_to_the_available_model(self) -> None:
+        linear = RecordingModel("linear")
+        hybrid = RecordingModel("hybrid")
+        self.agent.ranking_mode = "routed"
+
+        self.agent.linear_model = None
+        self.agent.model = hybrid  # type: ignore[assignment]
+        selected, mode = self.agent._active_model(
+            SessionState(scenario_state="buying")
+        )
+        self.assertIs(selected, hybrid)
+        self.assertEqual(mode, "hybrid")
+
+        self.agent.linear_model = linear  # type: ignore[assignment]
+        self.agent.model = None
+        selected, mode = self.agent._active_model(
+            SessionState(scenario_state="browsing")
+        )
+        self.assertIs(selected, linear)
+        self.assertEqual(mode, "linear")
+
+    def test_explicit_model_path_keeps_legacy_single_hybrid_default(self) -> None:
+        with Agent(
+            self.catalog_path,
+            category_index_path=self.category_path,
+            attribute_index_path=self.attribute_path,
+            model_path=self.data_directory / "missing-explicit.sqlite3",
+        ) as explicit_agent:
+            self.assertEqual(explicit_agent.ranking_mode, "hybrid")
+            self.assertIsNone(explicit_agent.linear_model)
 
     def test_buying_resumes_after_the_initial_constraints_entire_stage(self) -> None:
         self._reset()
@@ -306,6 +453,14 @@ class ProgressiveAgentTest(unittest.TestCase):
         self.assertEqual(state.surviving_candidates, {"A00"})
         self.assertIsNone(first["ask_attribute"])
 
+        linear = RecordingModel("linear")
+        hybrid = RecordingModel("hybrid")
+        self.agent.linear_model = linear  # type: ignore[assignment]
+        self.agent.model = hybrid  # type: ignore[assignment]
+        selected, mode = self.agent._active_model(state)
+        self.assertIs(selected, hybrid)
+        self.assertEqual(mode, "hybrid")
+
         response = self.agent.respond(
             "session",
             "Actually, ignore my earlier preference. What I need is: common option.",
@@ -319,6 +474,11 @@ class ProgressiveAgentTest(unittest.TestCase):
         self.assertEqual(len(state.surviving_candidates), 15)
         self.assertNotIn("feature-0", state.known_constraints["feature"])
         self.assertEqual(len(response["recommendations"]), 10)
+        selected, mode = self.agent._active_model(state)
+        self.assertIs(selected, hybrid)
+        self.assertEqual(mode, "hybrid")
+        self.assertIn(("posterior", "hybrid"), hybrid.calls)
+        self.assertIn(("rank", "hybrid"), hybrid.calls)
 
     def test_incomplete_override_preserves_existing_state(self) -> None:
         self._reset()
@@ -338,6 +498,33 @@ class ProgressiveAgentTest(unittest.TestCase):
         )
         self.assertEqual(state.surviving_candidates, before)
         self.assertEqual(state.intent_epoch, 0)
+
+    def test_explicit_override_switches_a_buying_session_to_hybrid(self) -> None:
+        linear = RecordingModel("linear")
+        hybrid = RecordingModel("hybrid")
+        self.agent.linear_model = linear  # type: ignore[assignment]
+        self.agent.model = hybrid  # type: ignore[assignment]
+        self._reset()
+
+        self.agent.respond(
+            "session",
+            f"I'm looking for {LARGE_CATEGORY}. A key requirement is: common option.",
+            1,
+            10,
+        )
+        self.assertEqual(self.agent._sessions["session"].scenario_state, "buying")
+        self.assertIn(("rank", "linear"), linear.calls)
+
+        self.agent.respond(
+            "session",
+            "Actually, ignore my earlier preference. What I need is: cotton.",
+            2,
+            10,
+        )
+        self.assertEqual(
+            self.agent._sessions["session"].scenario_state, "intent_override"
+        )
+        self.assertIn(("rank", "hybrid"), hybrid.calls)
 
 
 if __name__ == "__main__":

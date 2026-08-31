@@ -5,6 +5,11 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
+try:
+    from rapidfuzz import fuzz as rapidfuzz_fuzz
+except ImportError:  # exact templates still work without the optional wheel
+    rapidfuzz_fuzz = None
+
 from starter.attribute_index import AttributeIndex, normalize_value
 from starter.category_index import CategoryIndex
 from starter.conversation_features import (
@@ -15,6 +20,7 @@ from starter.conversation_features import (
 from starter.hybrid_model import (
     NO_ANSWER,
     PortableHybridModel,
+    default_linear_model_path,
     default_model_path,
 )
 
@@ -47,7 +53,10 @@ BUYING_MARKER = ". A key requirement is:"
 EXPLORING_MARKER = ", but I'm still exploring."
 BOUNDARY_MARKER = "please use your judgment"
 ANSWER_PREFIX = "For that, what matters is:"
-INITIAL_PREFIX_RE = re.compile(r"^\s*I(?:'m| am) looking for\s+", re.IGNORECASE)
+INITIAL_PREFIX_RE = re.compile(
+    r"^\s*I(?:['\N{RIGHT SINGLE QUOTATION MARK}]m| am) looking for\s+",
+    re.IGNORECASE,
+)
 OVERRIDE_MARKERS = (
     "ignore my earlier preference",
     "ignore my previous preference",
@@ -55,6 +64,13 @@ OVERRIDE_MARKERS = (
     "change my mind",
     "instead, what i need",
 )
+INTENT_CUES = {
+    "buying": "a key requirement is",
+    "browsing": "but i'm still exploring",
+    "boundary": "please use your judgment",
+}
+BUYING_FUZZY_THRESHOLD = 80.0
+NON_BUYING_FUZZY_THRESHOLD = 85.0
 
 QUESTION_TEXT = {
     "use_case": "What use case or occasion should this work best for?",
@@ -71,6 +87,74 @@ QUESTION_TEXT = {
 
 def _clean_disclosed_value(value: str) -> str:
     return re.sub(r"\s+", " ", value).strip(" -;,.\t\n")
+
+
+def _normalize_intent_text(value: str) -> str:
+    """Normalize wording without retaining category or constraint punctuation."""
+
+    value = value.casefold().replace("\N{RIGHT SINGLE QUOTATION MARK}", "'")
+    return re.sub(r"[^a-z0-9]+", " ", value).strip()
+
+
+def _contains_intent_cue(user_message: str, intent: str) -> bool:
+    return _normalize_intent_text(INTENT_CUES[intent]) in _normalize_intent_text(
+        user_message
+    )
+
+
+def _fuzzy_intent_score(user_message: str, intent: str) -> float:
+    if rapidfuzz_fuzz is None:
+        return 0.0
+    return float(
+        rapidfuzz_fuzz.partial_ratio(
+            _normalize_intent_text(user_message),
+            _normalize_intent_text(INTENT_CUES[intent]),
+        )
+    )
+
+
+def _classify_initial_intent(user_message: str) -> str:
+    """Classify visible opening wording without evaluator-only labels."""
+
+    normalized = _normalize_intent_text(user_message)
+    if any(
+        _normalize_intent_text(marker) in normalized for marker in OVERRIDE_MARKERS
+    ):
+        return "intent_override"
+
+    # An exact non-Buying marker wins even if unrelated words happen to look
+    # similar to the shorter Buying cue.
+    if _contains_intent_cue(user_message, "browsing"):
+        return "exploring_unknown"
+    if _contains_intent_cue(user_message, "boundary"):
+        return "boundary"
+    if _contains_intent_cue(user_message, "buying"):
+        return "buying"
+
+    # The asymmetric thresholds deliberately favor Buying recall. Unknown and
+    # low-confidence wording remains on the safer Hybrid route.
+    if _fuzzy_intent_score(user_message, "buying") >= BUYING_FUZZY_THRESHOLD:
+        return "buying"
+    if (
+        _fuzzy_intent_score(user_message, "browsing")
+        >= NON_BUYING_FUZZY_THRESHOLD
+    ):
+        return "exploring_unknown"
+    if (
+        _fuzzy_intent_score(user_message, "boundary")
+        >= NON_BUYING_FUZZY_THRESHOLD
+    ):
+        return "boundary"
+    return "unknown"
+
+
+def _is_boundary_reply(user_message: str) -> bool:
+    if _contains_intent_cue(user_message, "boundary"):
+        return True
+    return (
+        _fuzzy_intent_score(user_message, "boundary")
+        >= NON_BUYING_FUZZY_THRESHOLD
+    )
 
 
 @dataclass
@@ -102,7 +186,8 @@ class Agent:
         category_index_path: str | Path | None = None,
         attribute_index_path: str | Path | None = None,
         model_path: str | Path | None = None,
-        ranking_mode: str = "hybrid",
+        linear_model_path: str | Path | None = None,
+        ranking_mode: str | None = None,
         disabled_field_pair: tuple[str, str] | None = None,
     ) -> None:
         catalog_path = Path(catalog_path)
@@ -118,24 +203,49 @@ class Agent:
         self._attribute_hashmaps: dict[str, dict[str, tuple[str, ...]]] = {}
         self._indexed_products: dict[str, frozenset[str]] = {}
         self._all_catalog_ids: set[str] | None = None
-        if ranking_mode not in {"linear", "fm", "hybrid"}:
-            raise ValueError("ranking_mode must be linear, fm, or hybrid")
+        if ranking_mode is None:
+            # A caller supplying one explicit artifact retains the historical
+            # single-Hybrid behavior. The normal submission entrypoint, which
+            # supplies no artifact override, enables intent routing.
+            ranking_mode = "hybrid" if model_path is not None else "routed"
+        if ranking_mode not in {"linear", "fm", "hybrid", "routed"}:
+            raise ValueError("ranking_mode must be linear, fm, hybrid, or routed")
         self.ranking_mode = ranking_mode
         self.disabled_field_pair = disabled_field_pair
         self.model: PortableHybridModel | None = None
+        self.linear_model: PortableHybridModel | None = None
         self.model_error: str | None = None
         requested_model_path = Path(model_path) if model_path else default_model_path()
-        if requested_model_path.exists():
-            try:
-                candidate_model = PortableHybridModel(requested_model_path)
-                if candidate_model.matches_catalog(self._catalog_ids()):
-                    self.model = candidate_model
-                else:
-                    self.model_error = "FM artifact does not match this catalog"
-            except Exception as error:  # safe evaluator fallback
-                self.model_error = f"FM artifact could not be loaded: {error}"
-        else:
-            self.model_error = f"FM artifact not found: {requested_model_path}"
+        self.model, primary_error = self._load_model(
+            requested_model_path, "primary"
+        )
+
+        errors = [primary_error] if primary_error else []
+        if ranking_mode == "routed":
+            requested_linear_path = (
+                Path(linear_model_path)
+                if linear_model_path
+                else default_linear_model_path()
+            )
+            self.linear_model, linear_error = self._load_model(
+                requested_linear_path, "linear"
+            )
+            if linear_error:
+                errors.append(linear_error)
+        self.model_error = "; ".join(errors) or None
+
+    def _load_model(
+        self, requested_path: Path, label: str
+    ) -> tuple[PortableHybridModel | None, str | None]:
+        if not requested_path.exists():
+            return None, f"{label} model artifact not found: {requested_path}"
+        try:
+            candidate_model = PortableHybridModel(requested_path)
+            if candidate_model.matches_catalog(self._catalog_ids()):
+                return candidate_model, None
+            return None, f"{label} model artifact does not match this catalog"
+        except Exception as error:  # safe evaluator fallback
+            return None, f"{label} model artifact could not be loaded: {error}"
 
     def close(self) -> None:
         self.category_index.close()
@@ -180,12 +290,35 @@ class Agent:
 
         message = user_message.strip()
         without_prefix = INITIAL_PREFIX_RE.sub("", message, count=1)
-        if BUYING_MARKER in without_prefix:
-            category, constraint = without_prefix.split(BUYING_MARKER, 1)
+        scenario = _classify_initial_intent(message)
+        buying_match = re.search(
+            r"\.\s*a\s+key\s+requirement\s+is\s*:\s*",
+            without_prefix,
+            re.IGNORECASE,
+        )
+        if scenario == "buying" and buying_match is not None:
+            category = without_prefix[: buying_match.start()]
+            constraint = without_prefix[buying_match.end() :]
             return "buying", category.strip(), _clean_disclosed_value(constraint)
-        if without_prefix.endswith(EXPLORING_MARKER):
-            category = without_prefix[: -len(EXPLORING_MARKER)].strip()
+        if scenario == "buying":
+            category = re.split(r"[.,]", without_prefix, maxsplit=1)[0].strip()
+            constraint = (
+                _clean_disclosed_value(without_prefix.rsplit(":", 1)[1])
+                if ":" in without_prefix
+                else None
+            )
+            return "buying", category or "clothing item", constraint
+        if scenario == "exploring_unknown":
+            category = re.split(r",|\bbut\b", without_prefix, maxsplit=1, flags=re.I)[
+                0
+            ].strip()
             return "exploring_unknown", category, None
+        if scenario == "boundary":
+            category = re.split(r"[.,]", without_prefix, maxsplit=1)[0].strip()
+            return "boundary", category or "clothing item", None
+        if scenario == "intent_override":
+            category = re.split(r"[.,]", without_prefix, maxsplit=1)[0].strip()
+            return "intent_override", category or "clothing item", None
 
         # The simulator's Intent Override scenario starts with a category and
         # a provisional preference. It is not scored until the later explicit
@@ -199,6 +332,25 @@ class Agent:
 
         category = without_prefix.split(".", 1)[0].strip(" ,.")
         return "unknown", category or "clothing item", None
+
+    def _active_model(
+        self, state: SessionState
+    ) -> tuple[PortableHybridModel | None, str]:
+        """Return the available model and score mode for this visible state."""
+
+        if self.ranking_mode != "routed":
+            return self.model, self.ranking_mode
+        if state.scenario_state == "buying":
+            if self.linear_model is not None:
+                return self.linear_model, "linear"
+            if self.model is not None:
+                return self.model, "hybrid"
+        else:
+            if self.model is not None:
+                return self.model, "hybrid"
+            if self.linear_model is not None:
+                return self.linear_model, "linear"
+        return None, "hybrid"
 
     @staticmethod
     def _parse_override_message(user_message: str) -> str | None:
@@ -358,7 +510,7 @@ class Agent:
         if state.scenario_state == "exploring_unknown":
             state.scenario_state = (
                 "boundary"
-                if BOUNDARY_MARKER in user_message.casefold()
+                if _is_boundary_reply(user_message)
                 else "browsing"
             )
         if asked is None:
@@ -388,11 +540,12 @@ class Agent:
         return largest
 
     def _choose_next_attribute(self, state: SessionState, turn: int = 1) -> str | None:
-        if self.model is not None and state.surviving_candidates:
-            posterior = self.model.posterior(
+        active_model, active_mode = self._active_model(state)
+        if active_model is not None and state.surviving_candidates:
+            posterior = active_model.posterior(
                 state.surviving_candidates,
-                self._context_features(state, turn=turn),
-                mode=self.ranking_mode,
+                self._context_features(state, turn=turn, model=active_model),
+                mode=active_mode,
                 disabled_field_pair=self.disabled_field_pair,
             )
             if posterior:
@@ -406,7 +559,7 @@ class Agent:
                         continue
                     buckets: dict[tuple[str, ...], float] = {}
                     for parent_asin, probability in posterior.items():
-                        reply = self.model.predicted_reply(
+                        reply = active_model.predicted_reply(
                             parent_asin,
                             attribute,
                             state.historical_disclosures,
@@ -450,7 +603,12 @@ class Agent:
             state.roadmap_stage += 1
         return None
 
-    def _context_features(self, state: SessionState, turn: int) -> list[str]:
+    def _context_features(
+        self,
+        state: SessionState,
+        turn: int,
+        model: PortableHybridModel | None = None,
+    ) -> list[str]:
         features = context_feature_names(
             coarse_category=state.coarse_category,
             scenario_state=state.scenario_state,
@@ -458,7 +616,8 @@ class Agent:
             intent_epoch=state.intent_epoch,
             known_constraints=state.known_constraints,
         )
-        model = getattr(self, "model", None)
+        if model is None:
+            model = getattr(self, "model", None)
         if (
             model is None
             or model.metadata.get("feature_schema_version")
@@ -483,14 +642,15 @@ class Agent:
     ) -> list[dict[str, str]]:
         limit = max(0, min(10, int(top_k)))
         candidates = state.surviving_candidates
-        if self.model is None:
+        active_model, active_mode = self._active_model(state)
+        if active_model is None:
             ranked = sorted(candidates)[:limit]
         else:
-            ranked = self.model.rank(
+            ranked = active_model.rank(
                 candidates,
-                self._context_features(state, turn),
+                self._context_features(state, turn, model=active_model),
                 limit,
-                mode=self.ranking_mode,
+                mode=active_mode,
                 disabled_field_pair=self.disabled_field_pair,
             )
         return [{"parent_asin": parent_asin} for parent_asin in ranked]

@@ -20,6 +20,12 @@ def default_model_path() -> Path:
     return Path(__file__).resolve().parents[2] / "approach 1" / "fm_model.sqlite3"
 
 
+def default_linear_model_path() -> Path:
+    """Return the repository-local frozen linear artifact path."""
+
+    return Path(__file__).resolve().parents[2] / "approach 1" / "linear_model.sqlite3"
+
+
 def turn_bucket(turn: int) -> str:
     if turn <= 3:
         return "early"
