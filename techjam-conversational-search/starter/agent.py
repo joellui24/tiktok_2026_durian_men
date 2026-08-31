@@ -7,11 +7,15 @@ from pathlib import Path
 
 from starter.attribute_index import AttributeIndex, normalize_value
 from starter.category_index import CategoryIndex
+from starter.conversation_features import (
+    classify_constraint,
+    context_feature_names,
+    legacy_context_feature_names,
+)
 from starter.hybrid_model import (
     NO_ANSWER,
     PortableHybridModel,
     default_model_path,
-    turn_bucket,
 )
 
 
@@ -39,17 +43,6 @@ ROADMAP_STAGES = (
 ROADMAP_ATTRIBUTES = tuple(
     attribute for stage in ROADMAP_STAGES for attribute in stage
 )
-MATERIALS = (
-    "cotton",
-    "polyester",
-    "nylon",
-    "leather",
-    "wool",
-    "spandex",
-    "silk",
-    "rayon",
-    "fabric",
-)
 BUYING_MARKER = ". A key requirement is:"
 EXPLORING_MARKER = ", but I'm still exploring."
 BOUNDARY_MARKER = "please use your judgment"
@@ -74,32 +67,6 @@ QUESTION_TEXT = {
     "color": "Do you have a color preference?",
     "other": "Is there another requirement I should prioritize?",
 }
-
-
-def classify_constraint(value: str) -> str:
-    """Mirror evaluator.local_evaluator.classify_constraint exactly.
-
-    Classification cannot be inferred from index membership because every
-    simulator constraint is also stored under ``other``.
-    """
-
-    lowered = value.lower()
-    if "budget" in lowered or re.search(r"(?:\$|<=|under)\s*\d", lowered):
-        return "budget"
-    if any(material in lowered for material in MATERIALS):
-        return "material"
-    if any(
-        word in lowered
-        for word in ("color", "black", "white", "blue", "red", "pink", "green")
-    ):
-        return "color"
-    if any(word in lowered for word in ("size", "sizing", "width", "wide", "narrow")):
-        return "size"
-    if any(word in lowered for word in ("department", "style", "fit", "sleeve", "neck")):
-        return "style"
-    if any(word in lowered for word in ("hiking", "running", "gym", "winter", "outdoor", "work")):
-        return "use_case"
-    return "feature"
 
 
 def _clean_disclosed_value(value: str) -> str:
@@ -484,17 +451,32 @@ class Agent:
         return None
 
     def _context_features(self, state: SessionState, turn: int) -> list[str]:
-        features = [
-            f"ctx:category={normalize_value(state.coarse_category)}",
-            f"ctx:scenario={state.scenario_state}",
-            f"ctx:turn={turn_bucket(turn)}",
-            f"ctx:override={'post' if state.intent_epoch else 'pre'}",
-        ]
-        for attribute, values in sorted(state.known_constraints.items()):
-            features.extend(
-                f"ctx:{attribute}={normalize_value(value)}" for value in values
-            )
-        return features
+        features = context_feature_names(
+            coarse_category=state.coarse_category,
+            scenario_state=state.scenario_state,
+            turn=turn,
+            intent_epoch=state.intent_epoch,
+            known_constraints=state.known_constraints,
+        )
+        model = getattr(self, "model", None)
+        if (
+            model is None
+            or model.metadata.get("feature_schema_version")
+            == "conversation-features-v2"
+        ):
+            return features
+
+        # Frozen E0 artifacts predate dual OTHER encoding. Reconstruct their
+        # exact legacy context so baseline evaluation is not changed merely by
+        # loading the new runtime. Newly trained v2 artifacts take the shared
+        # path above and receive the source, retained, and inferred features.
+        return legacy_context_feature_names(
+            coarse_category=state.coarse_category,
+            scenario_state=state.scenario_state,
+            turn=turn,
+            intent_epoch=state.intent_epoch,
+            known_constraints=state.known_constraints,
+        )
 
     def _recommendations(
         self, state: SessionState, top_k: int, turn: int = 1

@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="760" viewBox="0 0 1240 760">
+<rect width="100%" height="100%" fill="white"/>
+<text x="620.0" y="30" text-anchor="middle" font-family="sans-serif" font-size="18">Full-survivor validation learning curves</text>
+<text x="180.0" y="76" text-anchor="middle" font-family="sans-serif" font-size="13">Validation MRR vs Complete trajectories</text>
+<line x1="88" y1="96" x2="88" y2="310" stroke="#444"/>
+<line x1="88" y1="310" x2="308" y2="310" stroke="#444"/>
+<line x1="88" y1="310.00" x2="308" y2="310.00" stroke="#ececec"/>
+<text x="83" y="314.00" text-anchor="end" font-family="sans-serif" font-size="9">0.459</text>
+<line x1="88" y1="238.67" x2="308" y2="238.67" stroke="#ececec"/>
+<text x="83" y="242.67" text-anchor="end" font-family="sans-serif" font-size="9">0.464</text>
+<line x1="88" y1="167.33" x2="308" y2="167.33" stroke="#ececec"/>
+<text x="83" y="171.33" text-anchor="end" font-family="sans-serif" font-size="9">0.468</text>
+<line x1="88" y1="96.00" x2="308" y2="96.00" stroke="#ececec"/>
+<text x="83" y="100.00" text-anchor="end" font-family="sans-serif" font-size="9">0.473</text>
+<polyline points="88.00,278.78 161.33,200.86 308.00,127.22" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+<circle cx="88.00" cy="278.78" r="4" fill="#2563eb"/>
+<circle cx="161.33" cy="200.86" r="4" fill="#2563eb"/>
+<circle cx="308.00" cy="127.22" r="4" fill="#2563eb"/>
+<text x="88.00" y="326" text-anchor="start" font-family="sans-serif" font-size="9">25.0k</text>
+<text x="308.00" y="326" text-anchor="end" font-family="sans-serif" font-size="9">100.0k</text>
+<text x="198.0" y="350" text-anchor="middle" font-family="sans-serif" font-size="11">Complete trajectories</text>
+<text x="480.0" y="76" text-anchor="middle" font-family="sans-serif" font-size="13">Validation MRR vs Retained states</text>
+<line x1="388" y1="96" x2="388" y2="310" stroke="#444"/>
+<line x1="388" y1="310" x2="608" y2="310" stroke="#444"/>
+<line x1="388" y1="310.00" x2="608" y2="310.00" stroke="#ececec"/>
+<text x="383" y="314.00" text-anchor="end" font-family="sans-serif" font-size="9">0.459</text>
+<line x1="388" y1="238.67" x2="608" y2="238.67" stroke="#ececec"/>
+<text x="383" y="242.67" text-anchor="end" font-family="sans-serif" font-size="9">0.464</text>
+<line x1="388" y1="167.33" x2="608" y2="167.33" stroke="#ececec"/>
+<text x="383" y="171.33" text-anchor="end" font-family="sans-serif" font-size="9">0.468</text>
+<line x1="388" y1="96.00" x2="608" y2="96.00" stroke="#ececec"/>
+<text x="383" y="100.00" text-anchor="end" font-family="sans-serif" font-size="9">0.473</text>
+<polyline points="388.00,278.78 461.49,200.86 608.00,127.22" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+<circle cx="388.00" cy="278.78" r="4" fill="#2563eb"/>
+<circle cx="461.49" cy="200.86" r="4" fill="#2563eb"/>
+<circle cx="608.00" cy="127.22" r="4" fill="#2563eb"/>
+<text x="388.00" y="326" text-anchor="start" font-family="sans-serif" font-size="9">97.8k</text>
+<text x="608.00" y="326" text-anchor="end" font-family="sans-serif" font-size="9">390.7k</text>
+<text x="498.0" y="350" text-anchor="middle" font-family="sans-serif" font-size="11">Retained states</text>
+<text x="780.0" y="76" text-anchor="middle" font-family="sans-serif" font-size="13">Validation MRR vs Effective weighted pairs</text>
+<line x1="688" y1="96" x2="688" y2="310" stroke="#444"/>
+<line x1="688" y1="310" x2="908" y2="310" stroke="#444"/>
+<line x1="688" y1="310.00" x2="908" y2="310.00" stroke="#ececec"/>
+<text x="683" y="314.00" text-anchor="end" font-family="sans-serif" font-size="9">0.459</text>
+<line x1="688" y1="238.67" x2="908" y2="238.67" stroke="#ececec"/>
+<text x="683" y="242.67" text-anchor="end" font-family="sans-serif" font-size="9">0.464</text>
+<line x1="688" y1="167.33" x2="908" y2="167.33" stroke="#ececec"/>
+<text x="683" y="171.33" text-anchor="end" font-family="sans-serif" font-size="9">0.468</text>
+<line x1="688" y1="96.00" x2="908" y2="96.00" stroke="#ececec"/>
+<text x="683" y="100.00" text-anchor="end" font-family="sans-serif" font-size="9">0.473</text>
+<polyline points="688.00,278.78 761.58,200.86 908.00,127.22" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+<circle cx="688.00" cy="278.78" r="4" fill="#2563eb"/>
+<circle cx="761.58" cy="200.86" r="4" fill="#2563eb"/>
+<circle cx="908.00" cy="127.22" r="4" fill="#2563eb"/>
+<text x="688.00" y="326" text-anchor="start" font-family="sans-serif" font-size="9">702.6</text>
+<text x="908.00" y="326" text-anchor="end" font-family="sans-serif" font-size="9">2.8k</text>
+<text x="798.0" y="350" text-anchor="middle" font-family="sans-serif" font-size="11">Effective weighted pairs</text>
+<text x="1080.0" y="76" text-anchor="middle" font-family="sans-serif" font-size="13">Validation MRR vs Training time (seconds)</text>
+<line x1="988" y1="96" x2="988" y2="310" stroke="#444"/>
+<line x1="988" y1="310" x2="1208" y2="310" stroke="#444"/>
+<line x1="988" y1="310.00" x2="1208" y2="310.00" stroke="#ececec"/>
+<text x="983" y="314.00" text-anchor="end" font-family="sans-serif" font-size="9">0.459</text>
+<line x1="988" y1="238.67" x2="1208" y2="238.67" stroke="#ececec"/>
+<text x="983" y="242.67" text-anchor="end" font-family="sans-serif" font-size="9">0.464</text>
+<line x1="988" y1="167.33" x2="1208" y2="167.33" stroke="#ececec"/>
+<text x="983" y="171.33" text-anchor="end" font-family="sans-serif" font-size="9">0.468</text>
+<line x1="988" y1="96.00" x2="1208" y2="96.00" stroke="#ececec"/>
+<text x="983" y="100.00" text-anchor="end" font-family="sans-serif" font-size="9">0.473</text>
+<polyline points="988.00,200.86 1008.45,278.78 1208.00,127.22" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+<circle cx="988.00" cy="200.86" r="4" fill="#2563eb"/>
+<circle cx="1008.45" cy="278.78" r="4" fill="#2563eb"/>
+<circle cx="1208.00" cy="127.22" r="4" fill="#2563eb"/>
+<text x="988.00" y="326" text-anchor="start" font-family="sans-serif" font-size="9">2.1k</text>
+<text x="1208.00" y="326" text-anchor="end" font-family="sans-serif" font-size="9">12.5k</text>
+<text x="1098.0" y="350" text-anchor="middle" font-family="sans-serif" font-size="11">Training time (seconds)</text>
+<text x="180.0" y="418" text-anchor="middle" font-family="sans-serif" font-size="13">Validation HR@10 vs Complete trajectories</text>
+<line x1="88" y1="438" x2="88" y2="652" stroke="#444"/>
+<line x1="88" y1="652" x2="308" y2="652" stroke="#444"/>
+<line x1="88" y1="652.00" x2="308" y2="652.00" stroke="#ececec"/>
+<text x="83" y="656.00" text-anchor="end" font-family="sans-serif" font-size="9">0.242</text>
+<line x1="88" y1="580.67" x2="308" y2="580.67" stroke="#ececec"/>
+<text x="83" y="584.67" text-anchor="end" font-family="sans-serif" font-size="9">0.250</text>
+<line x1="88" y1="509.33" x2="308" y2="509.33" stroke="#ececec"/>
+<text x="83" y="513.33" text-anchor="end" font-family="sans-serif" font-size="9">0.258</text>
+<line x1="88" y1="438.00" x2="308" y2="438.00" stroke="#ececec"/>
+<text x="83" y="442.00" text-anchor="end" font-family="sans-serif" font-size="9">0.266</text>
+<polyline points="88.00,627.31 161.33,510.78 308.00,462.69" fill="none" stroke="#059669" stroke-width="2.5"/>
+<circle cx="88.00" cy="627.31" r="4" fill="#059669"/>
+<circle cx="161.33" cy="510.78" r="4" fill="#059669"/>
+<circle cx="308.00" cy="462.69" r="4" fill="#059669"/>
+<text x="88.00" y="668" text-anchor="start" font-family="sans-serif" font-size="9">25.0k</text>
+<text x="308.00" y="668" text-anchor="end" font-family="sans-serif" font-size="9">100.0k</text>
+<text x="198.0" y="692" text-anchor="middle" font-family="sans-serif" font-size="11">Complete trajectories</text>
+<text x="480.0" y="418" text-anchor="middle" font-family="sans-serif" font-size="13">Validation HR@10 vs Retained states</text>
+<line x1="388" y1="438" x2="388" y2="652" stroke="#444"/>
+<line x1="388" y1="652" x2="608" y2="652" stroke="#444"/>
+<line x1="388" y1="652.00" x2="608" y2="652.00" stroke="#ececec"/>
+<text x="383" y="656.00" text-anchor="end" font-family="sans-serif" font-size="9">0.242</text>
+<line x1="388" y1="580.67" x2="608" y2="580.67" stroke="#ececec"/>
+<text x="383" y="584.67" text-anchor="end" font-family="sans-serif" font-size="9">0.250</text>
+<line x1="388" y1="509.33" x2="608" y2="509.33" stroke="#ececec"/>
+<text x="383" y="513.33" text-anchor="end" font-family="sans-serif" font-size="9">0.258</text>
+<line x1="388" y1="438.00" x2="608" y2="438.00" stroke="#ececec"/>
+<text x="383" y="442.00" text-anchor="end" font-family="sans-serif" font-size="9">0.266</text>
+<polyline points="388.00,627.31 461.49,510.78 608.00,462.69" fill="none" stroke="#059669" stroke-width="2.5"/>
+<circle cx="388.00" cy="627.31" r="4" fill="#059669"/>
+<circle cx="461.49" cy="510.78" r="4" fill="#059669"/>
+<circle cx="608.00" cy="462.69" r="4" fill="#059669"/>
+<text x="388.00" y="668" text-anchor="start" font-family="sans-serif" font-size="9">97.8k</text>
+<text x="608.00" y="668" text-anchor="end" font-family="sans-serif" font-size="9">390.7k</text>
+<text x="498.0" y="692" text-anchor="middle" font-family="sans-serif" font-size="11">Retained states</text>
+<text x="780.0" y="418" text-anchor="middle" font-family="sans-serif" font-size="13">Validation HR@10 vs Effective weighted pairs</text>
+<line x1="688" y1="438" x2="688" y2="652" stroke="#444"/>
+<line x1="688" y1="652" x2="908" y2="652" stroke="#444"/>
+<line x1="688" y1="652.00" x2="908" y2="652.00" stroke="#ececec"/>
+<text x="683" y="656.00" text-anchor="end" font-family="sans-serif" font-size="9">0.242</text>
+<line x1="688" y1="580.67" x2="908" y2="580.67" stroke="#ececec"/>
+<text x="683" y="584.67" text-anchor="end" font-family="sans-serif" font-size="9">0.250</text>
+<line x1="688" y1="509.33" x2="908" y2="509.33" stroke="#ececec"/>
+<text x="683" y="513.33" text-anchor="end" font-family="sans-serif" font-size="9">0.258</text>
+<line x1="688" y1="438.00" x2="908" y2="438.00" stroke="#ececec"/>
+<text x="683" y="442.00" text-anchor="end" font-family="sans-serif" font-size="9">0.266</text>
+<polyline points="688.00,627.31 761.58,510.78 908.00,462.69" fill="none" stroke="#059669" stroke-width="2.5"/>
+<circle cx="688.00" cy="627.31" r="4" fill="#059669"/>
+<circle cx="761.58" cy="510.78" r="4" fill="#059669"/>
+<circle cx="908.00" cy="462.69" r="4" fill="#059669"/>
+<text x="688.00" y="668" text-anchor="start" font-family="sans-serif" font-size="9">702.6</text>
+<text x="908.00" y="668" text-anchor="end" font-family="sans-serif" font-size="9">2.8k</text>
+<text x="798.0" y="692" text-anchor="middle" font-family="sans-serif" font-size="11">Effective weighted pairs</text>
+<text x="1080.0" y="418" text-anchor="middle" font-family="sans-serif" font-size="13">Validation HR@10 vs Training time (seconds)</text>
+<line x1="988" y1="438" x2="988" y2="652" stroke="#444"/>
+<line x1="988" y1="652" x2="1208" y2="652" stroke="#444"/>
+<line x1="988" y1="652.00" x2="1208" y2="652.00" stroke="#ececec"/>
+<text x="983" y="656.00" text-anchor="end" font-family="sans-serif" font-size="9">0.242</text>
+<line x1="988" y1="580.67" x2="1208" y2="580.67" stroke="#ececec"/>
+<text x="983" y="584.67" text-anchor="end" font-family="sans-serif" font-size="9">0.250</text>
+<line x1="988" y1="509.33" x2="1208" y2="509.33" stroke="#ececec"/>
+<text x="983" y="513.33" text-anchor="end" font-family="sans-serif" font-size="9">0.258</text>
+<line x1="988" y1="438.00" x2="1208" y2="438.00" stroke="#ececec"/>
+<text x="983" y="442.00" text-anchor="end" font-family="sans-serif" font-size="9">0.266</text>
+<polyline points="988.00,510.78 1008.45,627.31 1208.00,462.69" fill="none" stroke="#059669" stroke-width="2.5"/>
+<circle cx="988.00" cy="510.78" r="4" fill="#059669"/>
+<circle cx="1008.45" cy="627.31" r="4" fill="#059669"/>
+<circle cx="1208.00" cy="462.69" r="4" fill="#059669"/>
+<text x="988.00" y="668" text-anchor="start" font-family="sans-serif" font-size="9">2.1k</text>
+<text x="1208.00" y="668" text-anchor="end" font-family="sans-serif" font-size="9">12.5k</text>
+<text x="1098.0" y="692" text-anchor="middle" font-family="sans-serif" font-size="11">Training time (seconds)</text>
+</svg>

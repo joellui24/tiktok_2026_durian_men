@@ -1,0 +1,36 @@
+{
+  "evaluated_third_model": {
+    "name": "e7_100k_seed2028",
+    "mode": "fm",
+    "artifact": "approach 1/results/redesign/experiments_v3_downweight/E7_learning_curve/100k_public_tseed2026_mseed2028/model.sqlite3"
+  },
+  "non_override_170": {
+    "sample_count": 170,
+    "hit_rate_at_10": 0.970588,
+    "mrr": 0.656436,
+    "mttc": 2.058824,
+    "correct_answers": 165,
+    "accuracy": 0.970588,
+    "efficiency": 0.894118,
+    "technical_score": 0.861048,
+    "cohort": "buying_browsing_boundary_170"
+  },
+  "official_200": {
+    "sample_count": 200,
+    "hit_rate_at_10": 0.975,
+    "mrr": 0.652365,
+    "mttc": 2.39,
+    "correct_answers": 195,
+    "accuracy": 0.975,
+    "efficiency": 0.861,
+    "technical_score": 0.85541,
+    "cohort": "official_public_200",
+    "intent_override_implemented": true
+  },
+  "full_horizon_turn_10": {
+    "exactly_10": 4,
+    "at_most_10": 184,
+    "more_than_10": 16,
+    "naturally_reached_turn_10": 5
+  }
+}

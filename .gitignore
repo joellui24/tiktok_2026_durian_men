@@ -5,3 +5,6 @@ __pycache__/
 approach 1/results/cross_seed_20??.csv
 approach 1/linear_cross_weights.csv
 approach 1/fm_only_cross_weights.csv
+# Experiment checkpoints and dense diagnostics are generated locally. Curated
+# manifests, metrics, charts, and official-evaluation evidence are force-added.
+approach 1/results/redesign/

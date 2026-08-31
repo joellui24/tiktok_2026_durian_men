@@ -4,6 +4,60 @@ For the full project objective, proposed relational-learning architecture, model
 comparison, and experiment roadmap, see [Project Aim and Machine-Learning
 Research Direction](PROJECT_AIM_AND_ML_RESEARCH.md).
 
+## Current FM redesign status (experimental v3)
+
+The full 25k policy evidence pivots from the smoke-selected set-valued policy to
+`downweight_ties`; the v3 sequence then selects n32 and the no-model-hard
+0/50/50 sampler. In the matched three-seed sampler comparison, no-model-hard
+has mean validation MRR `0.461145 ± 0.001312`, versus `0.459686 ± 0.003903`
+for balanced 34/33/33. E2 leaves the public scenario mix selected, while E6's
+legacy-versus-dual result is mixed and tiny, so dual is retained for the
+approved shared train/runtime semantics.
+
+E7 is complete across model seeds 2026–2028 at 25k, 50k, and 100k. Exact
+trajectory-macro three-seed means are:
+
+| Size | Validation MRR | Validation conditional HR@10 | Internal-test MRR | Internal-test conditional HR@10 |
+|---:|---:|---:|---:|---:|
+| 25k | 0.4611451735195582 | 0.2446205431291301 | 0.4679953319320041 | 0.2599703619580787 |
+| 50k | 0.4661368213075574 | 0.2578220518067759 | 0.46517985986286964 | 0.25188508820886835 |
+| **100k** | **0.47085403640704176** | **0.2632694080808186** | **0.47053107772159003** | **0.26128202194931865** |
+
+The 25k→50k deltas in those four columns are respectively
+`+0.004991647787999209`, `+0.013201508677645829`,
+`−0.0028154720691344615`, and `−0.008085273749210364`. The 50k→100k deltas
+are `+0.004717215099484362`, `+0.005447356274042692`,
+`+0.005351217858720392`, and `+0.009396933740450308`.
+Overall 25k→100k changes are `+0.009708862887483571`,
+`+0.01864886495168852`, `+0.0025357457895859303`, and
+`+0.001311659991239944` in the same order.
+
+Both validation-MRR steps exceed the registered `0.002` threshold for every
+matched seed, so the plateau decision selects **100k trajectories**. The 25k
+point is digest-bound provenance reuse of the exact E4 source runs; its models
+and metrics were not copied or retrained. Evidence is in the [aggregate
+manifest](<approach 1/results/redesign/experiments_v3_downweight/aggregation_manifest.json>),
+[plateau decision](<approach 1/results/redesign/experiments_v3_downweight/plateau_decision.json>),
+[learning-curve CSV](<approach 1/results/redesign/experiments_v3_downweight/learning_curve.csv>),
+and [SVG](<approach 1/results/redesign/experiments_v3_downweight/learning_curve.svg>).
+
+Training stopped after E7 by user direction. V3 E8 tuning and final-candidate
+retraining were **not run**. A later user-authorized direct official evaluation
+used the best-validation E7 artifact (100k, seed 2028): it scored 195/200, MRR
+`0.652365`, MTTC `2.390000`, and Technical Score `0.855410`. This trails the
+frozen hybrid incumbent's 197/200, MRR `0.658440`, MTTC `2.200000`, and
+Technical Score `0.866032`, so the E7 artifact was not promoted. Its five
+misses are `public_0017`, `public_0028`, `public_0083`, `public_0087`, and
+`public_0174`; Intent Override remains 30/30. Evidence is in the [official E7
+summary](<approach 1/results/redesign/experiments_v3_downweight/E7_official_candidate/100k_tseed2026_mseed2028/summary.json>)
+and [paired model table](<approach 1/results/redesign/experiments_v3_downweight/E7_official_candidate/100k_tseed2026_mseed2028/model_ablation.csv>).
+Frozen runtime artifacts remain unchanged. Full provenance and diagnostics are
+in [Approach 1 — Factorization Machine ranking](<approach 1/README.md>) and the
+[execution report](<approach 1/FM_REDESIGN_EXECUTION.md>).
+
+The sections below are preserved as historical legacy findings and should not
+be read as v3 training results.
+
 ## Approach 1 FM branch: hybrid learned ranking
 
 Approach 1 now combines exact hard filtering with a second-order Factorization

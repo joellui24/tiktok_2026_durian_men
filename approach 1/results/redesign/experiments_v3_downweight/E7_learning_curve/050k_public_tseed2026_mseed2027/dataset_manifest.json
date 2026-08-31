@@ -1,0 +1,113 @@
+{
+  "config": {
+    "dataset_version": "fm-trajectories-v2",
+    "extended_fraction": 0.1,
+    "max_turns": 10,
+    "scenario_mix": "public",
+    "seed": 2026,
+    "split_seed": 2026,
+    "trajectory_count": 50000
+  },
+  "config_sha256": "9b2fbfac4446ac4f93e826bb24511dc645a19948f3ad3e7ef485d444ebf4e0ba",
+  "dataset_version": "fm-trajectories-v2",
+  "extended_trajectory_count": 4939,
+  "input_sha256": {
+    "catalog": "da979b05a68af864cb0dcf9ee6a81c010c7e66a57978ad286c7a2e005fc69a67",
+    "catalog_records": "9f45cc9e8c14e2b29435d10db7aff22b2d5eec4da6f5b8428a1a24f7a174cf59"
+  },
+  "maximum_trajectory_weight_sum_error": 0.0,
+  "product_count": 50000,
+  "product_counts_by_split": {
+    "test": 5000,
+    "train": 40000,
+    "validation": 5000
+  },
+  "product_split_sha256": {
+    "test": "87df7f275e7af9f254682ec57ef7814191abb47537dbc50c1cab6dfe59ef7201",
+    "train": "6d6bfebe0f8a3fead6eaff9c447c874ad9f7b86743e9842f61dc67aa478488af",
+    "validation": "b9bd3cf233a35d86ed01ae2efecac973dc60c48cca3aef49341f3b4bb4766737"
+  },
+  "state_count": 195641,
+  "state_counts_by_observed_scenario": {
+    "boundary": 8952,
+    "browsing": 64947,
+    "buying": 58331,
+    "exploring_unknown": 22500,
+    "intent_override": 22100,
+    "provisional_override": 18811
+  },
+  "state_counts_by_other": {
+    "with_other": 15772,
+    "without_other": 179869
+  },
+  "state_counts_by_scenario": {
+    "boundary": 11452,
+    "browsing": 84947,
+    "buying": 58331,
+    "intent_override": 40911
+  },
+  "state_counts_by_split": {
+    "test": 19236,
+    "train": 156799,
+    "validation": 19606
+  },
+  "state_counts_by_split_scenario": {
+    "test/boundary": 1005,
+    "test/browsing": 8461,
+    "test/buying": 5901,
+    "test/intent_override": 3869,
+    "train/boundary": 9149,
+    "train/browsing": 68197,
+    "train/buying": 46575,
+    "train/intent_override": 32878,
+    "validation/boundary": 1298,
+    "validation/browsing": 8289,
+    "validation/buying": 5855,
+    "validation/intent_override": 4164
+  },
+  "state_counts_by_survivor_width": {
+    "11-50": 31549,
+    "51-200": 36883,
+    "<=10": 84152,
+    ">200": 43057
+  },
+  "state_counts_by_turn_bucket": {
+    "early": 131480,
+    "late": 14550,
+    "middle": 49611
+  },
+  "states_after_normal_cutoff": 46743,
+  "survivor_value_count": 27031103,
+  "survivor_width_summary": {
+    "maximum": 1354,
+    "mean": 138.16686175188227,
+    "median": 23.0,
+    "minimum": 1
+  },
+  "trajectory_count": 50000,
+  "trajectory_counts_by_scenario": {
+    "boundary": 2500,
+    "browsing": 20000,
+    "buying": 20000,
+    "intent_override": 7500
+  },
+  "trajectory_counts_by_split": {
+    "test": 5000,
+    "train": 40000,
+    "validation": 5000
+  },
+  "trajectory_counts_by_split_scenario": {
+    "test/boundary": 221,
+    "test/browsing": 2053,
+    "test/buying": 2012,
+    "test/intent_override": 714,
+    "train/boundary": 2001,
+    "train/browsing": 15967,
+    "train/buying": 15999,
+    "train/intent_override": 6033,
+    "validation/boundary": 278,
+    "validation/browsing": 1980,
+    "validation/buying": 1989,
+    "validation/intent_override": 753
+  }
+}

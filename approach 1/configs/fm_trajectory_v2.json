@@ -1,0 +1,83 @@
+{
+  "schema_version": "fm-training-v2",
+  "dataset_version": "fm-trajectories-v2",
+  "catalog_only_training": true,
+  "trajectory": {
+    "seed": 2026,
+    "seed_role": "fixed question paths and synthetic evidence",
+    "split_seed": 2026,
+    "nested_trajectory_counts": [25000, 50000, 100000],
+    "scenario_mix": "public",
+    "public_scenario_proportions": {
+      "buying": 0.4,
+      "browsing": 0.4,
+      "boundary": 0.05,
+      "intent_override": 0.15
+    },
+    "balanced_sensitivity_proportions": {
+      "buying": 0.25,
+      "browsing": 0.25,
+      "boundary": 0.25,
+      "intent_override": 0.25
+    },
+    "maximum_turns": 10,
+    "extended_trajectory_fraction": 0.1,
+    "product_split_proportions": {
+      "train": 0.8,
+      "validation": 0.1,
+      "test": 0.1
+    }
+  },
+  "supervision": {
+    "policies": [
+      "skip_ties",
+      "downweight_ties",
+      "set_valued_positives"
+    ],
+    "default_policy": "set_valued_positives",
+    "tie_weight": 0.1,
+    "category_only_weight": 0.05,
+    "evidence_saturation": 3
+  },
+  "feature_encoding": {
+    "default": "dual",
+    "other_ablation": ["legacy", "dual"],
+    "schema_version": "conversation-features-v2"
+  },
+  "negative_sampling": {
+    "candidate_counts": [8, 16, 32],
+    "default_count": 16,
+    "pre_pool_size": 128,
+    "mixture": {
+      "model_hard": 0.5,
+      "near_match": 0.25,
+      "random": 0.25
+    },
+    "refresh_each_epoch": true
+  },
+  "model": {
+    "independent_from_linear": true,
+    "training_seed_role": "initialization, minibatches, and negative refresh",
+    "final_training_seeds": [2026, 2027, 2028],
+    "default_variant": "fm",
+    "latent_dimensions": [8, 16, 32],
+    "default_dimension": 16,
+    "learning_rates": [0.005, 0.01, 0.02],
+    "default_learning_rate": 0.01,
+    "latent_l2_candidates": [1e-06, 1e-05, 0.0001],
+    "linear_l2_candidates": [1e-06, 1e-05, 0.0001],
+    "default_latent_l2": 1e-05,
+    "default_linear_l2": 1e-05,
+    "cross_l2": 0.0001,
+    "maximum_epochs": 60,
+    "early_stopping_patience": 7,
+    "final_seed_count": 3
+  },
+  "selection": {
+    "primary_metric": "full_survivor_validation_mrr",
+    "learning_curve_plateau_minimum_mrr_gain": 0.002,
+    "promotion_requires_official_correct": 199,
+    "promotion_requires_official_mrr_above": 0.645863,
+    "hit_rate_at_10_scope": "candidate_width_gt_10"
+  }
+}
