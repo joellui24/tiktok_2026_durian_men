@@ -299,6 +299,38 @@ class CategoryIndex:
             for row in self.connection.execute(sql, parameters).fetchall()
         ]
 
+    def products_for_category_names(
+        self,
+        names: Iterable[str],
+        *,
+        required_path_terms: Iterable[str] = (),
+    ) -> list[str]:
+        """Return the union for exact category names and optional path terms."""
+
+        normalized_names = list(
+            dict.fromkeys(
+                normalize_category(name) for name in names if name.strip()
+            )
+        )
+        if not normalized_names:
+            return []
+        placeholders = ", ".join("?" for _ in normalized_names)
+        sql = f"""
+            SELECT DISTINCT pc.parent_asin
+            FROM product_categories pc
+            JOIN categories c ON c.category_id = pc.category_id
+            WHERE c.normalized_name IN ({placeholders})
+        """
+        parameters: list[object] = [*normalized_names]
+        for term in required_path_terms:
+            sql += " AND LOWER(c.full_path) LIKE ?"
+            parameters.append(f"%{normalize_category(term)}%")
+        sql += " ORDER BY pc.parent_asin"
+        return [
+            str(row[0])
+            for row in self.connection.execute(sql, parameters).fetchall()
+        ]
+
     def coarse_category_for_product(self, parent_asin: str) -> str | None:
         """Return the evaluator category string for one product ID."""
         row = self.connection.execute(

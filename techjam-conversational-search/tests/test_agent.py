@@ -526,6 +526,54 @@ class ProgressiveAgentTest(unittest.TestCase):
         )
         self.assertIn(("rank", "hybrid"), hybrid.calls)
 
+    def test_free_form_opening_applies_category_color_and_numeric_budget(self) -> None:
+        self._reset()
+        self.agent.respond(
+            "session", "I need black belts below $12", 1, 10
+        )
+        state = self.agent._sessions["session"]
+        self.assertTrue(state.free_form_active)
+        self.assertEqual(state.scenario_state, "buying")
+        self.assertEqual(state.coarse_category, "belts")
+        self.assertEqual(state.known_constraints["color"], ["black"])
+        self.assertEqual(state.maximum_price, 12.0)
+        self.assertEqual(state.surviving_candidates, {"B00", "B01"})
+
+    def test_free_form_category_change_clears_obsolete_constraints(self) -> None:
+        self._reset()
+        self.agent.respond("session", "I want black belts", 1, 10)
+        state = self.agent._sessions["session"]
+        self.assertEqual(state.surviving_candidates, {"B00", "B01", "B02"})
+
+        self.agent.respond("session", "Actually make that tunics", 2, 10)
+        self.assertEqual(state.scenario_state, "intent_override")
+        self.assertEqual(state.coarse_category, "tunics")
+        self.assertEqual(state.known_constraints, {})
+        self.assertEqual(
+            state.surviving_candidates, {f"A{index:02d}" for index in range(15)}
+        )
+
+    def test_free_form_removal_and_budget_replacement_rebuild_candidates(self) -> None:
+        self._reset("remove")
+        self.agent.respond("remove", "I want something black", 1, 10)
+        state = self.agent._sessions["remove"]
+        self.assertEqual(state.surviving_candidates, {"B00", "B01", "B02"})
+        self.agent.respond(
+            "remove", "Actually colour doesn't matter anymore", 2, 10
+        )
+        self.assertEqual(len(state.surviving_candidates), 18)
+        self.assertNotIn("color", state.known_constraints)
+
+        self._reset("budget")
+        self.agent.respond("budget", "Budget is $30", 1, 10)
+        state = self.agent._sessions["budget"]
+        self.assertEqual(len(state.surviving_candidates), 13)
+        self.agent.respond(
+            "budget", "Changed my mind, keep it below $25", 2, 10
+        )
+        self.assertEqual(state.maximum_price, 25.0)
+        self.assertEqual(len(state.surviving_candidates), 8)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -17,6 +17,7 @@ from starter.conversation_features import (
     context_feature_names,
     legacy_context_feature_names,
 )
+from starter.free_form_parser import FreeFormParse, parse_free_form_message
 from starter.hybrid_model import (
     NO_ANSWER,
     PortableHybridModel,
@@ -71,6 +72,38 @@ INTENT_CUES = {
 }
 BUYING_FUZZY_THRESHOLD = 80.0
 NON_BUYING_FUZZY_THRESHOLD = 85.0
+
+# Canonical free-form category labels resolve to exact nodes in the catalog's
+# category tree. Required path terms disambiguate labels such as Running, which
+# also exists under sport-specific clothing.
+FREE_FORM_CATEGORY_TARGETS = {
+    "running shoes": (("Running",), ("Shoes",)),
+    "walking shoes": (("Walking",), ("Shoes",)),
+    "sneakers": (("Fashion Sneakers", "Sneakers"), ("Shoes",)),
+    "sandals": (("Sandals",), ("Shoes",)),
+    "shoes": (("Shoes",), ()),
+    "shirts": (("Shirts", "T-Shirts", "Blouses & Button-Down Shirts"), ()),
+    "tunics": (("Tunics",), ()),
+    "boots": (("Boots",), ("Shoes",)),
+    "dresses": (("Dresses",), ()),
+    "jackets": (("Jackets",), ()),
+    "jeans": (("Jeans",), ()),
+    "pants": (("Pants",), ()),
+    "skirts": (("Skirts",), ()),
+    "socks": (("Socks", "Athletic Socks"), ()),
+    "belts": (("Belts",), ()),
+    "watches": (("Wrist Watches",), ()),
+    "earrings": (("Earrings",), ()),
+    "necklaces": (("Necklaces",), ()),
+    "rings": (("Rings",), ()),
+    "slippers": (("Slippers",), ("Shoes",)),
+    "loafers": (("Loafers & Slip-Ons",), ("Shoes",)),
+    "pumps": (("Pumps",), ("Shoes",)),
+    "flats": (("Flats",), ("Shoes",)),
+    "hoodies": (("Fashion Hoodies & Sweatshirts",), ()),
+    "hats": (("Hats & Caps",), ()),
+    "sunglasses": (("Sunglasses",), ()),
+}
 
 QUESTION_TEXT = {
     "use_case": "What use case or occasion should this work best for?",
@@ -174,6 +207,11 @@ class SessionState:
     intent_epoch: int = 0
     override_count: int = 0
     initialized: bool = False
+    free_form_active: bool = False
+    hard_constraints: dict[str, list[str]] = field(default_factory=dict)
+    alternative_constraints: dict[str, list[str]] = field(default_factory=dict)
+    excluded_constraints: dict[str, list[str]] = field(default_factory=dict)
+    maximum_price: float | None = None
 
 
 class Agent:
@@ -202,6 +240,7 @@ class Agent:
         self._sessions: dict[str, SessionState] = {}
         self._attribute_hashmaps: dict[str, dict[str, tuple[str, ...]]] = {}
         self._indexed_products: dict[str, frozenset[str]] = {}
+        self._known_brands: tuple[str, ...] | None = None
         self._all_catalog_ids: set[str] | None = None
         if ranking_mode is None:
             # A caller supplying one explicit artifact retains the historical
@@ -283,6 +322,43 @@ class Agent:
                 )
             }
         return set(self._all_catalog_ids)
+
+    def _brands(self) -> tuple[str, ...]:
+        if self._known_brands is None:
+            rows = self.attribute_index.connection.execute(
+                """
+                SELECT display_value, COUNT(*) AS product_count
+                FROM attribute_values
+                WHERE attribute = 'brand'
+                GROUP BY normalized_value
+                HAVING product_count >= 2
+                ORDER BY LENGTH(display_value) DESC, display_value
+                """
+            ).fetchall()
+            self._known_brands = tuple(
+                str(row[0])
+                for row in rows
+                if str(row[0]).strip().casefold() not in {"no", "generic", "unknown"}
+            )
+        return self._known_brands
+
+    def _parse_free_form(self, user_message: str) -> FreeFormParse:
+        return parse_free_form_message(user_message, known_brands=self._brands())
+
+    def _free_form_candidates(self, category: str | None) -> tuple[str, set[str]]:
+        if category:
+            target = FREE_FORM_CATEGORY_TARGETS.get(category)
+            if target:
+                names, path_terms = target
+                candidates = set(
+                    self.category_index.products_for_category_names(
+                        names, required_path_terms=path_terms
+                    )
+                )
+                if candidates:
+                    return category, candidates
+        fallback_category, fallback = self._initial_candidates("clothing item")
+        return fallback_category, fallback
 
     @staticmethod
     def _parse_initial_message(user_message: str) -> tuple[str, str, str | None]:
@@ -429,6 +505,166 @@ class Agent:
         )
         return False
 
+    def _apply_alternatives(
+        self, state: SessionState, attribute: str, values: list[str]
+    ) -> bool:
+        """Intersect candidates with the union of same-field alternatives."""
+
+        mapping = self._hashmap(attribute)
+        matched: set[str] = set()
+        for value in values:
+            postings = mapping.get(normalize_value(value))
+            if postings:
+                matched.update(postings)
+        filtered = state.surviving_candidates.intersection(matched)
+        if not filtered:
+            state.unindexed_values.update(
+                (attribute, normalize_value(value)) for value in values
+            )
+            return False
+        state.surviving_candidates = filtered
+        return True
+
+    def _rebuild_free_form_candidates(self, state: SessionState) -> None:
+        """Reapply the visible structured slots after an edit or removal."""
+
+        category, candidates = self._free_form_candidates(state.coarse_category)
+        state.coarse_category = category
+        state.surviving_candidates = candidates
+        state.unindexed_values.clear()
+
+        for attribute, values in state.hard_constraints.items():
+            self._apply_values(state, attribute, values)
+        for attribute, values in state.alternative_constraints.items():
+            self._apply_alternatives(state, attribute, values)
+        for attribute, values in state.excluded_constraints.items():
+            mapping = self._hashmap(attribute)
+            excluded = {
+                parent_asin
+                for value in values
+                for parent_asin in mapping.get(normalize_value(value), ())
+            }
+            retained = state.surviving_candidates.difference(excluded)
+            if retained:
+                state.surviving_candidates = retained
+        if state.maximum_price is not None:
+            priced = set(
+                self.attribute_index.filter_products(
+                    maximum_price=state.maximum_price
+                )
+            )
+            retained = state.surviving_candidates.intersection(priced)
+            if retained:
+                state.surviving_candidates = retained
+            else:
+                state.unindexed_values.add(
+                    ("budget", f"maximum:{state.maximum_price:g}")
+                )
+
+    def _store_free_form_parse(
+        self,
+        state: SessionState,
+        parsed: FreeFormParse,
+        *,
+        replace_category: bool = False,
+    ) -> None:
+        if replace_category and parsed.category:
+            state.coarse_category = parsed.category
+            state.known_constraints.clear()
+            state.hard_constraints.clear()
+            state.alternative_constraints.clear()
+            state.excluded_constraints.clear()
+            state.maximum_price = None
+            state.historical_disclosures.clear()
+            state.remaining_attributes = set(ROADMAP_ATTRIBUTES)
+            state.exhausted_attributes.clear()
+            state.roadmap_stage = 0
+
+        for attribute in parsed.remove_attributes:
+            state.known_constraints.pop(attribute, None)
+            state.hard_constraints.pop(attribute, None)
+            state.alternative_constraints.pop(attribute, None)
+            state.excluded_constraints.pop(attribute, None)
+            if attribute == "budget":
+                state.maximum_price = None
+
+        hard_attributes = {"color", "material", "brand"}
+        for attribute, values in parsed.attributes.items():
+            state.known_constraints[attribute] = list(values)
+            if attribute in hard_attributes:
+                state.hard_constraints[attribute] = list(values)
+                state.alternative_constraints.pop(attribute, None)
+            state.historical_disclosures.update(normalize_value(value) for value in values)
+            state.remaining_attributes.discard(attribute)
+
+        for attribute, values in parsed.alternatives.items():
+            state.known_constraints[attribute] = list(values)
+            state.alternative_constraints[attribute] = list(values)
+            state.hard_constraints.pop(attribute, None)
+            state.historical_disclosures.update(normalize_value(value) for value in values)
+            state.remaining_attributes.discard(attribute)
+
+        for attribute, values in parsed.excluded.items():
+            state.excluded_constraints[attribute] = list(values)
+            state.remaining_attributes.discard(attribute)
+
+        if parsed.maximum_price is not None:
+            state.maximum_price = parsed.maximum_price
+            state.known_constraints["budget"] = [
+                f"maximum ${parsed.maximum_price:g}"
+            ]
+            state.historical_disclosures.add(f"maximum ${parsed.maximum_price:g}")
+            state.remaining_attributes.discard("budget")
+        elif parsed.qualitative_budget:
+            state.known_constraints["budget"] = [parsed.qualitative_budget]
+            state.remaining_attributes.discard("budget")
+
+        self._rebuild_free_form_candidates(state)
+
+    def _initialize_free_form(
+        self, state: SessionState, user_message: str
+    ) -> bool:
+        parsed = self._parse_free_form(user_message)
+        if not (parsed.category or parsed.has_constraints or parsed.intent == "browsing"):
+            return False
+        state.free_form_active = True
+        state.scenario_state = parsed.intent
+        state.coarse_category, state.surviving_candidates = self._free_form_candidates(
+            parsed.category
+        )
+        self._store_free_form_parse(state, parsed)
+        return True
+
+    def _process_free_form_reply(
+        self, state: SessionState, user_message: str
+    ) -> bool:
+        parsed = self._parse_free_form(user_message)
+        category_changed = bool(
+            parsed.category and parsed.category != state.coarse_category
+        )
+        has_edit = bool(
+            category_changed
+            or parsed.has_constraints
+            or parsed.remove_attributes
+        )
+        if not has_edit:
+            return False
+        if category_changed or re.search(
+            r"\b(?:actually|changed? my mind|make that|instead)\b",
+            user_message,
+            re.IGNORECASE,
+        ):
+            state.scenario_state = "intent_override"
+            state.intent_epoch += 1
+            state.override_count += 1
+        elif parsed.intent != "unknown":
+            state.scenario_state = parsed.intent
+        self._store_free_form_parse(
+            state, parsed, replace_category=category_changed
+        )
+        state.last_asked_attribute = None
+        return True
+
     @staticmethod
     def _exhaust_attribute(state: SessionState, attribute: str) -> None:
         state.remaining_attributes.discard(attribute)
@@ -450,6 +686,11 @@ class Agent:
         scenario, parsed_category, buying_constraint = self._parse_initial_message(
             user_message
         )
+        if scenario == "unknown" and self._initialize_free_form(
+            state, user_message
+        ):
+            state.initialized = True
+            return
         coarse_category, candidates = self._initial_candidates(parsed_category)
         state.scenario_state = scenario
         state.coarse_category = coarse_category
@@ -490,6 +731,10 @@ class Agent:
         replacement = self._parse_override_message(user_message)
         if replacement is not None:
             if not replacement:
+                if state.free_form_active and self._process_free_form_reply(
+                    state, user_message
+                ):
+                    return
                 # Do not destroy a valid state when an override is incomplete.
                 state.last_asked_attribute = None
                 return
@@ -504,6 +749,11 @@ class Agent:
             attribute = classify_constraint(replacement)
             self._apply_values(state, attribute, [replacement])
             state.historical_disclosures.add(normalize_value(replacement))
+            return
+
+        if state.free_form_active and self._process_free_form_reply(
+            state, user_message
+        ):
             return
 
         asked = state.last_asked_attribute
