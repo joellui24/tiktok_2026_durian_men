@@ -61,6 +61,48 @@ class FreeFormParserTest(unittest.TestCase):
         no_color = self.parse("Actually colour doesn't matter anymore")
         self.assertEqual(no_color.remove_attributes, {"color"})
 
+    def test_operator_negation_is_recorded_not_promoted_to_positive(self) -> None:
+        cases = (
+            ("Anything except black shoes", "color", "black"),
+            ("Avoid red dresses", "color", "red"),
+            ("Blue sneakers without Adidas", "brand", "Adidas"),
+            ("I do not want wool", "material", "wool"),
+            ("Sandals in any colour other than white", "color", "white"),
+        )
+        for message, attribute, value in cases:
+            with self.subTest(message=message):
+                parsed = self.parse(message)
+                self.assertIn(value, parsed.excluded[attribute])
+                self.assertNotIn(value, parsed.attributes.get(attribute, ()))
+
+    def test_or_creates_same_field_alternatives(self) -> None:
+        cases = (
+            ("Nike or Adidas running shoes", "brand", ["Nike", "Adidas"]),
+            ("Cotton or wool shirts", "material", ["cotton", "wool"]),
+            ("Sneakers or sandals", "category", ["sneakers", "sandals"]),
+            ("Size 9 or 10 running shoes", "size", ["9", "10"]),
+        )
+        for message, attribute, values in cases:
+            with self.subTest(message=message):
+                parsed = self.parse(message)
+                self.assertEqual(parsed.alternatives[attribute], values)
+                self.assertNotIn(attribute, parsed.attributes)
+
+    def test_instead_and_preference_removal_phrases(self) -> None:
+        replacement = self.parse("White instead of black shoes")
+        self.assertEqual(replacement.attributes["color"], ["white"])
+        self.assertEqual(replacement.excluded["color"], ["black"])
+
+        cases = (
+            ("I have no preference for colour", "color"),
+            ("Any brand is fine", "brand"),
+            ("Material is irrelevant now", "material"),
+            ("There is no budget limit now", "budget"),
+        )
+        for message, attribute in cases:
+            with self.subTest(message=message):
+                self.assertIn(attribute, self.parse(message).remove_attributes)
+
     def test_browsing_and_underspecified_intent(self) -> None:
         browsing = self.parse("Show me some cool things for a beach holiday")
         self.assertEqual(browsing.intent, "browsing")

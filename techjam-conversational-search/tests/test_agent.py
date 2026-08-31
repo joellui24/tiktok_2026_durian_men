@@ -574,6 +574,42 @@ class ProgressiveAgentTest(unittest.TestCase):
         self.assertEqual(state.maximum_price, 25.0)
         self.assertEqual(len(state.surviving_candidates), 8)
 
+    def test_free_form_operator_edits_replace_or_remove_old_preferences(self) -> None:
+        self._reset("operator-edits")
+        self.agent.respond("operator-edits", "I want something black below $30", 1, 10)
+        state = self.agent._sessions["operator-edits"]
+
+        self.agent.respond("operator-edits", "White would be better instead", 2, 10)
+        self.assertEqual(state.known_constraints["color"], ["white"])
+        self.assertNotIn("black", state.known_constraints["color"])
+        self.assertEqual(state.scenario_state, "intent_override")
+
+        self.agent.respond("operator-edits", "There is no budget limit now", 3, 10)
+        self.assertIsNone(state.maximum_price)
+        self.assertNotIn("budget", state.known_constraints)
+        self.assertEqual(state.scenario_state, "intent_override")
+
+        self._reset("budget-operator")
+        self.agent.respond("budget-operator", "Shoes under $80", 1, 10)
+        self.agent.respond("budget-operator", "Raise the limit to $110", 2, 10)
+        budget_state = self.agent._sessions["budget-operator"]
+        self.assertEqual(budget_state.maximum_price, 110.0)
+        self.assertEqual(budget_state.scenario_state, "intent_override")
+
+    def test_free_form_or_and_exclusion_affect_candidates(self) -> None:
+        self._reset("or-filter")
+        self.agent.respond("or-filter", "I want red or blue tunics", 1, 10)
+        state = self.agent._sessions["or-filter"]
+        self.assertEqual(state.alternative_constraints["color"], ["red", "blue"])
+        self.assertEqual(len(state.surviving_candidates), 15)
+
+        self.agent.respond("or-filter", "Avoid red", 2, 10)
+        self.assertEqual(state.excluded_constraints["color"], ["red"])
+        self.assertEqual(
+            state.surviving_candidates,
+            {f"A{index:02d}" for index in range(15) if index % 2 == 1},
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

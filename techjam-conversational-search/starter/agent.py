@@ -528,7 +528,15 @@ class Agent:
     def _rebuild_free_form_candidates(self, state: SessionState) -> None:
         """Reapply the visible structured slots after an edit or removal."""
 
-        category, candidates = self._free_form_candidates(state.coarse_category)
+        category_alternatives = state.alternative_constraints.get("category", [])
+        if category_alternatives:
+            candidates: set[str] = set()
+            for category_value in category_alternatives:
+                _, category_candidates = self._free_form_candidates(category_value)
+                candidates.update(category_candidates)
+            category = state.coarse_category
+        else:
+            category, candidates = self._free_form_candidates(state.coarse_category)
         state.coarse_category = category
         state.surviving_candidates = candidates
         state.unindexed_values.clear()
@@ -536,14 +544,22 @@ class Agent:
         for attribute, values in state.hard_constraints.items():
             self._apply_values(state, attribute, values)
         for attribute, values in state.alternative_constraints.items():
+            if attribute == "category":
+                continue
             self._apply_alternatives(state, attribute, values)
         for attribute, values in state.excluded_constraints.items():
-            mapping = self._hashmap(attribute)
-            excluded = {
-                parent_asin
-                for value in values
-                for parent_asin in mapping.get(normalize_value(value), ())
-            }
+            if attribute == "category":
+                excluded = set()
+                for value in values:
+                    _, category_candidates = self._free_form_candidates(value)
+                    excluded.update(category_candidates)
+            else:
+                mapping = self._hashmap(attribute)
+                excluded = {
+                    parent_asin
+                    for value in values
+                    for parent_asin in mapping.get(normalize_value(value), ())
+                }
             retained = state.surviving_candidates.difference(excluded)
             if retained:
                 state.surviving_candidates = retained
@@ -642,18 +658,38 @@ class Agent:
         category_changed = bool(
             parsed.category and parsed.category != state.coarse_category
         )
+        browsing_switch = bool(
+            parsed.intent == "browsing" and state.scenario_state != "browsing"
+        )
         has_edit = bool(
             category_changed
             or parsed.has_constraints
             or parsed.remove_attributes
+            or browsing_switch
         )
         if not has_edit:
             return False
-        if category_changed or re.search(
-            r"\b(?:actually|changed? my mind|make that|instead)\b",
+        explicit_override = bool(
+            category_changed
+            or parsed.remove_attributes
+            or re.search(
+            r"\b(?:actually|changed? my mind|make that|instead|on second thought|"
+            r"would be better|switch to|prefer .+ now|cap it|"
+            r"(?:raise|lower|set) (?:the )?limit)\b",
             user_message,
             re.IGNORECASE,
-        ):
+            )
+        )
+        if browsing_switch:
+            state.known_constraints.clear()
+            state.hard_constraints.clear()
+            state.alternative_constraints.clear()
+            state.excluded_constraints.clear()
+            state.maximum_price = None
+            state.scenario_state = "browsing"
+            state.intent_epoch += 1
+            state.override_count += 1
+        elif explicit_override:
             state.scenario_state = "intent_override"
             state.intent_epoch += 1
             state.override_count += 1
