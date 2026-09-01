@@ -526,6 +526,397 @@ class ProgressiveAgentTest(unittest.TestCase):
         )
         self.assertIn(("rank", "hybrid"), hybrid.calls)
 
+    def test_free_form_opening_applies_category_color_and_numeric_budget(self) -> None:
+        self._reset()
+        self.agent.respond(
+            "session", "I need black belts below $12", 1, 10
+        )
+        state = self.agent._sessions["session"]
+        self.assertTrue(state.free_form_active)
+        self.assertEqual(state.scenario_state, "buying")
+        self.assertEqual(state.coarse_category, "belts")
+        self.assertEqual(state.known_constraints["color"], ["black"])
+        self.assertEqual(state.maximum_price, 12.0)
+        self.assertEqual(state.surviving_candidates, {"B00", "B01"})
+
+    def test_free_form_category_change_clears_obsolete_constraints(self) -> None:
+        self._reset()
+        self.agent.respond("session", "I want black belts", 1, 10)
+        state = self.agent._sessions["session"]
+        self.assertEqual(state.surviving_candidates, {"B00", "B01", "B02"})
+
+        self.agent.respond("session", "Actually make that tunics", 2, 10)
+        self.assertEqual(state.scenario_state, "intent_override")
+        self.assertEqual(state.coarse_category, "tunics")
+        self.assertEqual(state.known_constraints, {})
+        self.assertEqual(
+            state.surviving_candidates, {f"A{index:02d}" for index in range(15)}
+        )
+
+    def test_free_form_removal_and_budget_replacement_rebuild_candidates(self) -> None:
+        self._reset("remove")
+        self.agent.respond("remove", "I want something black", 1, 10)
+        state = self.agent._sessions["remove"]
+        self.assertEqual(state.surviving_candidates, {"B00", "B01", "B02"})
+        self.agent.respond(
+            "remove", "Actually colour doesn't matter anymore", 2, 10
+        )
+        self.assertEqual(len(state.surviving_candidates), 18)
+        self.assertNotIn("color", state.known_constraints)
+
+        self._reset("budget")
+        self.agent.respond("budget", "Budget is $30", 1, 10)
+        state = self.agent._sessions["budget"]
+        self.assertEqual(len(state.surviving_candidates), 14)
+        self.agent.respond(
+            "budget", "Changed my mind, keep it below $25", 2, 10
+        )
+        self.assertEqual(state.maximum_price, 25.0)
+        self.assertEqual(len(state.surviving_candidates), 8)
+
+    def test_free_form_operator_edits_replace_or_remove_old_preferences(self) -> None:
+        self._reset("operator-edits")
+        self.agent.respond("operator-edits", "I want something black below $30", 1, 10)
+        state = self.agent._sessions["operator-edits"]
+
+        self.agent.respond("operator-edits", "White would be better instead", 2, 10)
+        self.assertEqual(state.known_constraints["color"], ["white"])
+        self.assertNotIn("black", state.known_constraints["color"])
+        self.assertEqual(state.scenario_state, "intent_override")
+
+        self.agent.respond("operator-edits", "There is no budget limit now", 3, 10)
+        self.assertIsNone(state.maximum_price)
+        self.assertNotIn("budget", state.known_constraints)
+        self.assertEqual(state.scenario_state, "intent_override")
+
+        self._reset("budget-operator")
+        self.agent.respond("budget-operator", "Shoes under $80", 1, 10)
+        self.agent.respond("budget-operator", "Raise the limit to $110", 2, 10)
+        budget_state = self.agent._sessions["budget-operator"]
+        self.assertEqual(budget_state.maximum_price, 110.0)
+        self.assertEqual(budget_state.scenario_state, "intent_override")
+
+    def test_free_form_or_and_exclusion_affect_candidates(self) -> None:
+        self._reset("or-filter")
+        self.agent.respond("or-filter", "I want red or blue tunics", 1, 10)
+        state = self.agent._sessions["or-filter"]
+        self.assertEqual(state.alternative_constraints["color"], ["red", "blue"])
+        self.assertEqual(len(state.surviving_candidates), 15)
+
+        self.agent.respond("or-filter", "Avoid red", 2, 10)
+        self.assertEqual(state.excluded_constraints["color"], ["red"])
+        self.assertEqual(
+            state.surviving_candidates,
+            {f"A{index:02d}" for index in range(15) if index % 2 == 1},
+        )
+
+    def test_soft_alternatives_do_not_become_destructive_exact_filters(self) -> None:
+        cases = (
+            "breathable or lightweight tunics",
+            "size 9 or 10 tunics",
+            "running or walking tunics",
+        )
+        for index, message in enumerate(cases):
+            session_id = f"soft-or-{index}"
+            with self.subTest(message=message):
+                self._reset(session_id)
+                self.agent.respond(session_id, message, 1, 10)
+                state = self.agent._sessions[session_id]
+                self.assertEqual(len(state.surviving_candidates), 15)
+
+    def test_free_form_blanket_override_clears_every_old_state_store(self) -> None:
+        self._reset("blanket")
+        self.agent.respond(
+            "blanket", "I want red tunics below $25", 1, 10
+        )
+        state = self.agent._sessions["blanket"]
+        self.assertTrue(state.hard_constraints)
+        self.assertIsNotNone(state.maximum_price)
+        self.assertTrue(state.semantic_fragments)
+
+        self.agent.respond(
+            "blanket",
+            "Actually, ignore my earlier preference. What I need is: wool.",
+            2,
+            10,
+        )
+        self.assertEqual(state.hard_constraints, {"material": ["wool"]})
+        self.assertIsNone(state.maximum_price)
+        self.assertNotIn("color", state.known_constraints)
+        self.assertNotIn("red", self.agent._semantic_query(state).casefold())
+
+        self.agent.respond("blanket", "make it breathable", 3, 10)
+        self.assertEqual(state.hard_constraints, {"material": ["wool"]})
+        self.assertIsNone(state.maximum_price)
+        self.assertNotIn("red", self.agent._semantic_query(state).casefold())
+
+    def test_positive_and_excluded_values_are_reconciled_both_ways(self) -> None:
+        self._reset("exclude-positive")
+        self.agent.respond("exclude-positive", "I want red tunics", 1, 10)
+        state = self.agent._sessions["exclude-positive"]
+        self.agent.respond("exclude-positive", "avoid red", 2, 10)
+        self.assertNotIn("color", state.hard_constraints)
+        self.assertNotIn("color", state.known_constraints)
+        self.assertEqual(state.excluded_constraints["color"], ["red"])
+        self.assertEqual(
+            state.surviving_candidates,
+            {f"A{index:02d}" for index in range(15) if index % 2 == 1},
+        )
+
+        self._reset("positive-exclude")
+        self.agent.respond("positive-exclude", "tunics but not red", 1, 10)
+        state = self.agent._sessions["positive-exclude"]
+        self.agent.respond("positive-exclude", "Actually red is fine", 2, 10)
+        self.assertNotIn("color", state.excluded_constraints)
+        self.assertEqual(state.hard_constraints["color"], ["red"])
+        self.assertEqual(
+            state.surviving_candidates,
+            {f"A{index:02d}" for index in range(15) if index % 2 == 0},
+        )
+
+    def test_exclusions_that_remove_every_candidate_ask_for_clarification(self) -> None:
+        self._reset("exclude-all")
+        response = self.agent.respond(
+            "exclude-all", "tunics without red or blue", 1, 10
+        )
+        state = self.agent._sessions["exclude-all"]
+        self.assertEqual(state.surviving_candidates, set())
+        self.assertEqual(response["recommendations"], [])
+        self.assertIsNotNone(response["ask_attribute"])
+        self.assertIn("couldn't find", response["message"])
+
+    def test_inclusive_and_exclusive_price_bounds_differ_at_the_boundary(self) -> None:
+        self._reset("exclusive-price")
+        self.agent.respond("exclusive-price", "tunics under $20", 1, 10)
+        self.assertEqual(
+            self.agent._sessions["exclusive-price"].surviving_candidates,
+            set(),
+        )
+
+        self._reset("inclusive-price")
+        self.agent.respond("inclusive-price", "tunics up to $20", 1, 10)
+        self.assertEqual(
+            self.agent._sessions["inclusive-price"].surviving_candidates,
+            {"A00"},
+        )
+
+    def test_category_alternative_replacement_updates_semantic_state(self) -> None:
+        self._reset("category-or")
+        self.agent.respond("category-or", "I want black shoes", 1, 10)
+        state = self.agent._sessions["category-or"]
+        self.agent.respond(
+            "category-or", "sandals or boots instead", 2, 10
+        )
+        query = self.agent._semantic_query(state)
+        self.assertEqual(
+            state.alternative_constraints["category"], ["sandals", "boots"]
+        )
+        self.assertNotIn("color", state.known_constraints)
+        self.assertIn("category alternative sandals", query)
+        self.assertIn("category alternative boots", query)
+
+    def test_implicit_same_field_replacement_drops_stale_semantic_language(self) -> None:
+        self._reset("implicit-replace")
+        self.agent.respond(
+            "implicit-replace", "I want comfortable black tunics", 1, 10
+        )
+        state = self.agent._sessions["implicit-replace"]
+        self.agent.respond("implicit-replace", "white would work", 2, 10)
+        self.assertEqual(state.hard_constraints["color"], ["white"])
+        self.assertNotIn("black", self.agent._semantic_query(state).casefold())
+
+    def test_category_refinement_preserves_unrelated_preferences(self) -> None:
+        self._reset("refine")
+        self.agent.respond("refine", "Something comfortable", 1, 10)
+        state = self.agent._sessions["refine"]
+        self.agent.respond("refine", "tunics", 2, 10)
+        self.assertEqual(state.coarse_category, "tunics")
+        self.assertEqual(state.known_constraints["feature"], ["comfort"])
+
+        self._reset("narrow")
+        self.agent.respond(
+            "narrow", "I want red under $25", 1, 10
+        )
+        narrow_state = self.agent._sessions["narrow"]
+        self.agent.respond("narrow", "tunics", 2, 10)
+        self.assertEqual(narrow_state.coarse_category, "tunics")
+        self.assertEqual(narrow_state.hard_constraints["color"], ["red"])
+        self.assertEqual(narrow_state.maximum_price, 25.0)
+
+    def test_changed_mind_field_edit_is_not_a_blanket_reset(self) -> None:
+        self._reset("field-edit")
+        self.agent.respond(
+            "field-edit", "I want red tunics under $25", 1, 10
+        )
+        state = self.agent._sessions["field-edit"]
+        self.agent.respond(
+            "field-edit", "Changed my mind, I want blue", 2, 10
+        )
+        self.assertEqual(state.coarse_category, "tunics")
+        self.assertEqual(state.hard_constraints["color"], ["blue"])
+        self.assertEqual(state.maximum_price, 25.0)
+        self.assertIn("budget", state.known_constraints)
+
+    def test_short_clarification_answers_use_the_asked_field(self) -> None:
+        self._reset("answer-budget")
+        self.agent.respond("answer-budget", "I need tunics", 1, 10)
+        state = self.agent._sessions["answer-budget"]
+        state.last_asked_attribute = "budget"
+        self.agent.respond("answer-budget", "$1,200.50", 2, 10)
+        self.assertEqual(state.maximum_price, 1200.5)
+        self.assertTrue(state.maximum_price_inclusive)
+
+        self._reset("answer-size")
+        self.agent.respond("answer-size", "I need tunics", 1, 10)
+        state = self.agent._sessions["answer-size"]
+        state.last_asked_attribute = "size"
+        self.agent.respond("answer-size", "medium", 2, 10)
+        self.assertEqual(state.known_constraints["size"], ["medium"])
+
+        self._reset("answer-use")
+        self.agent.respond("answer-use", "I need tunics", 1, 10)
+        state = self.agent._sessions["answer-use"]
+        state.last_asked_attribute = "use_case"
+        self.agent.respond("answer-use", "daily commuting", 2, 10)
+        self.assertEqual(
+            state.known_constraints["use_case"], ["daily commuting"]
+        )
+
+        self._reset("answer-brand")
+        self.agent.respond("answer-brand", "I need tunics", 1, 10)
+        state = self.agent._sessions["answer-brand"]
+        state.last_asked_attribute = "brand"
+        self.agent.respond("answer-brand", "Brand-0", 2, 10)
+        self.assertEqual(state.hard_constraints["brand"], ["Brand-0"])
+
+    def test_contextual_no_preference_removes_the_asked_field(self) -> None:
+        self._reset("answer-remove")
+        self.agent.respond(
+            "answer-remove", "I want comfortable tunics", 1, 10
+        )
+        state = self.agent._sessions["answer-remove"]
+        state.last_asked_attribute = "feature"
+        self.agent.respond("answer-remove", "no preference", 2, 10)
+        self.assertNotIn("feature", state.known_constraints)
+
+    def test_experimental_gliner_layer_cannot_run_on_official_openings(self) -> None:
+        from starter.gliner_parser import GLiNERAugmenter, GLiNERExperimentalAgent
+
+        class FailIfCalledModel:
+            def __init__(self) -> None:
+                self.calls = 0
+
+            def eval(self) -> "FailIfCalledModel":
+                return self
+
+            def predict_entities(self, *_: object, **__: object) -> list[dict]:
+                self.calls += 1
+                raise AssertionError("structured evaluator path called GLiNER")
+
+        fake = FailIfCalledModel()
+        augmenter = GLiNERAugmenter(model=fake)
+        experimental = GLiNERExperimentalAgent.create(
+            augmenter,
+            self.catalog_path,
+            category_index_path=self.category_path,
+            attribute_index_path=self.attribute_path,
+            model_path=self.data_directory / "missing-hybrid.sqlite3",
+            linear_model_path=self.data_directory / "missing-linear.sqlite3",
+            ranking_mode="routed",
+        )
+        self.addCleanup(experimental.close)
+
+        experimental.reset("official-buying", {})
+        experimental.respond(
+            "official-buying",
+            f"I'm looking for {LARGE_CATEGORY}. A key requirement is: cotton.",
+            1,
+            10,
+        )
+        experimental.reset("official-browsing", {})
+        experimental.respond(
+            "official-browsing",
+            f"I'm looking for {LARGE_CATEGORY}, but I'm still exploring.",
+            1,
+            10,
+        )
+
+        self.assertEqual(fake.calls, 0)
+        self.assertEqual(experimental.gliner_augmentations, [])
+
+    def test_semantic_retrieval_cannot_run_on_official_openings(self) -> None:
+        class FailIfCalledSemanticIndex:
+            def __init__(self) -> None:
+                self.calls = 0
+
+            def dense_rank(self, *_: object, **__: object) -> list[str]:
+                self.calls += 1
+                raise AssertionError("structured evaluator path called dense retrieval")
+
+        fake = FailIfCalledSemanticIndex()
+        self.agent.free_form_retrieval_mode = "dense"
+        self.agent._semantic_index = fake
+        self._reset()
+        self.agent.respond(
+            "session",
+            f"I'm looking for {LARGE_CATEGORY}. A key requirement is: cotton.",
+            1,
+            10,
+        )
+
+        self.assertFalse(self.agent._sessions["session"].free_form_active)
+        self.assertEqual(fake.calls, 0)
+
+    def test_vague_free_form_language_activates_dense_retrieval(self) -> None:
+        class RecordingSemanticIndex:
+            def __init__(self) -> None:
+                self.calls: list[tuple[str, set[str], int]] = []
+
+            def dense_rank(
+                self, query: str, candidates: set[str], *, limit: int
+            ) -> list[str]:
+                self.calls.append((query, set(candidates), limit))
+                return sorted(candidates, reverse=True)[:limit]
+
+        fake = RecordingSemanticIndex()
+        self.agent.free_form_retrieval_mode = "dense"
+        self.agent._semantic_index = fake
+        self._reset()
+        self.agent.respond(
+            "session", "Something breathable for summer", 1, 10
+        )
+
+        state = self.agent._sessions["session"]
+        self.assertTrue(state.free_form_active)
+        self.assertEqual(len(fake.calls), 1)
+        self.assertIn("breathable for summer", fake.calls[0][0].casefold())
+        self.assertEqual(fake.calls[0][1], state.surviving_candidates)
+
+    def test_free_form_hard_constraint_conflict_fails_closed(self) -> None:
+        self.agent.free_form_retrieval_mode = "off"
+        self._reset()
+        response = self.agent.respond(
+            "session", "I want black tunics below $1", 1, 10
+        )
+
+        self.assertEqual(self.agent._sessions["session"].surviving_candidates, set())
+        self.assertEqual(response["recommendations"], [])
+        self.assertIsNotNone(response["ask_attribute"])
+
+    def test_operator_turn_removes_stale_raw_semantic_fragment(self) -> None:
+        self._reset()
+        self.agent.respond(
+            "session", "I want comfortable black belts", 1, 10
+        )
+        state = self.agent._sessions["session"]
+        self.assertTrue(state.semantic_fragments)
+
+        self.agent.respond(
+            "session", "Actually colour doesn't matter anymore", 2, 10
+        )
+        self.assertEqual(state.semantic_fragments, [])
+        self.assertNotIn("black", self.agent._semantic_query(state).casefold())
+
 
 if __name__ == "__main__":
     unittest.main()
