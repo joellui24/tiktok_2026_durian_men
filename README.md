@@ -1,6 +1,8 @@
 # Intent-Routed Conversational Product Search
 
-This is the submission bundle for the TechJam Conversational E-Commerce Search Challenge. The private evaluator entry point is [`agent.py`](agent.py), which exports the required `Agent` class. All commands below must be run from this repository root.
+This is the submission bundle for the TechJam Conversational E-Commerce Search Challenge. The project addresses a multi-turn shopping-search problem: identify a customer's hidden target product early, keep it highly ranked, ask useful clarification questions, and correctly handle customers who browse, buy with hard constraints, express no preference, or change their mind.
+
+The private evaluator entry point is [`agent.py`](agent.py), which exports the required `Agent` class. All commands below must be run from this repository root.
 
 The agent is fully offline at inference time. It makes no API calls, requires no credentials, and reports zero prompt and completion tokens.
 
@@ -30,6 +32,7 @@ Intent Override messages atomically replace obsolete state. Free-form hard filte
 ├── requirements-training.txt      # optional retraining dependency
 ├── README.md                      # setup, method, results, and limitations
 ├── SHA256SUMS                     # bundled-asset integrity checks
+├── scripts/reproduce_public.py    # adapter for the official public kit
 ├── src/                           # runtime implementation and helper modules
 ├── artifacts/
 │   ├── linear_model.sqlite3       # Buying route
@@ -60,6 +63,19 @@ Inference does not need network access. Dependency installation is the only step
 
 The private tester does not need the `training/` directory. Its catalog-only retraining instructions are documented separately in [`training/README.md`](training/README.md).
 
+## Tools and technologies
+
+| Area | Tools used |
+|---|---|
+| Development | Python 3.12/3.13, Git, GitHub, shell tooling, and `unittest` regression tests |
+| Core runtime | Python standard library, SQLite/FTS5, RapidFuzz, NumPy, FastEmbed, and ONNX Runtime |
+| Training | NumPy and SciPy sparse operations with the retained catalog-only FM trainer |
+| Models | Frozen Linear ranker, second-order Hybrid Factorization Machine, and local `BAAI/bge-small-en-v1.5` embeddings |
+| Data and assets | Frozen 50,000-product Amazon Reviews 2023 Clothing, Shoes and Jewelry catalog and catalog-derived indexes |
+| External APIs | None |
+
+The system does not use hosted LLMs, cloud vector databases, paid APIs, environment variables, or secret credentials.
+
 ## Private tester
 
 Run the organizer's harness with this repository root as its working directory or on `PYTHONPATH`. The harness should import exactly:
@@ -85,6 +101,14 @@ class Agent:
 
 Each response contains a customer-facing `message`, an allowed `ask_attribute` or `None`, up to ten ordered unique `parent_asin` recommendations, and non-negative token usage.
 
+The organizer controls the private harness filename. From the submission root, its invocation is:
+
+```bash
+PYTHONPATH="$PWD" python /path/supplied/by/organizer/private_harness.py
+```
+
+No agent-specific environment variables are required. On Windows, run the harness from this directory so `agent.py` is on the import path.
+
 One-command smoke test:
 
 ```bash
@@ -105,6 +129,18 @@ The frozen 200-session public evaluator produced:
 | Reported tokens | 0 |
 
 Scenario Hit Rate@10 was 0.9875 for Buying and 1.0000 for Browsing, Boundary, and Intent Override. The focused parser, state, lexical, dense, and retrieval regression suite passed 80 tests (one environment-dependent skip) before submission cleanup.
+
+### Reproduce the public score
+
+The catalog and public labels are intentionally not duplicated in this submission. To reproduce the result, obtain the official participant kit, place its released `catalog.jsonl` at `data/catalog.jsonl`, and keep that kit outside this repository. Then run:
+
+```bash
+python scripts/reproduce_public.py \
+  --kit-root /path/to/techjam-conversational-search \
+  --output public-results.json
+```
+
+The adapter loads the official kit's unchanged `evaluator/local_evaluator.py`, `data/public_set.jsonl`, and `data/catalog.jsonl`, but supplies this repository's `agent.Agent` implementation. The expected summary is Hit Rate@10 `0.995000`, MRR `0.704468`, MTTC `2.120000`, and Technical Score `0.886440`.
 
 ## Demonstrated multi-turn session
 
@@ -138,8 +174,8 @@ This frozen public Intent Override session shows state replacement and eventual 
 
 ## Contribution split
 
-- Intent routing contributor: Linear + Hybrid FM integration, scenario routing from the first prompt, ranking validation, and official-regression evaluation.
-- Parsing/retrieval contributor: free-form constraint parser, conversational edit handling, dense semantic retrieval, lexical fallback, and generalization diagnostics.
+- **Joel Lui:** exact attribute/category indexing, progressive conversation state, Linear + Hybrid FM training and integration, first-prompt scenario routing, ranking validation, and official-regression evaluation.
+- **`zenweilow`:** free-form constraint parsing, conversational edit handling, dense semantic retrieval, lexical fallback, and generalization diagnostics.
 
 ## Data and reproducibility
 
