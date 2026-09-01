@@ -106,6 +106,16 @@ class FreeFormParserTest(unittest.TestCase):
     def test_browsing_and_underspecified_intent(self) -> None:
         browsing = self.parse("Show me some cool things for a beach holiday")
         self.assertEqual(browsing.intent, "browsing")
+        vague_show = self.parse("Show me shoes")
+        self.assertEqual(vague_show.intent, "browsing")
+        constrained_show = self.parse(
+            "Show me black Nike running shoes under $120"
+        )
+        self.assertEqual(constrained_show.intent, "buying")
+        leather_show = self.parse(
+            "If it is leather and under 150 dollars, show me boots"
+        )
+        self.assertEqual(leather_show.intent, "buying")
         broad = self.parse("I need shoes")
         self.assertEqual(broad.intent, "unknown")
         self.assertEqual(broad.category, "shoes")
@@ -129,6 +139,109 @@ class FreeFormParserTest(unittest.TestCase):
             known_brands=("find", "Nike"),
         )
         self.assertNotIn("brand", parsed.attributes)
+        refresh = parse_free_form_message(
+            "Could you inspire me for an upcoming gym refresh?",
+            known_brands=("REFRESH", "Nike"),
+        )
+        self.assertNotIn("brand", refresh.attributes)
+
+    def test_conservative_catalog_synonyms_become_exact_constraints(self) -> None:
+        cases = (
+            ("jet-black footwear for weekend runs", "running shoes", "black"),
+            ("crimson silk dress", "dresses", "red"),
+            ("navy road runners", "running shoes", "blue"),
+            ("yellow beach flip-flops", "sandals", "yellow"),
+        )
+        for message, category, color in cases:
+            with self.subTest(message=message):
+                parsed = self.parse(message)
+                self.assertEqual(parsed.category, category)
+                self.assertEqual(parsed.attributes["color"], [color])
+
+    def test_broad_dark_wording_stays_unconstrained(self) -> None:
+        parsed = self.parse("dark coloured footwear for sightseeing")
+        self.assertNotIn("color", parsed.attributes)
+        self.assertNotIn("color", parsed.alternatives)
+
+    def test_capped_budget_and_walking_footwear_are_structured(self) -> None:
+        budget = self.parse("Nike runners capped at $135")
+        self.assertEqual(budget.category, "running shoes")
+        self.assertEqual(budget.maximum_price, 135.0)
+        walking = self.parse("footwear that can handle sightseeing on foot")
+        self.assertEqual(walking.category, "walking shoes")
+        self.assertEqual(walking.attributes["use_case"], ["travel", "walking"])
+
+    def test_brand_spans_and_nonliteral_materials_do_not_create_hard_filters(self) -> None:
+        brand = parse_free_form_message(
+            "Cotton On shirts", known_brands=("Cotton On",)
+        )
+        self.assertEqual(brand.attributes["brand"], ["Cotton On"])
+        self.assertNotIn("material", brand.attributes)
+
+        for message in ("cotton-like synthetic shirt", "vegan leather boots"):
+            with self.subTest(message=message):
+                parsed = self.parse(message)
+                self.assertNotIn("material", parsed.attributes)
+
+    def test_category_alias_negation_uses_the_users_actual_words(self) -> None:
+        cases = (
+            ("not runners", "running shoes"),
+            ("avoid road runners", "running shoes"),
+            ("anything except flip flops", "sandals"),
+        )
+        for message, category in cases:
+            with self.subTest(message=message):
+                parsed = self.parse(message)
+                self.assertIn(category, parsed.excluded["category"])
+                self.assertNotEqual(parsed.category, category)
+
+    def test_colour_idioms_are_not_promoted_to_hard_colours(self) -> None:
+        for message in (
+            "Black Friday shoe deals",
+            "a black-tie dress",
+            "red-carpet style",
+            "blue-collar work boots",
+        ):
+            with self.subTest(message=message):
+                parsed = self.parse(message)
+                self.assertNotIn("color", parsed.attributes)
+
+    def test_longest_overlapping_brand_span_wins(self) -> None:
+        parsed = parse_free_form_message(
+            "Nike Golf shoes", known_brands=("Nike", "Nike Golf")
+        )
+        self.assertEqual(parsed.attributes["brand"], ["Nike Golf"])
+
+    def test_numeric_ceiling_preserves_boundary_semantics(self) -> None:
+        exclusive = self.parse("shoes under $120")
+        self.assertEqual(exclusive.maximum_price, 120.0)
+        self.assertFalse(exclusive.maximum_price_inclusive)
+
+        for message in (
+            "shoes up to $120",
+            "shoes at most 120 dollars",
+            "shoes no more than $120",
+            "shoes not over 120 dollars",
+        ):
+            with self.subTest(message=message):
+                parsed = self.parse(message)
+                self.assertEqual(parsed.maximum_price, 120.0)
+                self.assertTrue(parsed.maximum_price_inclusive)
+
+        thousands = self.parse("shoes under $1,200")
+        self.assertEqual(thousands.maximum_price, 1200.0)
+        self.assertFalse(thousands.maximum_price_inclusive)
+
+    def test_material_free_wording_is_an_exclusion(self) -> None:
+        for message in (
+            "leather-free shoes",
+            "non-leather shoes",
+            "shoes free of leather",
+        ):
+            with self.subTest(message=message):
+                parsed = self.parse(message)
+                self.assertEqual(parsed.excluded["material"], ["leather"])
+                self.assertNotIn("leather", parsed.attributes.get("material", ()))
 
 
 if __name__ == "__main__":

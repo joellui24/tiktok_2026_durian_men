@@ -1,5 +1,41 @@
 # Project Aim and Machine-Learning Research Direction
 
+## Implemented free-form pipeline update
+
+The project now treats natural shopping language as an end-to-end retrieval
+problem rather than requiring perfect slot extraction. The implemented path is:
+
+```text
+official template guard
+  -> deterministic operator-aware parser
+  -> fail-closed recognized-hard-constraint filters
+  -> local BGE-small semantic retrieval over survivors
+  -> reciprocal-rank fusion with the existing routed Linear/FM ranker
+  -> clarification and conversation-state update
+```
+
+The selected dense variant uses no API, network call, LLM token, or online
+vector database. A prebuilt 384-dimensional catalogue matrix and quantized ONNX
+model run locally; a SQLite FTS5 index provides a dependency-free fallback.
+Recognized hard price, exact catalogue value, negation, hard-field OR,
+replacement, and preference-removal semantics remain deterministic and cannot
+be overridden by retrieval. Unverifiable feature/use-case/size alternatives are
+kept as ranking signals instead of destructive exact filters.
+
+On the frozen 30-query free-form development split, the selected variant
+reached nDCG@10 `0.7210`, Success@10 `1.0000`, first-relevant MRR `0.8040`, and
+zero proxy-measured hard-constraint violations. On the separate frozen
+confirmation regression split it improved nDCG@10 from `0.2504` to `0.4502`
+and Success@10 from `0.5000` to `0.8462`, while still revealing
+unseen-paraphrase weaknesses.
+
+The official 200-session formatted evaluator remains byte-for-byte unchanged:
+Hit Rate@10 `0.995`, MRR `0.704468`, MTTC `2.12`, Technical Score `0.886440`.
+See
+[`docs/free_form_retrieval_report.md`](techjam-conversational-search/docs/free_form_retrieval_report.md)
+for architecture, checksums, benchmark discipline, latency, reproduction, and
+limitations.
+
 ## Executive recommendation
 
 The next version of this project should not be a single end-to-end neural

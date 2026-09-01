@@ -22,3 +22,13 @@ with:
 ```bash
 python -m starter.category_index --force
 ```
+
+## Free-form retrieval artifacts
+
+`semantic_embeddings.npz` contains the precomputed normalized BGE-small vectors
+for all 50,000 frozen products. `lexical_index.sqlite3` contains the matching
+SQLite FTS5 documents and is used as the no-ML fallback. Both contain only
+catalogue-derived data and are read-only at agent runtime.
+
+Checksums, rebuild commands, model disclosure, and benchmark evidence are in
+[`../docs/free_form_retrieval_report.md`](../docs/free_form_retrieval_report.md).

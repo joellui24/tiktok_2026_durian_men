@@ -51,6 +51,48 @@ python3 -m evaluator.local_evaluator
 Edit `starter/agent.py` to implement your system. Do not edit the evaluator or public labels when reporting your local score.
 The command writes per-session results and aggregate metrics to `results.json`.
 
+## Free-form Semantic Retrieval
+
+Natural shopping messages use a separate, offline path. Deterministic parsing
+and fail-closed filters enforce recognized prices, exact catalogue values,
+negation, OR, replacement, and preference removal. The surviving products are
+ranked by a local BGE-small dense index fused with the existing routed Linear/FM ranker.
+SQLite FTS5 is the dependency-free fallback. The formatted evaluator path
+exits before any semantic import or model load.
+
+The selected dense free-form path requires Python 3.11 or later (tested with
+Python 3.13) and the semantic dependency manifest. An official-formatted-only
+runner can omit it; free-form requests then require selecting the lexical path
+or will automatically use lexical fallback if dense loading fails. Install from
+a fresh PowerShell terminal:
+
+```powershell
+cd techjam-conversational-search
+py -3.13 -m pip install -r requirements-semantic.txt
+Test-Path data\semantic_embeddings.npz
+Test-Path data\lexical_index.sqlite3
+Test-Path models\bge-small-en-v1.5\model_optimized.onnx
+```
+
+Try one natural request:
+
+```powershell
+py -3.13 -B -c "from starter.agent import Agent; a=Agent(); a.reset('demo', {}); print(a.respond('demo', 'Something breathable for summer', 1, 10)); a.close()"
+```
+
+Run the frozen free-form development diagnostic and official evaluator:
+
+```powershell
+py -3.13 -B tests\free_form_retrieval_benchmark.py --split development --retrieval-mode dense --output retrieval-dense-development.json
+py -3.13 -B -m evaluator.local_evaluator --output results.json
+```
+
+The final official result remains Hit Rate@10 `0.995`, MRR `0.704468`, MTTC
+`2.12`, and Technical Score `0.886440`; the complete before/after JSON is
+byte-identical. Model choice, architecture, checksums, latency, confirmation
+results, limitations, and rebuild commands are in
+[`docs/free_form_retrieval_report.md`](docs/free_form_retrieval_report.md).
+
 The included weak BM25 starter scores Hit Rate@10 `0.125`, MRR `0.068034`, and
 MTTC `9.81` on the released public set. See `docs/baseline_results.json`.
 
