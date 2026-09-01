@@ -2,5 +2,7 @@
 __pycache__/
 *.py[cod]
 .Rhistory
+.venv*/
 data/attribute_index.sqlite3
+public-results.json
 training/outputs/

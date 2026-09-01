@@ -32,15 +32,17 @@ Intent Override messages atomically replace obsolete state. Free-form hard filte
 ├── requirements-training.txt      # optional retraining dependency
 ├── README.md                      # setup, method, results, and limitations
 ├── SHA256SUMS                     # bundled-asset integrity checks
-├── scripts/reproduce_public.py    # adapter for the official public kit
+├── evaluation/local_evaluator.py  # bundled 200-session public evaluator
 ├── src/                           # runtime implementation and helper modules
 ├── artifacts/
 │   ├── linear_model.sqlite3       # Buying route
 │   └── fm_model.sqlite3           # Hybrid FM route
 ├── data/
 │   ├── attribute_index.sqlite3.gz # exact-filter index, expanded temporarily
+│   ├── catalog.jsonl              # frozen 50,000-product public catalog
 │   ├── category_index.sqlite3
 │   ├── lexical_index.sqlite3      # dependency-free semantic fallback
+│   ├── public_set.jsonl           # 200 labeled public sessions
 │   └── semantic_embeddings.npz
 ├── models/bge-small-en-v1.5/      # local quantized ONNX encoder and license
 └── training/                      # optional FM trainer and frozen config
@@ -61,7 +63,7 @@ shasum -a 256 -c SHA256SUMS       # Windows alternative: Get-FileHash
 
 Inference does not need network access. Dependency installation is the only step that may access a package index.
 
-The private tester does not need the `training/` directory. Its catalog-only retraining instructions are documented separately in [`training/README.md`](training/README.md).
+The private tester does not need the `evaluation/` or `training/` directories. The bundled evaluator, catalog, and public labels are retained only so judges and reviewers can reproduce the published score locally. Catalog-only retraining instructions are documented separately in [`training/README.md`](training/README.md).
 
 ## Tools and technologies
 
@@ -130,17 +132,35 @@ The frozen 200-session public evaluator produced:
 
 Scenario Hit Rate@10 was 0.9875 for Buying and 1.0000 for Browsing, Boundary, and Intent Override. The focused parser, state, lexical, dense, and retrieval regression suite passed 80 tests (one environment-dependent skip) before submission cleanup.
 
-### Reproduce the public score
+## Run the 200-session public evaluation
 
-The catalog and public labels are intentionally not duplicated in this submission. To reproduce the result, obtain the official participant kit, place its released `catalog.jsonl` at `data/catalog.jsonl`, and keep that kit outside this repository. Then run:
+The frozen 50,000-product catalog, all 200 labeled public sessions, and the evaluator are included in this repository. No additional download or external kit is required.
+
+From the repository root, activate the environment created during setup:
 
 ```bash
-python scripts/reproduce_public.py \
-  --kit-root /path/to/techjam-conversational-search \
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+```
+
+Then run all 200 sessions:
+
+```bash
+python -B -m evaluation.local_evaluator \
+  --catalog data/catalog.jsonl \
+  --dataset data/public_set.jsonl \
   --output public-results.json
 ```
 
-The adapter loads the official kit's unchanged `evaluator/local_evaluator.py`, `data/public_set.jsonl`, and `data/catalog.jsonl`, but supplies this repository's `agent.Agent` implementation. The expected summary is Hit Rate@10 `0.995000`, MRR `0.704468`, MTTC `2.120000`, and Technical Score `0.886440`.
+The command prints the aggregate and scenario metrics to the terminal and writes every session outcome to `public-results.json`. A successful run begins with `"sample_count": 200` and reports:
+
+| Metric | Expected value |
+|---|---:|
+| Hit Rate@10 | 0.995000 |
+| MRR | 0.704468 |
+| MTTC | 2.120000 |
+| Technical Score | 0.886440 |
+
+The formatted public evaluator path runs entirely offline and does not load the optional dense encoder.
 
 ## Demonstrated multi-turn session
 
@@ -179,4 +199,4 @@ This frozen public Intent Override session shows state replacement and eventual 
 
 ## Data and reproducibility
 
-The indexes and model artifacts contain only data derived from the frozen 50,000-product Amazon Reviews 2023 Clothing, Shoes and Jewelry catalog supplied for the challenge. Private evaluation sessions, organizer-only files, credentials, outputs, and API keys are not included. The original dataset is published by McAuley Lab, UCSD; the bundled BGE model is MIT licensed.
+The bundled catalog, public sessions, indexes, and model artifacts are the participant-visible development resources for the frozen Amazon Reviews 2023 Clothing, Shoes and Jewelry challenge data. Private evaluation sessions, organizer-only files, credentials, outputs, and API keys are not included. The original dataset is published by McAuley Lab, UCSD; the bundled BGE model is MIT licensed.
